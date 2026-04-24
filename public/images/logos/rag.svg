@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="nodeA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="nodeB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#0891B2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Links between the three nodes -->
+  <path d="M32 40 L64 70 L96 40"
+        stroke="#E5E7EB" stroke-width="4"
+        stroke-linecap="round" fill="none" opacity="0.6"/>
+  <line x1="32" y1="40" x2="96" y2="40"
+        stroke="#E5E7EB" stroke-width="4"
+        stroke-linecap="round" opacity="0.35"/>
+
+  <!-- Nodes -->
+  <circle cx="32" cy="40" r="16" fill="url(#nodeA)"/>
+  <circle cx="96" cy="40" r="16" fill="url(#nodeB)"/>
+  <circle cx="64" cy="82" r="20" fill="#18181B" stroke="#8B5CF6" stroke-width="2.5"/>
+
+  <!-- RAG text -->
+  <text x="64" y="90" text-anchor="middle"
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="700" font-size="16" fill="#F5F3FF" letter-spacing="0.5">RAG</text>
+</svg>

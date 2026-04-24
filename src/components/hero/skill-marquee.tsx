@@ -1,11 +1,11 @@
 "use client"
 
-import { SKILLS, type Skill } from "@/lib/data/skills"
+import { FLOATING_SKILLS, type Skill } from "@/lib/data/skills"
 
 type SkillMarqueeProps = {
-  /** Override items. Defaults to the shared SKILLS catalog. */
+  /** Override items. Defaults to the non-cube skills catalog. */
   items?: readonly Skill[]
-  /** Seconds per full cycle. Default 18. */
+  /** Seconds per full cycle. Default 24. */
   durationSec?: number
   className?: string
 }
@@ -25,8 +25,8 @@ type SkillMarqueeProps = {
  *   A horizontally scrolling list of pill-shaped skill chips.
  */
 export function SkillMarquee({
-  items = SKILLS,
-  durationSec = 18,
+  items = FLOATING_SKILLS,
+  durationSec = 60,
   className = "",
 }: SkillMarqueeProps) {
   return (

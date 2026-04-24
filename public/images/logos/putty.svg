@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="term" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#1F2937"/>
+      <stop offset="100%" stop-color="#0B1020"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Terminal window -->
+  <rect x="12" y="22" width="104" height="80" rx="10" fill="url(#term)" stroke="#374151" stroke-width="2"/>
+
+  <!-- Title bar accents -->
+  <circle cx="26" cy="34" r="3" fill="#F87171"/>
+  <circle cx="38" cy="34" r="3" fill="#FBBF24"/>
+  <circle cx="50" cy="34" r="3" fill="#34D399"/>
+
+  <!-- Caret -->
+  <path d="M26 62 L42 74 L26 86"
+        stroke="#A7F3D0" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Cursor line -->
+  <rect x="50" y="82" width="24" height="5" rx="1.5" fill="#A7F3D0"/>
+</svg>

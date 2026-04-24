@@ -2,6 +2,7 @@
 
 import { ArrowRight, Download } from "lucide-react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
+import { SocialIconButton } from "@/components/ui/social-icon-button"
 import { SOCIALS } from "@/lib/data/socials"
 
 type ActionBarProps = {
@@ -14,12 +15,13 @@ type ActionBarProps = {
 
 /**
  * Purpose:
- *   Primary + secondary CTAs and a row of social icon buttons. Every
- *   button is magnetic — cursor-following with an elastic snap-back.
+ *   Primary + secondary CTAs and a row of animated social icon buttons.
+ *   CTAs are magnetic (cursor-following) and the socials use the shared
+ *   SocialIconButton pill with per-icon hover micro-animations.
  *
  * Args:
- *   contactHref — destination for the primary CTA.
- *   resumeHref  — destination for the secondary CTA.
+ *   contactHref — primary CTA destination.
+ *   resumeHref  — secondary CTA / file download URL.
  *   className   — extra classes on the root.
  *
  * Returns:
@@ -30,8 +32,6 @@ export function ActionBar({
   resumeHref = "/resume.pdf",
   className = "",
 }: ActionBarProps) {
-  const visibleSocials = SOCIALS.filter((s) => s.href !== "#")
-
   return (
     <div className={`flex flex-col gap-6 ${className}`}>
       {/* Primary + secondary CTA */}
@@ -53,6 +53,8 @@ export function ActionBar({
 
         <MagneticButton
           href={resumeHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl border border-app bg-[var(--glass)] px-6 py-3 text-sm font-medium text-brand/85 backdrop-blur-md transition-all duration-300 hover:bg-[var(--glass-strong)]"
         >
           <Download size={14} />
@@ -62,15 +64,15 @@ export function ActionBar({
 
       {/* Socials */}
       <div className="flex items-center gap-3">
-        {visibleSocials.map(({ icon: Icon, href, label }) => (
-          <MagneticButton
-            key={label}
-            href={href}
-            aria-label={label}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-app bg-[var(--glass)] text-muted backdrop-blur-md transition-all duration-300 hover:text-accent"
-          >
-            <Icon size={16} />
-          </MagneticButton>
+        {SOCIALS.map((s) => (
+          <SocialIconButton
+            key={s.label}
+            icon={s.icon}
+            label={s.label}
+            href={s.href}
+            target={s.href.startsWith("http") ? "_blank" : undefined}
+            rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+          />
         ))}
       </div>
     </div>

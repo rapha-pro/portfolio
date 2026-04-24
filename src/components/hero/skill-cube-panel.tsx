@@ -2,7 +2,7 @@
 
 import { GlassCard } from "@/components/ui/glass-card"
 import { SkillCube } from "@/components/three/skill-cube"
-import { SKILLS } from "@/lib/data/skills"
+import { CUBE_SKILLS } from "@/lib/data/skills"
 
 type SkillCubePanelProps = {
   className?: string
@@ -29,10 +29,10 @@ export function SkillCubePanel({ className = "" }: SkillCubePanelProps) {
         Best skills in
       </p>
 
-      <SkillCube skills={SKILLS} size={220} />
+      <SkillCube skills={CUBE_SKILLS} size={220} />
 
       <div className="flex flex-wrap justify-center gap-1.5">
-        {SKILLS.map((s) => (
+        {CUBE_SKILLS.map((s) => (
           <span
             key={s.label}
             className="rounded-full border border-app px-2.5 py-0.5 text-[10px] font-medium text-muted"

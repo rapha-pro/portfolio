@@ -57,7 +57,7 @@ export function IdentityBlock({
 
       {/* Typewriter role */}
       <h2 className="text-xl font-light text-muted lg:text-2xl">
-        <span className="italic text-subtle">aspiring </span>
+        <span className="italic text-subtle me-2">aspiring </span>
         <span className="font-semibold text-brand">{text}</span>
         <Cursor cursorBlinking cursorStyle="|" cursorColor="var(--accent)" />
       </h2>

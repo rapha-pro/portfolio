@@ -94,18 +94,25 @@ export function SkillCube({
     const geo = new THREE.BoxGeometry(1.15, 1.15, 1.15)
     const loader = new THREE.TextureLoader()
 
-    const makeFaceMaterial = (iconUrl: string, tint: string) => {
+    /**
+     * MeshPhysicalMaterial.color multiplies with `map`. If we use the
+     * skill's tint color, dark-palette logos (GitHub, Next.js, etc.) get
+     * crushed to near-black. So we keep the base white and let the texture
+     * render its native colors; the tint lives on the edge glow instead.
+     */
+    const makeFaceMaterial = (iconUrl: string) => {
       const mat = new THREE.MeshPhysicalMaterial({
-        color: tint,
-        metalness: 0.6,
-        roughness: 0.25,
+        color: 0xffffff,
+        metalness: 0.25,
+        roughness: 0.35,
         transparent: true,
-        opacity: 0.92,
+        opacity: 0.98,
         clearcoat: 1,
-        clearcoatRoughness: 0.05,
+        clearcoatRoughness: 0.08,
       })
       loader.load(iconUrl, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace
+        tex.anisotropy = 4
         mat.map = tex
         mat.needsUpdate = true
       })
@@ -114,15 +121,21 @@ export function SkillCube({
 
     const faces = skills.slice(0, 6)
     // Pad to 6 so BoxGeometry always has a material per face.
-    while (faces.length < 6) {
-      const last = faces[faces.length - 1] ?? {
-        label: "",
-        bg: "#8b5cf6",
-        src: "",
-      }
-      faces.push(last)
-    }
-    const materials = faces.map((s) => makeFaceMaterial(s.src, s.bg))
+    const last = faces[faces.length - 1]
+    while (faces.length < 6 && last) faces.push(last)
+
+    const materials =
+      faces.length > 0
+        ? faces.map((s) => makeFaceMaterial(s.src))
+        : Array.from({ length: 6 }, () =>
+            new THREE.MeshPhysicalMaterial({
+              color: 0xffffff,
+              metalness: 0.25,
+              roughness: 0.4,
+              transparent: true,
+              opacity: 0.9,
+            }),
+          )
     const cube = new THREE.Mesh(geo, materials)
     scene.add(cube)
 
