@@ -1,18 +1,43 @@
 import { Navbar } from "@/components/navbar"
+import Hero from "@/components/hero"
 
+/**
+ * Purpose:
+ *   Landing page. Mounts the navbar + hero; the remaining sections are
+ *   placeholders so anchor links and scroll-spy have real scroll targets.
+ *
+ * Returns:
+ *   The full <main> tree.
+ */
 export default function HomePage() {
   return (
     <main className="min-h-screen">
       <Navbar />
 
-      <section id="home" className="mx-auto max-w-6xl px-6 pb-32 pt-28 md:pt-36">
-        <p className="mb-3 text-sm uppercase tracking-[0.2em] opacity-70">Portfolio</p>
-        <h1 className="text-brand text-5xl font-extrabold tracking-tight md:text-7xl">
-          Raphaël Onana
-        </h1>
-        <p className="mt-5 max-w-2xl text-base opacity-80 md:text-lg">
-          Building immersive web experiences with Next.js, animation, and 3D.
-        </p>
+      <Hero />
+
+      <section
+        id="about"
+        className="mx-auto min-h-[60vh] max-w-6xl px-6 py-24"
+      >
+        <h2 className="text-3xl font-bold text-brand md:text-4xl">About</h2>
+        <p className="mt-4 max-w-2xl text-muted">Coming soon.</p>
+      </section>
+
+      <section
+        id="projects"
+        className="mx-auto min-h-[60vh] max-w-6xl px-6 py-24"
+      >
+        <h2 className="text-3xl font-bold text-brand md:text-4xl">Projects</h2>
+        <p className="mt-4 max-w-2xl text-muted">Coming soon.</p>
+      </section>
+
+      <section
+        id="contact"
+        className="mx-auto min-h-[60vh] max-w-6xl px-6 py-24 pb-40"
+      >
+        <h2 className="text-3xl font-bold text-brand md:text-4xl">Contact</h2>
+        <p className="mt-4 max-w-2xl text-muted">Coming soon.</p>
       </section>
     </main>
   )

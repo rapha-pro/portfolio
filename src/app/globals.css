@@ -1,46 +1,87 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   All colors/glass/accents live here so components stay clean.
+   Accents are applied via a class on <html>: .accent-violet, etc.
+═══════════════════════════════════════════════════════════ */
+
 :root {
-  --bg: #f6f7fb;
-  --fg: #171923;
+  /* Surfaces */
+  --bg: #f7f7fb;
+  --bg-elevated: #ffffff;
+  --fg: #0b0d14;
+  --fg-muted: rgba(11, 13, 20, 0.62);
+  --fg-subtle: rgba(11, 13, 20, 0.42);
 
-  --glass: rgba(255, 255, 255, 0.66);
-  --glass-strong: rgba(255, 255, 255, 0.78);
-  --border: rgba(22, 24, 35, 0.1);
+  /* Glass */
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.76);
+  --glass-border: rgba(11, 13, 20, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.85);
 
-  --brand: #18181b;
+  /* Default accent (violet) */
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.12);
+  --accent-glow: rgba(139, 92, 246, 0.45);
+  --accent-foreground: #ffffff;
+
+  /* Brand = semantic "primary" for text/buttons tied to accent */
+  --brand: #0b0d14;
   --brand-foreground: #ffffff;
+
+  /* Elevations */
+  --shadow-1: 0 1px 2px rgba(11, 13, 20, 0.06), 0 4px 12px rgba(11, 13, 20, 0.06);
+  --shadow-2: 0 10px 30px rgba(11, 13, 20, 0.10), 0 4px 10px rgba(11, 13, 20, 0.06);
+  --shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset, 0 8px 28px rgba(31, 38, 135, 0.14);
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --bg: #12141a;
+  --bg: #0a0b11;
+  --bg-elevated: #11131a;
   --fg: #eef1f7;
+  --fg-muted: rgba(238, 241, 247, 0.72);
+  --fg-subtle: rgba(238, 241, 247, 0.48);
 
   --glass: rgba(255, 255, 255, 0.06);
-  --glass-strong: rgba(255, 255, 255, 0.1);
-  --border: rgba(255, 255, 255, 0.14);
+  --glass-strong: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.18);
 
   --brand: #f2f4f8;
-  --brand-foreground: #12141a;
+  --brand-foreground: #0a0b11;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 10px 30px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 8px 28px rgba(0, 0, 0, 0.45);
 }
 
-.accent-default {
-  --brand: #18181b;
-  --brand-foreground: #ffffff;
+/* Accent palettes (apply .accent-* on <html>) */
+.accent-violet {
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.14);
+  --accent-glow: rgba(139, 92, 246, 0.5);
+  --accent-foreground: #ffffff;
 }
-.dark.accent-default {
-  --brand: #f2f4f8;
-  --brand-foreground: #12141a;
+.accent-cyan {
+  --accent: #06b6d4;
+  --accent-soft: rgba(6, 182, 212, 0.14);
+  --accent-glow: rgba(6, 182, 212, 0.5);
+  --accent-foreground: #04131a;
 }
-.accent-blue {
-  --brand: #446ef8;
-  --brand-foreground: #ffffff;
-}
-.accent-rose {
-  --brand: #e11d48;
-  --brand-foreground: #ffffff;
+.accent-amber {
+  --accent: #f59e0b;
+  --accent-soft: rgba(245, 158, 11, 0.14);
+  --accent-glow: rgba(245, 158, 11, 0.5);
+  --accent-foreground: #1a0f00;
 }
 
+/* ─────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────── */
 * {
   box-sizing: border-box;
 }
@@ -51,36 +92,114 @@ body {
   padding: 0;
 }
 
+html {
+  color-scheme: light dark;
+}
+
 body {
-  background:
-    radial-gradient(1200px 500px at -10% -10%, rgba(68, 110, 248, 0.08), transparent 50%),
-    radial-gradient(900px 420px at 110% -20%, rgba(225, 29, 72, 0.08), transparent 50%),
-    var(--bg);
   color: var(--fg);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-feature-settings: "ss01", "cv11"; /* Plus Jakarta Sans stylistic sets */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(1200px 520px at -10% -10%, var(--accent-soft), transparent 55%),
+    radial-gradient(900px 420px at 110% -20%, var(--accent-soft), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  transition: background-color 0.4s var(--ease-spring), color 0.25s var(--ease-spring);
 }
 
-.text-brand {
-  color: var(--brand);
-}
-.bg-brand {
-  background-color: var(--brand);
-}
-.text-brand-foreground {
-  color: var(--brand-foreground);
-}
-.border-app {
-  border-color: var(--border);
+::selection {
+  background: var(--accent-glow);
+  color: var(--accent-foreground);
 }
 
-/* Glass helpers */
+/* ─────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────── */
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.text-brand      { color: var(--brand); }
+.text-accent     { color: var(--accent); }
+.text-muted      { color: var(--fg-muted); }
+.text-subtle     { color: var(--fg-subtle); }
+.bg-accent       { background-color: var(--accent); }
+.bg-accent-soft  { background-color: var(--accent-soft); }
+.border-app      { border-color: var(--glass-border); }
+.ring-accent     { --tw-ring-color: var(--accent); }
+
+/* Glass surfaces */
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-border);
 }
 .glass-strong {
   background: var(--glass-strong);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid var(--glass-border);
+}
+
+/* Inner highlight line used on glass cards (top bevel) */
+.glass-bevel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Accent-aware glow */
+.glow-accent {
+  box-shadow: 0 0 24px -4px var(--accent-glow);
+}
+
+/* Animated accent gradient text */
+.text-gradient-accent {
+  background: linear-gradient(120deg, var(--accent), var(--fg) 50%, var(--accent));
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 8s var(--ease-spring) infinite;
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Skill marquee loop (used by SkillMarquee) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Subtle floating idle for logos / orbs */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* Shimmer used on CTA borders */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Global smooth motion fallback (respect user prefs) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
