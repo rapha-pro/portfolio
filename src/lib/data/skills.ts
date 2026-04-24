@@ -62,8 +62,8 @@ export const SKILLS: readonly Skill[] = [
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
   { label: "Haskell",      category: "language",  bg: "#5E5086",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" },
-  { label: "SAS",          category: "language",  bg: "#0066CC",
-    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sas/sas-original.svg" },
+  { label: "SAS",          category: "language",  bg: "#003B7A",
+    src: "/images/logos/sas.svg" },
 
   /* ── Tools / platforms ────────────────────────────────── */
   { label: "Git",           category: "tool", bg: "#F05032",
@@ -92,8 +92,8 @@ export const SKILLS: readonly Skill[] = [
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
   { label: "RAG",           category: "framework", bg: "#6D28D9",
     src: "/images/logos/rag.svg" },
-  { label: "LangChain",     category: "framework", bg: "#1C3D36",
-    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/langchain/langchain-original.svg" },
+  { label: "LangChain",     category: "framework", bg: "#047857",
+    src: "/images/logos/langchain.svg" },
   { label: "Next.js",       category: "framework", bg: "#18181b",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
   { label: "MongoDB",       category: "framework", bg: "#47A248",
