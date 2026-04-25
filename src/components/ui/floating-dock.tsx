@@ -32,9 +32,9 @@ type FloatingDockProps = {
  *   horizontal row of equal-size icon pills.
  *
  * Args:
- *   items         — array of dock items (title, icon, href).
- *   className     — extra classes on the desktop bar.
- *   mobileClassName — extra classes on the mobile row.
+ *   items           -- array of dock items (title, icon, href).
+ *   className       -- extra classes on the desktop bar.
+ *   mobileClassName -- extra classes on the mobile row.
  *
  * Returns:
  *   A dock that switches between desktop magnified bar and mobile row.
@@ -68,7 +68,7 @@ function FloatingDockMobile({ items, className }: { items: DockItem[]; className
   )
 }
 
-/** Desktop: magnifying dock bar — icons scale when the cursor approaches. */
+/** Desktop: magnifying dock bar -- icons scale when the cursor approaches. */
 function FloatingDockDesktop({ items, className }: { items: DockItem[]; className: string }) {
   /** pageX of the cursor inside the dock; Infinity = cursor is outside. */
   const mouseX = useMotionValue(Infinity)
@@ -77,7 +77,7 @@ function FloatingDockDesktop({ items, className }: { items: DockItem[]; classNam
     <motion.div
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
-      className={`hidden h-14 items-end gap-3 rounded-2xl border border-app bg-[var(--glass)] px-4 pb-2.5 backdrop-blur-md md:flex ${className}`}
+      className={`hidden h-14 w-fit items-end gap-3 rounded-2xl border border-app bg-[var(--glass)] px-4 pb-2.5 backdrop-blur-md md:flex ${className}`}
     >
       {items.map((item) => (
         <DockIcon key={item.title} mouseX={mouseX} item={item} />
@@ -97,8 +97,8 @@ type DockIconProps = {
  *   Uses Framer Motion springs for smooth physics-based scaling.
  *
  * Args:
- *   mouseX — shared page-x motion value from the dock wrapper.
- *   item   — the dock item to render.
+ *   mouseX -- shared page-x motion value from the dock wrapper.
+ *   item   -- the dock item to render.
  *
  * Returns:
  *   A scaled icon with a floating label on hover.
@@ -113,10 +113,10 @@ function DockIcon({ mouseX, item }: DockIconProps) {
     return val - bounds.x - bounds.width / 2
   })
 
-  const sizeTransform  = useTransform(distance, [-140, 0, 140], [36, 68, 36])
-  const iconTransform  = useTransform(distance, [-140, 0, 140], [18, 34, 18])
+  const sizeTransform = useTransform(distance, [-140, 0, 140], [36, 68, 36])
+  const iconTransform = useTransform(distance, [-140, 0, 140], [18, 34, 18])
 
-  const size = useSpring(sizeTransform, { mass: 0.1, stiffness: 180, damping: 14 })
+  const size     = useSpring(sizeTransform, { mass: 0.1, stiffness: 180, damping: 14 })
   const iconSize = useSpring(iconTransform, { mass: 0.1, stiffness: 180, damping: 14 })
 
   return (
