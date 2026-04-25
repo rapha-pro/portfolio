@@ -38,10 +38,11 @@ export const SKILLS: readonly Skill[] = [
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
   { label: "C++",          category: "language",  bg: "#7C3AED", onCube: true,
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
+  // https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg
   { label: "Docker",       category: "tool",      bg: "#2563EB", onCube: true,
-    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+    src: "/images/programming_logos/docker_gradient.png" },
   { label: "SQL",          category: "framework", bg: "#3B82F6", onCube: true,
-    src: "/images/logos/sql.svg" },
+    src: "/images/programming_logos/sql.svg" },
   { label: "GitHub",       category: "tool",      bg: "#24292e", onCube: true,
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
   { label: "scikit-learn", category: "framework", bg: "#F7931E", onCube: true,
@@ -63,7 +64,7 @@ export const SKILLS: readonly Skill[] = [
   { label: "Haskell",      category: "language",  bg: "#5E5086",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" },
   { label: "SAS",          category: "language",  bg: "#003B7A",
-    src: "/images/logos/sas.svg" },
+    src: "/images/programming_logos/sas.svg" },
 
   /* ── Tools / platforms ────────────────────────────────── */
   { label: "Git",           category: "tool", bg: "#F05032",
@@ -83,7 +84,7 @@ export const SKILLS: readonly Skill[] = [
   { label: "Jira",          category: "tool", bg: "#0052CC",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg" },
   { label: "PuTTY",         category: "tool", bg: "#0B1020",
-    src: "/images/logos/putty.svg" },
+    src: "/images/programming_logos/putty.svg" },
 
   /* ── Frameworks / libraries / platforms ───────────────── */
   { label: "Pandas",        category: "framework", bg: "#150458",
@@ -91,9 +92,9 @@ export const SKILLS: readonly Skill[] = [
   { label: "NumPy",         category: "framework", bg: "#013243",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
   { label: "RAG",           category: "framework", bg: "#6D28D9",
-    src: "/images/logos/rag.svg" },
+    src: "/images/programming_logos/rag.svg" },
   { label: "LangChain",     category: "framework", bg: "#047857",
-    src: "/images/logos/langchain.svg" },
+    src: "/images/programming_logos/langchain.svg" },
   { label: "Next.js",       category: "framework", bg: "#18181b",
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
   { label: "MongoDB",       category: "framework", bg: "#47A248",

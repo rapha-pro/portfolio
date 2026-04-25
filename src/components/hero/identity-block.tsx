@@ -2,29 +2,29 @@
 
 import { Cursor, useTypewriter } from "react-simple-typewriter"
 import { HERO_COPY } from "@/lib/data/hero-copy"
+import { TextHoverEffect } from "@/components/ui/text-hover-effect"
 
 type IdentityBlockProps = {
-  /** Display name. Defaults to HERO_COPY.firstName. */
-  name?: string
-  /** Rotating roles fed to the typewriter. */
+  firstName?: string
+  lastName?: string
   roles?: readonly string[]
 }
 
 /**
- * Purpose:
- *   The hero "headline" stack — greeting kicker, first name with a glowing
- *   gradient underline, and a typewriter line that loops through roles.
+ * Purpose: Hero headline stack -- greeting kicker, name as Aceternity
+ *   TextHoverEffect SVG (accent gradient sweeps on cursor hover), and a
+ *   typewriter role line below.
  *
- * Args:
- *   name  — overrides the displayed name.
- *   roles — overrides the typewriter word list.
+ *   Desktop: first + last name on a single line (wide viewBox, one SVG).
+ *   Mobile:  two stacked SVGs so each word fills the narrow viewport.
  *
- * Returns:
- *   A vertical flex stack of three typographic layers.
+ * Args: firstName, lastName, roles
+ * Returns: Kicker + TextHoverEffect name + typewriter.
  */
 export function IdentityBlock({
-  name = HERO_COPY.firstName + " " + HERO_COPY.lastName,
-  roles = HERO_COPY.roles,
+  firstName = HERO_COPY.firstName,
+  lastName  = HERO_COPY.lastName,
+  roles     = HERO_COPY.roles,
 }: IdentityBlockProps) {
   const [text] = useTypewriter({
     words: [...roles],
@@ -34,28 +34,25 @@ export function IdentityBlock({
     delaySpeed: 2800,
   })
 
+  const first = firstName.toUpperCase()
+  const last  = lastName.toUpperCase()
+
   return (
-    <div className="flex flex-col gap-4">
-      {/* Kicker */}
+    <div className="flex flex-col gap-2">
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-subtle">
         {HERO_COPY.greetingKicker}
       </p>
 
-      {/* Name with animated gradient underline */}
-      <h1 className="relative text-5xl font-black leading-none tracking-tight text-brand lg:text-7xl">
-        {name}
-        <span
-          aria-hidden
-          className="absolute -bottom-2 left-0 h-1 w-full rounded-full"
-          style={{
-            background:
-              "linear-gradient(90deg, var(--accent), #8b5cf6, #e11d48)",
-            filter: "blur(2px)",
-          }}
+      {/* Single-line name for all screen sizes */}
+      <div className="-mx-1">
+        <TextHoverEffect
+          text={`${first} ${last}`}
+          duration={0.12}
+          className="h-14 sm:h-16 lg:h-20"
+          viewBox="0 0 580 100"
         />
-      </h1>
+      </div>
 
-      {/* Typewriter role */}
       <h2 className="text-xl font-light text-muted lg:text-2xl">
         <span className="italic text-subtle me-2">aspiring </span>
         <span className="font-semibold text-brand">{text}</span>

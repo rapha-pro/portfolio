@@ -2,53 +2,46 @@
 
 import { ArrowRight, Download } from "lucide-react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
-import { SocialIconButton } from "@/components/ui/social-icon-button"
+import { FloatingDock, type DockItem } from "@/components/ui/floating-dock"
 import { SOCIALS } from "@/lib/data/socials"
 
 type ActionBarProps = {
-  /** Where "Get in touch" points. Default "#contact". */
   contactHref?: string
-  /** Resume file path. Default "/resume.pdf". */
   resumeHref?: string
   className?: string
 }
 
 /**
- * Purpose:
- *   Primary + secondary CTAs and a row of animated social icon buttons.
- *   CTAs are magnetic (cursor-following) and the socials use the shared
- *   SocialIconButton pill with per-icon hover micro-animations.
- *
- * Args:
- *   contactHref — primary CTA destination.
- *   resumeHref  — secondary CTA / file download URL.
- *   className   — extra classes on the root.
- *
- * Returns:
- *   A vertical stack: CTA row + socials row.
+ * Purpose: Primary + secondary CTAs and the Aceternity FloatingDock social row.
+ * Args: contactHref, resumeHref, className
+ * Returns: CTA row + FloatingDock socials stack.
  */
 export function ActionBar({
   contactHref = "#contact",
   resumeHref = "/resume.pdf",
   className = "",
 }: ActionBarProps) {
+  const dockItems: DockItem[] = SOCIALS.map((s) => {
+    const Icon = s.icon
+    return {
+      title: s.label,
+      icon: <Icon size={20} className="text-[color:var(--accent)]" />,
+      href: s.href,
+      target: s.href.startsWith("http") ? "_blank" : undefined,
+      rel: s.href.startsWith("http") ? "noopener noreferrer" : undefined,
+    }
+  })
+
   return (
     <div className={`flex flex-col gap-6 ${className}`}>
-      {/* Primary + secondary CTA */}
       <div className="flex flex-wrap items-center gap-4">
         <MagneticButton
           href={contactHref}
           className="group inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all duration-300"
-          style={{
-            background: "linear-gradient(135deg, var(--accent), #6d28d9)",
-            boxShadow: "0 0 24px var(--accent-glow)",
-          }}
+          style={{ background: "linear-gradient(135deg, var(--accent), #6d28d9)", boxShadow: "0 0 24px var(--accent-glow)" }}
         >
           Get in touch
-          <ArrowRight
-            size={15}
-            className="transition-transform group-hover:translate-x-1"
-          />
+          <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
         </MagneticButton>
 
         <MagneticButton
@@ -62,19 +55,7 @@ export function ActionBar({
         </MagneticButton>
       </div>
 
-      {/* Socials */}
-      <div className="flex items-center gap-3">
-        {SOCIALS.map((s) => (
-          <SocialIconButton
-            key={s.label}
-            icon={s.icon}
-            label={s.label}
-            href={s.href}
-            target={s.href.startsWith("http") ? "_blank" : undefined}
-            rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
-          />
-        ))}
-      </div>
+      <FloatingDock items={dockItems} />
     </div>
   )
 }

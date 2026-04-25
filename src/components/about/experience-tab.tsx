@@ -21,22 +21,24 @@ import { CompanyLogo } from "./company-logo"
 export function ExperienceTab() {
   return (
     <section aria-label="Experience" className="relative mx-auto w-full max-w-4xl">
-      {/* Desktop: center rail */}
+      {/* Desktop: center rail — uses the current accent color */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 bottom-0 hidden w-px -translate-x-1/2 md:block"
+        className="pointer-events-none absolute left-1/2 top-0 bottom-0 hidden w-0.5 -translate-x-1/2 md:block"
         style={{
           background:
-            "linear-gradient(to bottom, transparent, var(--border-app) 8%, var(--border-app) 92%, transparent)",
+            "linear-gradient(to bottom, transparent, var(--accent) 8%, var(--accent) 92%, transparent)",
+          opacity: 0.45,
         }}
       />
-      {/* Mobile: left rail */}
+      {/* Mobile: left rail — accent tinted */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-4 top-0 bottom-0 w-px md:hidden"
+        className="pointer-events-none absolute left-4 top-0 bottom-0 w-0.5 md:hidden"
         style={{
           background:
-            "linear-gradient(to bottom, transparent, var(--border-app) 8%, var(--border-app) 92%, transparent)",
+            "linear-gradient(to bottom, transparent, var(--accent) 8%, var(--accent) 92%, transparent)",
+          opacity: 0.4,
         }}
       />
 
@@ -78,17 +80,20 @@ function ExperienceRow({ job, index }: ExperienceRowProps) {
     <li ref={ref} className="relative">
       {/* ── Mobile: single column, left rail ─────────────────────────────── */}
       <div className="pl-10 md:hidden">
-        {/* Mobile rail node */}
+        {/* Mobile rail node -- hollow ring so the accent bar passes through */}
         <span
           aria-hidden
-          className="absolute left-[9px] top-4 flex h-4 w-4 items-center justify-center rounded-full border border-app bg-[var(--bg)]"
+          className="absolute left-[3px] top-4 flex h-5 w-5 items-center justify-center rounded-full border-2"
+          style={{
+            borderColor: `${job.accent}99`,
+            background: "var(--bg)",
+            boxShadow: inView ? `0 0 10px ${job.accent}55` : "none",
+            transition: "box-shadow 500ms ease-out",
+          }}
         >
           <span
-            className="h-2 w-2 rounded-full transition-shadow duration-500"
-            style={{
-              background: job.accent,
-              boxShadow: inView ? `0 0 12px ${job.accent}` : "none",
-            }}
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: job.accent }}
           />
         </span>
         {card}
@@ -210,23 +215,22 @@ type CenterNodeProps = {
  */
 function CenterNode({ job, inView }: CenterNodeProps) {
   return (
-    <div className="flex flex-col items-center pt-5">
+    <div className="flex flex-col items-center pt-4">
+      {/* Hollow ring -- bg matches page so the accent rail bar passes through */}
       <div
         className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2"
         style={{
-          borderColor: `${job.accent}88`,
-          background: `${job.accent}18`,
+          borderColor: `${job.accent}99`,
+          background: "var(--bg)",
           boxShadow: inView ? `0 0 18px ${job.accent}55` : "none",
-          transition: "box-shadow 450ms ease-out",
+          transition: "box-shadow 500ms ease-out",
         }}
       >
         <span className="text-sm font-bold" style={{ color: job.accent }}>
           {job.company.trim().charAt(0).toUpperCase()}
         </span>
       </div>
-      <time
-        className="mt-2 max-w-[56px] text-center text-[10px] font-mono leading-tight text-subtle"
-      >
+      <time className="mt-2 whitespace-nowrap text-center text-[10px] font-mono leading-tight text-subtle">
         {job.period}
       </time>
     </div>
