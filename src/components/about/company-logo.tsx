@@ -11,8 +11,14 @@ type CompanyLogoProps = {
   simpleIconSlug?: string
   /** Tailwind size tokens — defaults to h-14 w-14. */
   sizeClass?: string
-  /** When true, logo renders on a near-white backdrop (dark wordmarks). */
+  /** When true, logo renders on a white backdrop (for dark wordmarks). */
   lightBg?: boolean
+  /**
+   * Optional hex color to force as the tile background.
+   * Takes priority over `lightBg`. Use for logos that need a specific brand
+   * background (e.g. Caterpillar's yellow mark on dark).
+   */
+  bgOverride?: string
   /** Accent color for the monogram fallback (hex). */
   accent?: string
   className?: string
@@ -28,12 +34,16 @@ type CompanyLogoProps = {
  *   Precedence:
  *     localSrc → https://cdn.simpleicons.org/{slug} → monogram badge
  *
+ *   Background priority:
+ *     bgOverride → lightBg (#FFFFFF) → glass gradient (default)
+ *
  * Args:
  *   name           — company name (alt + monogram source).
  *   localSrc       — preferred local image path.
  *   simpleIconSlug — Simple Icons slug for the CDN fallback.
- *   sizeClass      — tailwind height + width.
- *   lightBg        — use a light card for dark brand marks.
+ *   sizeClass      — tailwind height + width classes.
+ *   lightBg        — use a white card for dark brand marks.
+ *   bgOverride     — force an exact hex background (overrides lightBg).
  *   accent         — monogram tint.
  *   className      — extra classes on the tile.
  *
@@ -46,6 +56,7 @@ export function CompanyLogo({
   simpleIconSlug,
   sizeClass = "h-14 w-14",
   lightBg = false,
+  bgOverride,
   accent = "var(--accent)",
   className = "",
 }: CompanyLogoProps) {
@@ -58,6 +69,7 @@ export function CompanyLogo({
   const initial = localSrc ? 0 : simpleIconSlug ? 1 : 2
   const [stage, setStage] = useState<0 | 1 | 2>(initial as 0 | 1 | 2)
 
+  /** Advance to the next fallback stage on image load error. */
   const advance = () =>
     setStage((s) => {
       if (s === 0 && simpleIconSlug) return 1
@@ -66,22 +78,21 @@ export function CompanyLogo({
 
   const tileBase = `relative flex items-center justify-center overflow-hidden rounded-xl border border-app ${sizeClass} ${className}`
 
+  const tileBg = bgOverride
+    ? bgOverride
+    : lightBg
+      ? "#FFFFFF"
+      : "linear-gradient(135deg, var(--glass), var(--glass-strong))"
+
   if (stage === 2) {
-    // Monogram badge
     return (
       <div
         className={tileBase}
-        style={{
-          background:
-            "linear-gradient(135deg, var(--glass), var(--glass-strong))",
-        }}
+        style={{ background: "linear-gradient(135deg, var(--glass), var(--glass-strong))" }}
         aria-label={name}
         title={name}
       >
-        <span
-          className="text-lg font-bold"
-          style={{ color: accent }}
-        >
+        <span className="text-lg font-bold" style={{ color: accent }}>
           {name.trim().charAt(0).toUpperCase()}
         </span>
       </div>
@@ -96,14 +107,7 @@ export function CompanyLogo({
         : ""
 
   return (
-    <div
-      className={tileBase}
-      style={{
-        background: lightBg
-          ? "#FFFFFF"
-          : "linear-gradient(135deg, var(--glass), var(--glass-strong))",
-      }}
-    >
+    <div className={tileBase} style={{ background: tileBg }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}

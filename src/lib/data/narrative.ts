@@ -37,7 +37,7 @@ export type NarrativeBlock = NarrativeProseBlock | NarrativePhotoBlock
 export const NARRATIVE: readonly NarrativeBlock[] = [
   {
     kind: "photo",
-    src: "/images/about_me_intro.jpg",
+    src: "/images/about%20me/about_me_intro.jpg",
     alt: "Raphaël — a snapshot",
     caption: "A little bit about me — beyond the terminal.",
   },
@@ -61,7 +61,7 @@ export const NARRATIVE: readonly NarrativeBlock[] = [
   },
   {
     kind: "photo",
-    src: "/images/infront_of_classroom.jpg",
+    src: "/images/about%20me/infront_of_classroom.jpg",
     alt: "Standing in front of a classroom",
     caption: "High school in Ottawa — somewhere between a math problem and a Python script.",
   },
@@ -76,7 +76,7 @@ export const NARRATIVE: readonly NarrativeBlock[] = [
   },
   {
     kind: "photo",
-    src: "/images/comp 2804.jpg",
+    src: "/images/about%20me/comp%202804.jpg",
     alt: "Working on a discrete math problem on a whiteboard",
     caption:
       "COMP 2804 · discrete math office hours — working through problem sets with friends on a whiteboard.",

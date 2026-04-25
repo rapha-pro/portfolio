@@ -8,10 +8,11 @@ import { HOBBIES, type Hobby } from "@/lib/data/hobbies"
 
 /**
  * Purpose:
- *   The Hobbies tab. A responsive card grid — each hobby is an image +
- *   short personal story with a subtle tilt and accent header. When a
- *   `videoSrc` is later added to a hobby, the card can render a muted
- *   autoplay loop in place of the image.
+ *   The Hobbies tab. A responsive card grid — each hobby is an optional image
+ *   plus a short personal story with a subtle tilt and accent header. When a
+ *   `videoSrc` is added to a hobby, the card renders a muted autoplay loop in
+ *   place of the image. Omitting both `imageSrc` and `videoSrc` hides the
+ *   media block entirely (graceful no-image state).
  *
  * Returns:
  *   A grid of hobby cards.
@@ -31,18 +32,21 @@ export function HobbiesTab() {
 
 /**
  * Purpose:
- *   One hobby card. Uses a gentle tilt, a glass frame, a header strip
- *   tinted with the hobby's accent, an image (or looping video), and a
- *   short story paragraph.
+ *   One hobby card. Uses a gentle tilt, a glass frame, a header strip tinted
+ *   with the hobby's accent, an optional image or looping video, and a short
+ *   story paragraph. The media block is omitted gracefully when neither
+ *   `imageSrc` nor `videoSrc` is supplied.
  *
  * Args:
- *   hobby — hobby payload.
- *   delay — stagger delay, in seconds, for the entry animation.
+ *   hobby — hobby payload from HOBBIES.
+ *   delay — stagger delay in seconds for the entry animation.
  *
  * Returns:
  *   A motion-wrapped tilt + glass card.
  */
 function HobbyCard({ hobby, delay }: { hobby: Hobby; delay: number }) {
+  const hasMedia = Boolean(hobby.videoSrc ?? hobby.imageSrc)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -80,36 +84,38 @@ function HobbyCard({ hobby, delay }: { hobby: Hobby; delay: number }) {
             </div>
           </div>
 
-          {/* Media */}
-          <div className="relative aspect-[4/3] w-full overflow-hidden">
-            {hobby.videoSrc ? (
-              <video
-                src={hobby.videoSrc}
-                poster={hobby.imageSrc}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="absolute inset-0 h-full w-full object-cover"
+          {/* Media — only rendered when imageSrc or videoSrc is provided */}
+          {hasMedia && (
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+              {hobby.videoSrc ? (
+                <video
+                  src={hobby.videoSrc}
+                  poster={hobby.imageSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={hobby.imageSrc}
+                  alt={hobby.imageAlt ?? hobby.title}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
+                  draggable={false}
+                />
+              )}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 40%)",
+                }}
               />
-            ) : (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={hobby.imageSrc}
-                alt={hobby.imageAlt}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
-                draggable={false}
-              />
-            )}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 40%)",
-              }}
-            />
-          </div>
+            </div>
+          )}
 
           {/* Story */}
           <p className="px-4 py-4 text-sm leading-relaxed text-muted">

@@ -34,7 +34,7 @@ export const SCHOOLS: readonly School[] = [
     result: "11.75 / 12",
     description:
       "Fourth-year student specializing in Artificial Intelligence and Machine Learning, with a minor in Mathematics and Statistics. Dean's Honour List every term; member of Golden Key.",
-    logo: "/images/carleton.png",
+    logo: "/images/carleton-logo.png",
     lightLogoBg: true,
   },
   {
@@ -58,7 +58,7 @@ export type Course = {
   language?: string
   /** Grade received; leave empty for "In progress". */
   grade?: string
-  /** Optional one-paragraph description (Carleton calendar or yours). */
+  /** Optional one-paragraph description (Carleton calendar). */
   description?: string
   /** Optional banner image under /public/images/courses/. */
   banner?: string
@@ -115,14 +115,14 @@ export const YEARS: readonly YearBlock[] = [
     label: "Junior",
     period: "2024 – 2025",
     courses: [
-      { code: "COMP 3000", title: "Operating Systems",                                grade: "A+", banner: "/images/courses/3000_operating_systems.png",  accent: "#0EA5E9" },
-      { code: "COMP 3004", title: "Object-Oriented Software Engineering", language: "C++",            banner: "/images/courses/comp3004_banner.png",        accent: "#7C3AED" },
-      { code: "COMP 3005", title: "Database Management Systems",          language: "SQL, Postgres", banner: "/images/courses/comp3005_banner.png",        accent: "#10B981" },
-      { code: "COMP 3007", title: "Programming Paradigms",                language: "Haskell",        banner: "/images/courses/comp3007_banner.png",        accent: "#5E5086" },
-      { code: "COMP 3105", title: "Introduction to Machine Learning",     language: "Python",         banner: "/images/courses/3105_Machine Learning_cover.png", accent: "#F7931E" },
-      { code: "COMP 3804", title: "Design and Analysis of Algorithms",                               banner: "/images/courses/3804_algorithms_design_cover.jpg", accent: "#EF4444" },
-      { code: "MATH 3007", title: "Complex Analysis",                                               banner: "/images/courses/Math_3007_complex_analysis.jpg",   accent: "#F59E0B" },
-      { code: "STAT 3504", title: "Analysis of Variance & Experimental Design",                    banner: "/images/courses/stat3504_banner.png",              accent: "#0EA5E9" },
+      { code: "COMP 3000", title: "Operating Systems",                    language: "C, kernel",     grade: "A", banner: "/images/courses/junior/3000_operating_systems.png",       accent: "#0EA5E9" },
+      { code: "COMP 3004", title: "Object-Oriented Software Engineering", language: "C++",                    banner: "/images/courses/junior/comp3004_banner.png",              accent: "#7C3AED" },
+      { code: "COMP 3005", title: "Database Management Systems",          language: "SQL, Postgres",          banner: "/images/courses/junior/comp3005_banner.png",              accent: "#10B981" },
+      { code: "COMP 3007", title: "Programming Paradigms",                language: "Haskell",                banner: "/images/courses/junior/comp3007_banner.png",              accent: "#5E5086" },
+      { code: "COMP 3105", title: "Introduction to Machine Learning",     language: "Python",                 banner: "/images/courses/junior/3105_Machine Learning_cover.png",  accent: "#F7931E" },
+      { code: "COMP 3804", title: "Design and Analysis of Algorithms",                                       banner: "/images/courses/junior/3804_algorithms_design_cover.jpg", accent: "#EF4444" },
+      { code: "MATH 3007", title: "Complex Analysis",                                                        banner: "/images/courses/junior/Math_3007_complex_analysis.jpg",   accent: "#F59E0B" },
+      { code: "STAT 3504", title: "Analysis of Variance & Experimental Design",                              banner: "/images/courses/junior/stat3504_banner.png",              accent: "#0EA5E9" },
     ],
   },
   {

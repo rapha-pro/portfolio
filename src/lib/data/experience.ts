@@ -25,8 +25,14 @@ export type ExperienceEntry = {
   logo: string | null
   /** Tailwind color for the node dot / accent (a brand color). */
   accent: string
-  /** If true the logo tile uses a light background (for dark wordmarks). */
+  /** If true the logo tile uses a white background (for dark wordmarks). */
   lightLogoBg?: boolean
+  /**
+   * Optional hex color to force as the logo tile background.
+   * Takes priority over `lightLogoBg`. Useful for logos designed on specific
+   * brand backgrounds (e.g. Caterpillar's yellow mark on dark).
+   */
+  bgOverride?: string
 }
 
 /** Order here == order rendered (top of timeline == most recent). */
@@ -72,9 +78,10 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       "Integrated the GitHub Actions Importer into existing workflows, reaching high translation accuracy across legacy pipelines.",
       "Contributed to embedded software for autonomous drilling systems using Linux, bash, and Docker inside a scaled-Agile team.",
     ],
-    logo: "/images/experience/caterpillar.png",
+    logo: "",
     accent: "#FFCD11",
     lightLogoBg: false,
+    bgOverride: "#1C1C1C",
   },
   {
     company: "Ford",
@@ -87,7 +94,7 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       "Mentored a new intern on the team's automation stack, debugging process, and lab setup.",
       "Worked hands-on with Sync Infotainment, Telematics hardware, and Arduino while setting up Fully Networked Vehicle (FNV) systems for testing.",
     ],
-    logo: "/images/experience/ford3.png",
+    logo: "",
     accent: "#003478",
     lightLogoBg: true,
   },

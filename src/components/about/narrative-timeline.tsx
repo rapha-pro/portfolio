@@ -20,25 +20,53 @@ type NarrativeTimelineProps = {
 
 /**
  * Purpose:
- *   DeepMind-style alternating-side story timeline. Each block (prose or
- *   photo) occupies a full row; consecutive blocks flip to the opposite
- *   side so the eye zig-zags down a soft vertical rail. Rail nodes glow
- *   when their block enters the viewport.
+ *   Groups an ordered list of narrative blocks into pairs — two blocks share
+ *   each row. The first block of a pair occupies the left column, the second
+ *   occupies the right. This eliminates whitespace: a photo always sits beside
+ *   its matching prose instead of each block claiming a row alone.
+ *
+ * Args:
+ *   blocks — the ordered block list to pair.
+ *
+ * Returns:
+ *   Array of [left, right | null] tuples. The last pair has null on the right
+ *   when the total block count is odd.
+ */
+function pairBlocks(
+  blocks: readonly NarrativeBlock[]
+): Array<[NarrativeBlock, NarrativeBlock | null]> {
+  const pairs: Array<[NarrativeBlock, NarrativeBlock | null]> = []
+  for (let i = 0; i < blocks.length; i += 2) {
+    pairs.push([blocks[i], blocks[i + 1] ?? null])
+  }
+  return pairs
+}
+
+/**
+ * Purpose:
+ *   DeepMind-style paired story timeline. Consecutive blocks share a row —
+ *   left column / right column — so photos always sit beside their matching
+ *   prose and no half-empty rows appear. A center rail connects all rows;
+ *   rail nodes glow when their pair enters the viewport.
+ *
+ *   On mobile, the two-column layout collapses and blocks stack vertically.
  *
  * Args:
  *   blocks    — ordered story blocks. Defaults to NARRATIVE.
  *   className — extra classes on the root wrapper.
  *
  * Returns:
- *   A vertical sequence of alternating-side rows with a center rail.
+ *   A vertical sequence of paired rows with a center rail.
  */
 export function NarrativeTimeline({
   blocks = NARRATIVE,
   className = "",
 }: NarrativeTimelineProps) {
+  const pairs = pairBlocks(blocks)
+
   return (
     <div className={`relative mx-auto w-full max-w-5xl ${className}`}>
-      {/* Center rail (hidden on mobile, where blocks stack single-column) */}
+      {/* Center rail (md+) */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 md:block"
@@ -48,9 +76,9 @@ export function NarrativeTimeline({
         }}
       />
 
-      <ol className="relative flex flex-col gap-10 md:gap-16">
-        {blocks.map((block, i) => (
-          <NarrativeRow key={i} block={block} side={i % 2 === 0 ? "left" : "right"} />
+      <ol className="relative flex flex-col gap-12 md:gap-20">
+        {pairs.map((pair, i) => (
+          <NarrativeRow key={i} left={pair[0]} right={pair[1]} />
         ))}
       </ol>
     </div>
@@ -58,33 +86,30 @@ export function NarrativeTimeline({
 }
 
 type RowProps = {
-  block: NarrativeBlock
-  side: "left" | "right"
+  left: NarrativeBlock
+  right: NarrativeBlock | null
 }
 
 /**
  * Purpose:
- *   A single row of the narrative timeline. Places its content on the
- *   given side on medium+ screens, fades/slides in from that side on first
- *   viewport entry, and renders the rail node on the center axis.
+ *   A single paired row. Both blocks animate in from their respective sides
+ *   when the row enters the viewport. The rail node glows on entry.
  *
  * Args:
- *   block — prose or photo payload.
- *   side  — which half of the rail the card sits on.
+ *   left  — block occupying the left column.
+ *   right — block occupying the right column, or null (left-only row).
  *
  * Returns:
  *   A two-column <li> row (stacks on mobile).
  */
-function NarrativeRow({ block, side }: RowProps) {
+function NarrativeRow({ left, right }: RowProps) {
   const rowRef = useRef<HTMLLIElement>(null)
-  const inView = useInView(rowRef, { once: true, margin: "-20% 0px -20% 0px" })
-
-  const slideFrom = side === "left" ? -60 : 60
+  const inView = useInView(rowRef, { once: true, margin: "-15% 0px -15% 0px" })
 
   return (
     <li
       ref={rowRef}
-      className="relative grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-10"
+      className="relative grid grid-cols-1 items-start gap-8 md:grid-cols-2 md:gap-12"
     >
       {/* Rail node */}
       <span
@@ -101,54 +126,100 @@ function NarrativeRow({ block, side }: RowProps) {
         />
       </span>
 
-      {/* The card — placed on the correct side at md+ */}
-      <div
-        className={
-          side === "left"
-            ? "md:col-start-1 md:pr-8"
-            : "md:col-start-2 md:pl-8"
-        }
-      >
-        <motion.div
-          initial={{ opacity: 0, x: slideFrom, y: 24 }}
-          animate={inView ? { opacity: 1, x: 0, y: 0 } : undefined}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {block.kind === "prose" ? (
-            <ProseBlock block={block} />
-          ) : (
-            <PhotoBlock block={block} />
-          )}
-        </motion.div>
+      {/* Left block */}
+      <div className="md:pr-10">
+        <BlockItem block={left} inView={inView} slideFrom={-60} />
       </div>
+
+      {/* Right block — omitted gracefully on odd-count endings */}
+      {right && (
+        <div className="md:pl-10">
+          <BlockItem block={right} inView={inView} slideFrom={60} />
+        </div>
+      )}
     </li>
   )
 }
 
-/** Renders the text-only narrative block. */
+type BlockItemProps = {
+  block: NarrativeBlock
+  inView: boolean
+  slideFrom: number
+}
+
+/**
+ * Purpose:
+ *   Wraps a prose or photo block in a shared slide-in animation. Delegates
+ *   actual rendering to the typed sub-components below.
+ *
+ * Args:
+ *   block     — the block to render.
+ *   inView    — whether the parent row has entered the viewport.
+ *   slideFrom — horizontal offset (px) to animate in from.
+ *
+ * Returns:
+ *   An animated wrapper around the block content.
+ */
+function BlockItem({ block, inView, slideFrom }: BlockItemProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: slideFrom, y: 20 }}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : undefined}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {block.kind === "prose" ? (
+        <ProseBlock block={block} />
+      ) : (
+        <PhotoBlock block={block} />
+      )}
+    </motion.div>
+  )
+}
+
+/**
+ * Purpose:
+ *   Renders the text-only narrative block. No card background — the text
+ *   floats directly against the page so it visually pairs with its adjacent
+ *   photo without competing surfaces.
+ *
+ * Args:
+ *   block — the prose narrative block.
+ *
+ * Returns:
+ *   Kicker + heading + paragraph stack.
+ */
 function ProseBlock({ block }: { block: NarrativeProseBlock }) {
   return (
-    <GlassCard className="p-5 md:p-6">
+    <div className="py-2">
       {block.kicker && (
         <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.18em] text-accent">
           {block.kicker}
         </p>
       )}
       {block.heading && (
-        <h3 className="mb-3 text-lg font-semibold text-brand md:text-xl">
+        <h3 className="mb-4 text-xl font-semibold text-brand md:text-2xl">
           {block.heading}
         </h3>
       )}
-      <div className="flex flex-col gap-3 text-sm leading-relaxed text-muted md:text-[15px]">
+      <div className="flex flex-col gap-4 text-sm leading-relaxed text-muted md:text-[15px]">
         {block.paragraphs.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
       </div>
-    </GlassCard>
+    </div>
   )
 }
 
-/** Renders the photo + caption narrative block, with a gentle tilt. */
+/**
+ * Purpose:
+ *   Renders the photo + caption narrative block inside a gentle tilt frame.
+ *
+ * Args:
+ *   block — the photo narrative block.
+ *
+ * Returns:
+ *   A TiltCard-wrapped image with caption.
+ */
 function PhotoBlock({ block }: { block: NarrativePhotoBlock }) {
   return (
     <TiltCard max={6}>
