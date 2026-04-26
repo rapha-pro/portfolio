@@ -6,6 +6,7 @@ import { ArrowLeft, Globe } from "lucide-react"
 import { AnimatedGithub } from "@/components/ui/icons/animated-github"
 import { AnimatedYoutube } from "@/components/ui/icons/animated-youtube"
 import { PROJECTS } from "@/lib/data/projects"
+import { TechBadge } from "@/components/projects/tech-badge"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -96,17 +97,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           <h2 className="mb-4 text-lg font-semibold text-brand">Technologies</h2>
           <div className="flex flex-wrap gap-2">
             {project.tech.map((t) => (
-              <span
-                key={t}
-                className="rounded-lg border px-3 py-1 text-sm font-mono"
-                style={{
-                  borderColor: "var(--glass-border)",
-                  background: "var(--glass)",
-                  color: "var(--fg-muted)",
-                }}
-              >
-                {t}
-              </span>
+              <TechBadge key={t} name={t} />
             ))}
           </div>
         </div>

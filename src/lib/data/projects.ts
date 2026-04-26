@@ -8,32 +8,30 @@
  *      SORT_RECENT_FIRST is true, or left in declaration order when false.
  *
  * Fields:
- *   slug           -- URL-safe identifier used for /projects/[slug] routes.
- *   title          -- Display name.
- *   description    -- Short blurb shown on the card.
- *   longDescription -- Paragraphs shown on the detail page.
- *   image          -- Primary card image (public/images/projects/).
- *   tech           -- Tech stack tags.
- *   sortDate       -- Numeric YYYYMM date for ordering (e.g. 202409 = Sep 2024).
- *   period         -- Human-readable date string shown on the card badge.
- *   context        -- Project type label shown on the card badge.
- *   githubUrl      -- Shown as GitHub icon if present.
- *   liveUrl        -- Shown as Globe icon if present (listed first).
- *   videoUrl       -- Shown as YouTube icon if present.
- *   hasDetailPage  -- When true, card links to /projects/[slug].
- *   featured       -- Featured cards get a wider 16:9 image ratio.
- *   priority       -- "high" | "medium" | "low" (default "low").
- *                     High-priority projects appear before medium, then low.
- *   visible        -- Set false to hide from the projects grid entirely.
- *   customPage     -- True when a hand-crafted page exists at
- *                     src/app/projects/{slug}/page.tsx. The standard
- *                     detail template is skipped for these slugs.
+ *   slug        - URL-safe identifier used for /projects/[slug] routes.
+ *   title       - Display name.
+ *   description - Short blurb shown on the card (1-2 lines max).
+ *   image       - Primary card image (public/images/projects/).
+ *   tech        - Tech stack tags.
+ *   sortDate    - Numeric YYYYMM date for ordering (e.g. 202409 = Sep 2024).
+ *   period      - Human-readable date string shown on the card badge.
+ *   context     - Project type label shown on the card badge.
+ *   githubUrl   - Shown as GitHub icon if present.
+ *   liveUrl     - Shown as Globe icon if present (listed first).
+ *   videoUrl    - Shown as YouTube icon if present.
+ *   hasDetailPage - When true, card links to /projects/[slug].
+ *   featured    - Featured cards get a wider 16:9 image ratio.
+ *   priority    - "high" | "medium" | "low" (default "low").
+ *                 High-priority projects appear before medium, then low.
+ *   visible     - Set false to hide from the projects grid entirely.
+ *   customPage  - True when a hand-crafted page exists at
+ *                 src/app/projects/{slug}/page.tsx. The standard
+ *                 detail template is skipped for these slugs.
  *
  * Long descriptions (detail page body):
  *   Edit content/projects/{slug}.txt. Paragraphs are separated by blank lines.
- *   The detail page reads this file at build time. If the file is missing, it
- *   falls back to project.description. To add a new project's long copy, just
- *   drop a new {slug}.txt in that folder.
+ *   The detail page reads this file at build time. If the file is missing or
+ *   empty, it falls back to project.description.
  */
 
 export type ProjectPriority = "high" | "medium" | "low"
@@ -42,8 +40,6 @@ export type Project = {
   slug: string
   title: string
   description: string
-  /** @deprecated -- long descriptions now live in content/projects/{slug}.txt */
-  longDescription?: string[]
   image: string
   images?: string[]
   tech: string[]
@@ -62,7 +58,7 @@ export type Project = {
    * src/app/projects/{slug}/page.tsx. Next.js static routes take precedence
    * over the [slug] dynamic route automatically -- no code change needed.
    * Setting this flag just excludes the slug from generateStaticParams() so
-   * the dynamic template doesn't shadow the custom one.
+   * the dynamic template does not shadow the custom one.
    */
   customPage?: boolean
 }
@@ -90,9 +86,9 @@ export function getSortedProjects(): readonly Project[] {
     .sort((a, b) => {
       const pa = PRIORITY_WEIGHT[a.priority ?? "low"]
       const pb = PRIORITY_WEIGHT[b.priority ?? "low"]
-      if (pa !== pb) return pb - pa          // higher priority first
+      if (pa !== pb) return pb - pa
       if (SORT_RECENT_FIRST) return b.sortDate - a.sortDate
-      return 0                               // preserve declaration order
+      return 0
     })
 }
 
@@ -101,12 +97,7 @@ export const PROJECTS: readonly Project[] = [
     slug: "cu-webring",
     title: "CU-Webring",
     description:
-      "Contributed to the creation of the CU-Webring, a platform for Carleton University students and alumni to showcase their personal websites and portfolios, enhancing visibility and networking opportunities.",
-    longDescription: [
-      "CU-Webring is an open-source web ring built for the Carleton University community. A web ring is a circular collection of websites linked together so visitors can easily navigate between member sites.",
-      "I contributed to the project by building out core navigation features and automating the member-addition workflow using GitHub Actions, making it easy for new students to submit their sites via pull request.",
-      "The project is fully static, intentionally lightweight, and designed to stay that way -- it's about discoverability, not complexity.",
-    ],
+      "Open-source web ring for Carleton University students and alumni to showcase personal websites and connect with the community.",
     image: "/images/projects/cu-webring.png",
     tech: ["JavaScript", "GitHub Actions", "HTML", "CSS"],
     sortDate: 202501,
@@ -123,12 +114,7 @@ export const PROJECTS: readonly Project[] = [
     slug: "foodbank-ai",
     title: "Foodbank AI",
     description:
-      "FoodQuest is a gamified web application designed to encourage food donations by allowing users to donate items, track their contributions, and earn points based on the nutritional value of donated items.",
-    longDescription: [
-      "FoodQuest was built at a 24-hour hackathon in September 2024. The core idea: make donating to food banks feel rewarding by gamifying the experience with points, streaks, and leaderboards.",
-      "The AI component uses a PyTorch model to estimate the nutritional value of donated food items from photos, automatically assigning point values so users don't need to manually input data.",
-      "The backend is a Flask REST API connected to a PostgreSQL database, with a React frontend for a smooth single-page experience.",
-    ],
+      "Gamified food donation app where users earn points based on the nutritional value of donated items, built at a 24-hour hackathon.",
     image: "/images/projects/foodbank_ai.png",
     tech: ["PyTorch", "Flask", "Pandas", "NumPy", "Python", "React", "PostgreSQL"],
     sortDate: 202409,
@@ -145,11 +131,6 @@ export const PROJECTS: readonly Project[] = [
     title: "Galleria Webapp",
     description:
       "A gallery web application allowing artists to showcase their art and interact with other artists on the platform.",
-    longDescription: [
-      "Galleria was the final project for my Web Development course in Fall 2023. The goal was to build a full-stack application from scratch using Node.js and Express.",
-      "Artists can create profiles, upload artwork, follow each other, and leave comments. The app uses MongoDB for flexible document storage and Pug as a server-side templating engine.",
-      "This project taught me the full request-response cycle, session-based authentication, and how to structure a real MVC application.",
-    ],
     image: "/images/projects/galleria.png",
     tech: ["Node.js", "Express.js", "MongoDB", "Pug", "HTML", "CSS"],
     sortDate: 202312,
@@ -164,14 +145,14 @@ export const PROJECTS: readonly Project[] = [
     slug: "internship-nest",
     title: "Internship Nest",
     description:
-      "A full-stack internship tracking dashboard for students to manage applications, deadlines, and interview stages in one place.",
+      "Full-stack dashboard for students to track internship applications, deadlines, and interview stages.",
     image: "/images/projects/internship-nest.png",
     tech: ["React", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
     sortDate: 202402,
     period: "Winter 2024",
     context: "Personal Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: false,
   },
@@ -186,7 +167,7 @@ export const PROJECTS: readonly Project[] = [
     period: "Summer 2023",
     context: "Personal Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },
@@ -194,14 +175,14 @@ export const PROJECTS: readonly Project[] = [
     slug: "english-trivia",
     title: "English Trivia",
     description:
-      "An interactive trivia web app covering English grammar, literature, and vocabulary -- designed for classroom use.",
+      "Interactive trivia web app covering English grammar, literature, and vocabulary, designed for classroom use.",
     image: "/images/projects/trivia.png",
     tech: ["JavaScript", "HTML", "CSS"],
     sortDate: 202303,
     period: "Spring 2023",
     context: "Side Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },
@@ -215,7 +196,7 @@ export const PROJECTS: readonly Project[] = [
     sortDate: 202312,
     period: "Dec 2023",
     context: "Creative Project",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },
@@ -230,7 +211,7 @@ export const PROJECTS: readonly Project[] = [
     period: "Fall 2023",
     context: "AI Course Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },
@@ -245,7 +226,7 @@ export const PROJECTS: readonly Project[] = [
     period: "Winter 2023",
     context: "Side Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },
@@ -260,7 +241,7 @@ export const PROJECTS: readonly Project[] = [
     period: "Fall 2022",
     context: "Side Project",
     githubUrl: "https://github.com/nathonana",
-    hasDetailPage: false,
+    hasDetailPage: true,
     priority: "low",
     visible: true,
   },

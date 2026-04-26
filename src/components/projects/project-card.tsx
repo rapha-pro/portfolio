@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { AnimatedGithub } from "@/components/ui/icons/animated-github"
 import { AnimatedYoutube } from "@/components/ui/icons/animated-youtube"
 import { type Project } from "@/lib/data/projects"
+import { TechBadge } from "@/components/projects/tech-badge"
 
 type ProjectCardProps = {
   project: Project
@@ -150,17 +151,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             {/* Tech chips */}
             <div className="flex flex-wrap gap-1.5">
               {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-md border px-2 py-0.5 text-[11px] font-mono"
-                  style={{
-                    borderColor: "var(--glass-border)",
-                    background: "var(--glass)",
-                    color: "var(--fg-muted)",
-                  }}
-                >
-                  {t}
-                </span>
+                <TechBadge key={t} name={t} showLogo={false} />
               ))}
             </div>
           </div>
