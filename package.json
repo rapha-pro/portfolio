@@ -10,7 +10,8 @@
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "birthday:media": "node scripts/birthday-media.mjs"
     },
     "dependencies": {
         "@gsap/react": "^2.1.2",

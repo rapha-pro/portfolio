@@ -1,0 +1,705 @@
+/*
+   Birthday experience styles.
+   Everything is prefixed with .bd- so nothing leaks into the portfolio.
+   Colors come from the --bd-* variables that birthday-experience.tsx sets
+   from the person's theme.ts; transparencies are mixed with color-mix().
+*/
+
+/* In the components layer so Tailwind utilities on the same element win. */
+@layer components {
+    .bd-root {
+        --bd-cord: clamp(26px, 8dvh, 96px);
+        --bd-bulb-w: clamp(30px, 3.6vw, 44px);
+        --bd-light-y: calc(var(--bd-cord) + var(--bd-bulb-w) * 0.93);
+        --bd-top: calc(var(--bd-cord) + var(--bd-bulb-w) * 1.67 + 28px);
+        --bd-card-h: max(120px, min(34dvh, 58vw, 360px));
+        --bd-card-w: calc(var(--bd-card-h) * 0.8);
+        --bd-card-gap: clamp(14px, 2.2vw, 30px);
+        --bd-bottom: calc(env(safe-area-inset-bottom, 0px) + 86px);
+        --bd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bd-bg);
+        color: var(--bd-ink);
+        color-scheme: dark;
+        font-family:
+            var(--font-sans),
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        user-select: none;
+        overscroll-behavior: none;
+        outline: none;
+    }
+
+    @media (max-height: 480px) {
+        .bd-root {
+            --bd-cord: 10px;
+            --bd-top: calc(var(--bd-cord) + var(--bd-bulb-w) * 1.67 + 14px);
+            --bd-card-h: 92px;
+            --bd-bottom: calc(env(safe-area-inset-bottom, 0px) + 56px);
+        }
+    }
+
+    .bd-root ::selection {
+        background: color-mix(in srgb, var(--bd-light) 35%, transparent);
+        color: var(--bd-ink);
+    }
+
+    /* ─── Typography ─────────────────────────────────────────────── */
+
+    .bd-serif {
+        font-family: var(--font-bd-serif), "Cormorant Garamond", Georgia, serif;
+        font-variant-ligatures: common-ligatures;
+    }
+
+    .bd-label {
+        font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10px;
+        line-height: 1.6;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--bd-ink-subtle);
+    }
+
+    @media (max-width: 380px) {
+        .bd-label {
+            letter-spacing: 0.2em;
+            font-size: 9px;
+        }
+    }
+
+    .bd-glow {
+        text-shadow:
+            0 0 28px color-mix(in srgb, var(--bd-light) 26%, transparent),
+            0 0 2px color-mix(in srgb, var(--bd-ink) 25%, transparent);
+    }
+
+    .bd-glow-warm {
+        color: color-mix(in srgb, var(--bd-light) 38%, var(--bd-ink));
+        text-shadow:
+            0 0 42px color-mix(in srgb, var(--bd-light) 40%, transparent),
+            0 0 14px color-mix(in srgb, var(--bd-light) 22%, transparent);
+    }
+
+    .bd-message {
+        font-size: clamp(1.5rem, min(4.8vw, 4.7dvh), 2.65rem);
+        line-height: 1.28;
+        font-weight: 500;
+        letter-spacing: 0.005em;
+        text-wrap: balance;
+    }
+
+    .bd-message[data-tone="quiet"] {
+        font-size: clamp(1.3rem, min(4vw, 4.6dvh), 2.1rem);
+        font-style: italic;
+        color: var(--bd-ink-muted);
+    }
+
+    .bd-message[data-tone="emphasis"] {
+        font-size: clamp(1.8rem, min(5.6vw, 6.2dvh), 3.1rem);
+        font-style: italic;
+    }
+
+    /* Untyped remainder keeps its space so centered text never jumps */
+    .bd-ghost {
+        color: transparent;
+        text-shadow: none;
+    }
+
+    /* Freshly typed characters settle in like ink */
+    .bd-ink {
+        animation: bd-ink 0.34s ease-out both;
+    }
+
+    @keyframes bd-ink {
+        from {
+            opacity: 0;
+            filter: blur(3px);
+        }
+        to {
+            opacity: 1;
+            filter: blur(0);
+        }
+    }
+
+    .bd-caret {
+        position: relative;
+        display: inline-block;
+        width: 0;
+        height: 1em;
+        vertical-align: -0.12em;
+    }
+
+    .bd-caret::after {
+        content: "";
+        position: absolute;
+        left: 0.06em;
+        top: 0;
+        bottom: 0;
+        width: 1.5px;
+        background: color-mix(in srgb, var(--bd-light) 70%, var(--bd-ink));
+        box-shadow: 0 0 8px color-mix(in srgb, var(--bd-light) 60%, transparent);
+        animation: bd-blink 1.05s steps(1) infinite;
+    }
+
+    @keyframes bd-blink {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* ─── Atmosphere ─────────────────────────────────────────────── */
+
+    .bd-grain {
+        position: absolute;
+        inset: -50%;
+        width: 200%;
+        height: 200%;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        opacity: 0.055;
+        animation: bd-grain 0.9s steps(5) infinite;
+        will-change: transform;
+    }
+
+    @keyframes bd-grain {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+        20% {
+            transform: translate3d(-4%, 3%, 0);
+        }
+        40% {
+            transform: translate3d(3%, -5%, 0);
+        }
+        60% {
+            transform: translate3d(-6%, -2%, 0);
+        }
+        80% {
+            transform: translate3d(5%, 4%, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .bd-vignette {
+        background: radial-gradient(
+            ellipse 85% 75% at 50% 42%,
+            transparent 40%,
+            color-mix(in srgb, black 72%, transparent) 100%
+        );
+    }
+
+    /* The whole light rig sways a little, like a bulb on a long cord */
+    .bd-sway {
+        transform-origin: 50% 0;
+        animation: bd-sway 11s ease-in-out infinite;
+    }
+
+    @keyframes bd-sway {
+        0%,
+        100% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(0.9deg);
+        }
+        75% {
+            transform: rotate(-0.9deg);
+        }
+    }
+
+    .bd-pool {
+        background:
+            radial-gradient(
+                ellipse 34% 26% at 50% var(--bd-light-y),
+                color-mix(in srgb, var(--bd-light) 20%, transparent) 0%,
+                transparent 100%
+            ),
+            radial-gradient(
+                ellipse 78% 62% at 50% var(--bd-light-y),
+                color-mix(in srgb, var(--bd-light) 9%, transparent) 0%,
+                color-mix(in srgb, var(--bd-light) 3%, transparent) 45%,
+                transparent 100%
+            );
+    }
+
+    .bd-cone {
+        position: absolute;
+        left: 50%;
+        top: var(--bd-light-y);
+        width: min(150vw, 1500px);
+        height: calc(100% - var(--bd-light-y));
+        transform: translateX(-50%);
+        clip-path: polygon(47% 0, 53% 0, 88% 100%, 12% 100%);
+        background: linear-gradient(
+            to bottom,
+            color-mix(in srgb, var(--bd-light) 11%, transparent) 0%,
+            color-mix(in srgb, var(--bd-light) 4%, transparent) 45%,
+            transparent 85%
+        );
+        filter: blur(18px);
+    }
+
+    .bd-mote {
+        position: absolute;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 9999px;
+        background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--bd-light) 55%, white) 0%,
+            transparent 70%
+        );
+        opacity: 0;
+        animation: bd-drift var(--dur) ease-in-out var(--delay) infinite;
+    }
+
+    @keyframes bd-drift {
+        0% {
+            transform: translate3d(0, 0, 0);
+            opacity: 0;
+        }
+        25% {
+            opacity: var(--alpha);
+        }
+        75% {
+            opacity: var(--alpha);
+        }
+        100% {
+            transform: translate3d(var(--dx), var(--dy), 0);
+            opacity: 0;
+        }
+    }
+
+    .bd-ember {
+        position: absolute;
+        bottom: -4%;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 9999px;
+        background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--bd-light) 80%, white) 0%,
+            color-mix(in srgb, var(--bd-ember) 60%, transparent) 45%,
+            transparent 72%
+        );
+        opacity: 0;
+        animation: bd-rise var(--dur) linear var(--delay) infinite;
+    }
+
+    @keyframes bd-rise {
+        0% {
+            transform: translate3d(0, 0, 0);
+            opacity: 0;
+        }
+        15% {
+            opacity: var(--alpha);
+        }
+        70% {
+            opacity: var(--alpha);
+        }
+        100% {
+            transform: translate3d(var(--dx), -105dvh, 0);
+            opacity: 0;
+        }
+    }
+
+    /* ─── PIN gate ───────────────────────────────────────────────── */
+
+    .bd-pin-box {
+        --size: clamp(54px, 15vw, 64px);
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: var(--size);
+        height: calc(var(--size) * 1.14);
+        border-radius: 14px;
+        border: 1px solid color-mix(in srgb, var(--bd-ink) 13%, transparent);
+        background: linear-gradient(
+            to bottom,
+            color-mix(in srgb, var(--bd-ink) 4%, transparent),
+            color-mix(in srgb, var(--bd-ink) 1.5%, transparent)
+        );
+        box-shadow: 0 1px 0 color-mix(in srgb, var(--bd-ink) 6%, transparent) inset;
+        transition:
+            border-color 0.45s var(--bd-ease),
+            box-shadow 0.45s var(--bd-ease),
+            background-color 0.45s var(--bd-ease);
+    }
+
+    .bd-pin-box[data-active="true"] {
+        border-color: color-mix(in srgb, var(--bd-light) 45%, transparent);
+        box-shadow:
+            0 0 0 3px color-mix(in srgb, var(--bd-light) 8%, transparent),
+            0 1px 0 color-mix(in srgb, var(--bd-ink) 6%, transparent) inset;
+    }
+
+    .bd-pin-box[data-state="wrong"] {
+        border-color: color-mix(in srgb, var(--bd-ember) 60%, transparent);
+    }
+
+    .bd-pin-box[data-state="success"] {
+        border-color: color-mix(in srgb, var(--bd-light) 80%, transparent);
+        box-shadow:
+            0 0 26px color-mix(in srgb, var(--bd-light) 35%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--bd-light) 30%, transparent) inset;
+    }
+
+    .bd-pin-caret {
+        width: 1.5px;
+        height: 38%;
+        background: color-mix(in srgb, var(--bd-light) 75%, var(--bd-ink));
+        animation: bd-blink 1.05s steps(1) infinite;
+    }
+
+    /* ─── Photo stream ───────────────────────────────────────────── */
+
+    .bd-track {
+        display: flex;
+        width: max-content;
+        animation: bd-marquee var(--bd-marquee-duration, 300s) linear infinite;
+        will-change: transform;
+    }
+
+    @keyframes bd-marquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+        to {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+
+    .bd-stream[data-held="true"] .bd-track,
+    .bd-stream:focus-visible .bd-track {
+        animation-play-state: paused;
+    }
+
+    @media (hover: hover) {
+        .bd-stream:hover .bd-track {
+            animation-play-state: paused;
+        }
+    }
+
+    .bd-stream-static {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .bd-stream-static::-webkit-scrollbar {
+        display: none;
+    }
+
+    .bd-stream-static .bd-card-slot {
+        scroll-snap-align: center;
+    }
+
+    .bd-card-slot {
+        position: relative;
+        flex: none;
+        padding-right: var(--bd-card-gap);
+        transform: translateY(var(--lift)) rotate(var(--tilt));
+    }
+
+    .bd-card {
+        position: relative;
+        display: block;
+        padding: 0;
+        cursor: zoom-in;
+        width: var(--bd-card-w);
+        height: var(--bd-card-h);
+        border-radius: 10px;
+        overflow: hidden;
+        background:
+            radial-gradient(
+                120% 90% at 50% 0%,
+                color-mix(in srgb, var(--bd-light) 7%, transparent),
+                transparent 70%
+            ),
+            var(--bd-surface);
+        border: 1px solid color-mix(in srgb, var(--bd-ink) 10%, transparent);
+        box-shadow:
+            0 1px 0 color-mix(in srgb, var(--bd-light) 22%, transparent) inset,
+            0 26px 40px -22px black,
+            0 10px 18px -10px color-mix(in srgb, black 70%, transparent);
+        transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+            scale(var(--scale, 1));
+        transition: transform 0.6s var(--bd-ease);
+    }
+
+    .bd-card-img {
+        object-fit: cover;
+        opacity: 0;
+        filter: sepia(0.2) saturate(0.82) contrast(1.04) brightness(0.9);
+        transition:
+            opacity 1.1s ease,
+            filter 0.6s ease;
+    }
+
+    .bd-card[data-loaded="true"] .bd-card-img {
+        opacity: 1;
+    }
+
+    .bd-card video.bd-card-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* The enlarged card */
+    .bd-focus-frame {
+        border-radius: 14px;
+        background: var(--bd-surface);
+        border: 1px solid color-mix(in srgb, var(--bd-ink) 14%, transparent);
+        box-shadow:
+            0 1px 0 color-mix(in srgb, var(--bd-light) 28%, transparent) inset,
+            0 40px 80px -30px black,
+            0 0 60px -10px color-mix(in srgb, var(--bd-light) 18%, transparent);
+    }
+
+    .bd-card-sheen {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+            165deg,
+            color-mix(in srgb, var(--bd-light) 16%, transparent) 0%,
+            transparent 34%,
+            transparent 66%,
+            color-mix(in srgb, black 30%, transparent) 100%
+        );
+    }
+
+    .bd-card-glare {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: radial-gradient(
+            circle at var(--gx, 50%) var(--gy, 30%),
+            color-mix(in srgb, var(--bd-light) 26%, transparent) 0%,
+            transparent 55%
+        );
+        transition: opacity 0.4s ease;
+    }
+
+    @media (hover: hover) {
+        .bd-card-slot:hover {
+            z-index: 2;
+        }
+        .bd-card:hover {
+            --scale: 1.07;
+            transition: transform 0.14s linear;
+        }
+        .bd-card:hover .bd-card-img {
+            filter: none;
+        }
+        .bd-card:hover .bd-card-glare {
+            opacity: 1;
+        }
+    }
+
+    /* Light falls on the center of the row; the edges fade into the dark */
+    .bd-stream-mask {
+        -webkit-mask-image: radial-gradient(
+            ellipse 58% 150% at 50% 0%,
+            #000 38%,
+            rgba(0, 0, 0, 0.35) 78%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            ellipse 58% 150% at 50% 0%,
+            #000 38%,
+            rgba(0, 0, 0, 0.35) 78%,
+            transparent 100%
+        );
+    }
+
+    /* ─── Controls ───────────────────────────────────────────────── */
+
+    .bd-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 48px;
+        padding: 0 1.4rem 0 0.55rem;
+        border-radius: 9999px;
+        border: 1px solid color-mix(in srgb, var(--bd-light) 32%, transparent);
+        background: color-mix(in srgb, var(--bd-light) 6%, transparent);
+        color: var(--bd-ink);
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        transition:
+            background-color 0.4s var(--bd-ease),
+            border-color 0.4s var(--bd-ease),
+            box-shadow 0.4s var(--bd-ease);
+        animation: bd-breathe 3.2s ease-in-out infinite;
+    }
+
+    .bd-button:hover {
+        background: color-mix(in srgb, var(--bd-light) 11%, transparent);
+        border-color: color-mix(in srgb, var(--bd-light) 55%, transparent);
+    }
+
+    @keyframes bd-breathe {
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--bd-light) 0%, transparent);
+        }
+        50% {
+            box-shadow: 0 0 34px 2px color-mix(in srgb, var(--bd-light) 16%, transparent);
+        }
+    }
+
+    /* Continue: meant to be found at a glance, even on a small phone */
+    .bd-continue {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        min-height: 52px;
+        padding: 0 1.6rem 0 1.8rem;
+        border-radius: 9999px;
+        border: 1px solid color-mix(in srgb, var(--bd-light) 55%, transparent);
+        background: color-mix(in srgb, var(--bd-light) 14%, var(--bd-bg));
+        color: color-mix(in srgb, var(--bd-light) 30%, var(--bd-ink));
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        cursor: pointer;
+        animation: bd-continue-glow 2.8s ease-in-out infinite;
+        transition:
+            background-color 0.3s ease,
+            border-color 0.3s ease;
+    }
+
+    .bd-continue:hover {
+        background: color-mix(in srgb, var(--bd-light) 22%, var(--bd-bg));
+        border-color: color-mix(in srgb, var(--bd-light) 75%, transparent);
+    }
+
+    @keyframes bd-continue-glow {
+        0%,
+        100% {
+            box-shadow:
+                0 0 0 0 color-mix(in srgb, var(--bd-light) 0%, transparent),
+                0 10px 30px -12px black;
+        }
+        50% {
+            box-shadow:
+                0 0 36px 4px color-mix(in srgb, var(--bd-light) 26%, transparent),
+                0 10px 30px -12px black;
+        }
+    }
+
+    .bd-link {
+        min-height: 44px;
+        padding: 0 0.75rem;
+        color: var(--bd-ink-subtle);
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .bd-link:hover {
+        color: var(--bd-ink-muted);
+    }
+
+    .bd-root :focus-visible {
+        outline: 1.5px solid color-mix(in srgb, var(--bd-light) 70%, transparent);
+        outline-offset: 4px;
+        border-radius: 10px;
+    }
+
+    /* Lets long text slide under the bottom controls instead of colliding */
+    .bd-bottom-fade {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 15;
+        height: calc(var(--bd-bottom) + 12px);
+        pointer-events: none;
+        background: linear-gradient(to top, var(--bd-bg) 45%, transparent);
+    }
+
+    .bd-scroll {
+        overflow-y: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .bd-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .bd-eq span {
+        display: block;
+        width: 2px;
+        border-radius: 2px;
+        background: currentColor;
+        animation: bd-eq 1.1s ease-in-out infinite;
+    }
+
+    .bd-eq span:nth-child(2) {
+        animation-delay: -0.35s;
+    }
+
+    .bd-eq span:nth-child(3) {
+        animation-delay: -0.7s;
+    }
+
+    @keyframes bd-eq {
+        0%,
+        100% {
+            height: 4px;
+        }
+        50% {
+            height: 13px;
+        }
+    }
+
+    /* Hidden YouTube player. When a phone refuses a scripted start, it is
+       centered (still invisible) under the sound button so her tap lands on
+       the player itself, which is the only start iPhones accept. */
+    .bd-music-shell {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 200px;
+        height: 200px;
+        z-index: -1;
+        opacity: 0.01;
+        pointer-events: none;
+    }
+
+    .bd-music-frame,
+    .bd-music-frame iframe {
+        display: block;
+        width: 200px;
+        height: 200px;
+        border: 0;
+    }
+
+    .bd-music-shell[data-armed="true"] {
+        left: auto;
+        right: calc(12px + 22px - 100px);
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 14px + 22px - 100px);
+        z-index: 45;
+        pointer-events: auto;
+    }
+
+    @media (min-width: 640px) {
+        .bd-music-shell[data-armed="true"] {
+            right: calc(24px + 22px - 100px);
+        }
+    }
+}
