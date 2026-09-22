@@ -83,6 +83,21 @@ export function parseYouTubeId(link: string): string {
 
 /**
  * Purpose:
+ *   The public page of a YouTube video, for the "open on YouTube" links.
+ *
+ * Args:
+ *   - link : the pasted link or id.
+ *
+ * Returns:
+ *   A watch URL, or null when no id can be found.
+ */
+export function youtubeWatchUrl(link: string): string | null {
+    const id = parseYouTubeId(link)
+    return id ? `https://www.youtube.com/watch?v=${id}` : null
+}
+
+/**
+ * Purpose:
  *   Injects the IFrame API script once and resolves when it is ready.
  *   Chains any existing onYouTubeIframeAPIReady handler instead of
  *   replacing it.

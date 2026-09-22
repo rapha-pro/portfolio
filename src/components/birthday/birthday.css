@@ -15,6 +15,7 @@
         --bd-card-h: max(120px, min(34dvh, 58vw, 360px));
         --bd-card-w: calc(var(--bd-card-h) * 0.8);
         --bd-card-gap: clamp(14px, 2.2vw, 30px);
+        --bd-sun: clamp(150px, min(42vw, 26dvh), 240px);
         --bd-bottom: calc(env(safe-area-inset-bottom, 0px) + 86px);
         --bd-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -278,36 +279,180 @@
         }
     }
 
-    .bd-ember {
-        position: absolute;
-        bottom: -4%;
-        width: var(--size);
-        height: var(--size);
-        border-radius: 9999px;
-        background: radial-gradient(
-            circle,
-            color-mix(in srgb, var(--bd-light) 80%, white) 0%,
-            color-mix(in srgb, var(--bd-ember) 60%, transparent) 45%,
-            transparent 72%
-        );
-        opacity: 0;
-        animation: bd-rise var(--dur) linear var(--delay) infinite;
+    /* ─── Birthday celebration ─────────────────────────────────── */
+
+    .bd-sun-spin {
+        animation: bd-spin 60s linear infinite;
     }
 
-    @keyframes bd-rise {
-        0% {
-            transform: translate3d(0, 0, 0);
+    .bd-sun-breathe {
+        animation: bd-breathe-scale 3.4s ease-in-out infinite;
+    }
+
+    @keyframes bd-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes bd-breathe-scale {
+        0%,
+        100% {
+            transform: scale(0.96);
+        }
+        50% {
+            transform: scale(1.04);
+        }
+    }
+
+    .bd-sun-number,
+    .bd-sun-glow {
+        font-size: calc(var(--bd-sun) * 0.4);
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+
+    .bd-sun-number {
+        background: linear-gradient(
+            110deg,
+            color-mix(in srgb, var(--bd-ember) 85%, black) 0%,
+            var(--bd-light) 32%,
+            #fffaf0 46%,
+            var(--bd-light) 60%,
+            color-mix(in srgb, var(--bd-ember) 85%, black) 100%
+        );
+        background-size: 250% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: bd-shimmer 3.2s ease-in-out infinite;
+    }
+
+    .bd-sun-glow {
+        color: var(--bd-light);
+        filter: blur(16px);
+        opacity: 0;
+        animation: bd-glow-pulse 2.8s ease-in-out 1.2s infinite;
+    }
+
+    @keyframes bd-shimmer {
+        from {
+            background-position: 110% 0;
+        }
+        to {
+            background-position: -140% 0;
+        }
+    }
+
+    @keyframes bd-glow-pulse {
+        0%,
+        100% {
+            opacity: 0.45;
+        }
+        50% {
+            opacity: 0.85;
+        }
+    }
+
+    .bd-sparkle {
+        position: absolute;
+        width: var(--size);
+        height: var(--size);
+        margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+        clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+        background: radial-gradient(circle, #fffaf0 0%, var(--bd-light) 70%);
+        opacity: 0;
+        animation: bd-twinkle var(--dur) ease-in-out var(--delay) infinite both;
+    }
+
+    @keyframes bd-twinkle {
+        0%,
+        100% {
+            transform: scale(0) rotate(0deg);
             opacity: 0;
         }
-        15% {
-            opacity: var(--alpha);
+        50% {
+            transform: scale(1) rotate(45deg);
+            opacity: 1;
         }
-        70% {
+    }
+
+    .bd-balloon {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        animation: bd-float-up var(--dur) linear var(--delay) infinite both;
+    }
+
+    @keyframes bd-float-up {
+        0% {
+            transform: translate3d(0, 100%, 0);
+            opacity: 0;
+        }
+        6%,
+        88% {
             opacity: var(--alpha);
         }
         100% {
-            transform: translate3d(var(--dx), -105dvh, 0);
+            transform: translate3d(0, calc(-100dvh - 120%), 0);
             opacity: 0;
+        }
+    }
+
+    .bd-balloon-sway {
+        transform-origin: 50% 0;
+        animation: bd-balloon-sway var(--sway-dur) ease-in-out infinite alternate;
+    }
+
+    @keyframes bd-balloon-sway {
+        from {
+            transform: translateX(calc(var(--sway) * -1)) rotate(-4deg);
+        }
+        to {
+            transform: translateX(var(--sway)) rotate(4deg);
+        }
+    }
+
+    .bd-confetti {
+        position: absolute;
+        top: 0;
+        opacity: 0;
+        animation: bd-fall var(--dur) linear var(--delay) infinite both;
+    }
+
+    .bd-confetti-piece {
+        display: block;
+        animation: bd-tumble var(--spin) linear infinite;
+    }
+
+    @keyframes bd-fall {
+        0% {
+            transform: translate3d(0, -24px, 0);
+            opacity: 0;
+        }
+        4%,
+        86% {
+            opacity: 0.95;
+        }
+        100% {
+            transform: translate3d(var(--drift), 104dvh, 0);
+            opacity: 0;
+        }
+    }
+
+    @keyframes bd-tumble {
+        from {
+            transform: rotate3d(1, 0.6, 0.2, 0deg);
+        }
+        to {
+            transform: rotate3d(1, 0.6, 0.2, 360deg);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .bd-confetti:nth-child(2n) {
+            display: none;
         }
     }
 
@@ -631,7 +776,20 @@
         background: linear-gradient(to top, var(--bd-bg) 45%, transparent);
     }
 
+    /* Text that scrolls up dissolves before it reaches the bulb */
     .bd-scroll {
+        -webkit-mask-image: linear-gradient(
+            to bottom,
+            transparent 0,
+            #000 calc(var(--bd-top) * 0.72),
+            #000 100%
+        );
+        mask-image: linear-gradient(
+            to bottom,
+            transparent 0,
+            #000 calc(var(--bd-top) * 0.72),
+            #000 100%
+        );
         overflow-y: auto;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;

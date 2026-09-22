@@ -15,7 +15,8 @@ type Entry = { file: string; position?: string; poster?: string }
  *   videos the experience renders. With an empty `files` list it reads the
  *   folder (at build time in production), so adding media is just a matter
  *   of dropping files into public/. A video's poster is `<name>.poster.jpg`
- *   next to it; posters are never listed as photos themselves.
+ *   next to it; posters are never listed as photos themselves. Videos are
+ *   then woven between the photos following `videoEvery`.
  *
  * Args:
  *   - config : the person's photo settings.
@@ -32,7 +33,7 @@ export function resolveMedia(config: PhotoConfig, seed: string): BirthdayMedia[]
     const base = folder.split("/").map(encodeURIComponent).join("/")
     const url = (file: string) => `/${base}/${encodeURIComponent(file)}`
 
-    return ordered
+    const media = ordered
         .filter((e) => IMAGE_FILE.test(e.file) || VIDEO_FILE.test(e.file))
         .map((entry): BirthdayMedia => {
             const kind = VIDEO_FILE.test(entry.file) ? "video" : "image"
@@ -45,6 +46,37 @@ export function resolveMedia(config: PhotoConfig, seed: string): BirthdayMedia[]
                 ...(entry.position ? { position: entry.position } : {}),
             }
         })
+
+    return weaveVideos(media, config.videoEvery)
+}
+
+/**
+ * Places a video after every few photos, following the cycled gaps (e.g.
+ * [3, 4]). Videos repeat when there are more slots than videos; every video
+ * appears at least once. An empty gap list keeps the original order.
+ */
+function weaveVideos(media: BirthdayMedia[], gaps: number[]): BirthdayMedia[] {
+    const steps = gaps.filter((g) => g > 0)
+    const photos = media.filter((m) => m.kind === "image")
+    const videos = media.filter((m) => m.kind === "video")
+    if (steps.length === 0 || photos.length === 0 || videos.length === 0) return media
+
+    const out: BirthdayMedia[] = []
+    let video = 0
+    let gap = 0
+    let run = 0
+    for (const photo of photos) {
+        out.push(photo)
+        run++
+        if (run >= steps[gap % steps.length]) {
+            out.push(videos[video % videos.length])
+            video++
+            gap++
+            run = 0
+        }
+    }
+    for (; video < videos.length; video++) out.push(videos[video])
+    return out
 }
 
 /** Normalizes a string or object file entry. */

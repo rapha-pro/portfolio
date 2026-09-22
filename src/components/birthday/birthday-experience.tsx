@@ -11,6 +11,7 @@ import { PinGate } from "./gate/pin-gate"
 import { MusicDock } from "./music/music-dock"
 import { MusicHost } from "./music/music-host"
 import { useBirthdayMusic } from "./music/useBirthdayMusic"
+import { youtubeWatchUrl } from "./music/youtubeApi"
 import { preloadCardImages, loadGhostImages } from "./shared/preload"
 import { useFlicker } from "./shared/useFlicker"
 import { useWakeLock } from "./shared/useWakeLock"
@@ -115,6 +116,11 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
     const toFinale = useCallback(() => setPhase("finale"), [])
 
     const armPlayer = music.status === "blocked" && config.music.source.kind === "youtube"
+    const songUrl =
+        config.music.source.kind === "youtube" ? youtubeWatchUrl(config.music.source.link) : null
+    const songLabel = [config.music.title, config.music.artist].filter(Boolean).join("  ·  ")
+    const credit = songUrl && songLabel ? { label: songLabel, url: songUrl } : null
+    const pauseForLink = music.pause
 
     return (
         <MotionConfig reducedMotion="user">
@@ -161,6 +167,7 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                             <BirthdayWishes
                                 key="wishes"
                                 wishes={config.wishes}
+                                festive={config.theme.festive}
                                 timing={config.timing.wishes}
                                 continueLabel={config.ui.continueLabel}
                                 onComplete={toFinale}
@@ -171,13 +178,21 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                                 key="finale"
                                 finale={config.finale}
                                 timing={config.timing.finale}
+                                credit={credit}
+                                onCreditClick={pauseForLink}
                                 onReplay={handleReplay}
                             />
                         )}
                     </AnimatePresence>
                 </main>
 
-                <MusicDock music={music} config={config.music} visible={inRoom && musicCued} />
+                <MusicDock
+                    music={music}
+                    config={config.music}
+                    url={songUrl}
+                    visible={inRoom && musicCued}
+                    phoneTitle={phase === "archive"}
+                />
 
                 <FilmGrain />
 

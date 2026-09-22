@@ -5,6 +5,12 @@ import { PROFILE } from "./profile"
 export const WISHES: WishesConfig = {
     kicker: "September 23",
     title: ["Happy Birthday,", `${PROFILE.name}.`],
+    celebration: {
+        number: "20",
+        rays: 16,
+        balloons: 9,
+        confetti: 56,
+    },
     paragraphs: [
         "Today is about you, and about the One who made you with so much care.",
         "I pray this new year of your life is full of His guidance, His peace, and blessings you did not even think to ask for.",

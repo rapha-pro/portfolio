@@ -46,6 +46,7 @@ export type PhotoConfig = {
     folder: string // path inside /public, e.g. "images/birthday/dulcinee"
     files: PhotoFileEntry[] // explicit order; leave empty to use every photo and video in the folder
     order: "name" | "shuffle" // "shuffle" is stable between builds
+    videoEvery: number[] // photos between videos, cycled: [3, 4] alternates 3 and 4; [] keeps file order
 }
 
 export type BirthdayMedia = {
@@ -92,9 +93,17 @@ export type VerseConfig = {
     prayer: string
 }
 
+export type CelebrationConfig = {
+    number: string // the sparkling number under the title, e.g. her new age
+    rays: number // sun rays drawn around it
+    balloons: number // 0 for none
+    confetti: number // 0 for none (phones show about half)
+}
+
 export type WishesConfig = {
     kicker: string | null
     title: string[] // one entry per visual line
+    celebration: CelebrationConfig | null // null hides the number, balloons and confetti
     paragraphs: string[]
 }
 
@@ -106,7 +115,7 @@ export type FinaleLine = {
 export type FinaleConfig = {
     lines: FinaleLine[] // shown one at a time before the notebook appears
     instruction: string
-    closingTitle: string
+    closingTitle: string // "" to hide
     blessing: string
     replayLabel: string
 }
@@ -125,6 +134,7 @@ export type BirthdayTheme = {
     inkSubtle: string // labels
     light: string // the bulb, glows and highlights
     ember: string // warm accent for the birthday section
+    festive: string[] // balloons and confetti
 }
 
 export type BirthdayTiming = {

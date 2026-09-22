@@ -12,6 +12,7 @@ export type MusicController = {
     hostRef: RefObject<HTMLDivElement | null> // hidden element the YouTube player mounts into
     start: () => void // first play; browsers allow sound once she has interacted with the page
     toggle: () => void // pause or resume
+    pause: () => void // stop right away (e.g. she opened the song on YouTube)
 }
 
 type Backend = {
@@ -234,9 +235,21 @@ export function useBirthdayMusic(music: MusicConfig, preload: boolean): MusicCon
         }
     }, [status, begin, fadeTo, start])
 
+    const pause = useCallback(() => {
+        window.clearInterval(fadeTimer.current)
+        backendRef.current?.pause()
+    }, [])
+
     let effective: MusicStatus = status
     if (!available) effective = "unavailable"
     else if (status === "idle" && wanted && !ready) effective = "loading"
 
-    return { available: effective !== "unavailable", status: effective, hostRef, start, toggle }
+    return {
+        available: effective !== "unavailable",
+        status: effective,
+        hostRef,
+        start,
+        toggle,
+        pause,
+    }
 }

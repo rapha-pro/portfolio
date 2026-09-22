@@ -13,7 +13,7 @@ import { PROFILE } from "./profile"
 export const GATE: GateConfig = {
     pin: "2309",
     title: "Enter PIN",
-    subtitle: "Between two worlds",
+    subtitle: "“Between two worlds”",
     cornerLabel: `23rd September ${PROFILE.year}`,
     inputLabel: "Enter the four digit code",
     wrongMessages: ["Not quite...", "Close, maybe. Try again.", "Take your time..."],

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { motion, type MotionValue } from "framer-motion"
 import type { BirthdayConfig, BirthdayMedia } from "@/lib/data/birthday/types"
 import { EASE_IN_OUT, EASE_OUT, sec } from "../shared/motion"
@@ -58,6 +58,8 @@ export function MemoryRoom({
     const [liftedIndex, setLiftedIndex] = useState<number | null>(null)
     const completeRef = useRef(onComplete)
     const pageVisible = useDocumentVisible()
+    // Videos can repeat in the stream; the counter shows distinct frames.
+    const frameCount = useMemo(() => new Set(photos.map((p) => p.src)).size, [photos])
 
     useEffect(() => {
         completeRef.current = onComplete
@@ -102,7 +104,7 @@ export function MemoryRoom({
         >
             <ArchiveLabels
                 archive={config.archive}
-                count={photos.length}
+                count={frameCount}
                 visible={active && !leaving}
             />
 

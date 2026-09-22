@@ -1,19 +1,19 @@
 import type { FinaleConfig } from "../types"
-import { PROFILE } from "./profile"
 
 /**
  * The ending, pointing her to the notebook. `lines` play one at a time;
- * then the notebook appears with the three closing lines, and stays.
+ * then the notebook appears with the closing lines, and stays.
+ * closingTitle is optional: "" hides it.
  */
 export const FINALE: FinaleConfig = {
     lines: [
-        { text: "But...", holdMs: 1600 },
-        { text: "And one more last surprise for you.", holdMs: 2400 },
+        { text: "We're not over yet...", holdMs: 1800 },
+        { text: "One more surprise for you...", holdMs: 2400 },
         { text: "This was just the beginning.", holdMs: 2200 },
         { text: "There's something waiting for you.", holdMs: 2600 },
     ],
-    instruction: "Go open the little book I left you.",
-    closingTitle: `Happy Birthday, ${PROFILE.name}.`,
+    instruction: "I left a little book for you.",
+    closingTitle: "",
     blessing: "May God bless this new chapter of your life.",
     replayLabel: "Begin again",
 }

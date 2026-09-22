@@ -12,20 +12,20 @@ Each person has a folder here; the page for that person lives at
 
 ## Editing Dulcinée's page
 
-| To change...                     | Edit                                                         |
-| -------------------------------- | ------------------------------------------------------------ |
-| Her name, URL, year, tab title   | `dulcinee/profile.ts` (the name flows into every other file) |
-| The PIN, entrance text, hints    | `dulcinee/gate.ts` (`pin` is the only place the code lives)  |
-| Photos and videos                | See "Photos and videos" below                                |
-| Order or crop                    | `dulcinee/photos.ts`                                         |
-| Typed messages                   | `dulcinee/messages.ts`                                       |
-| Music (YouTube link or mp3)      | `dulcinee/music.ts`                                          |
-| Bible verse and prayer           | `dulcinee/verse.ts`                                          |
-| Birthday message                 | `dulcinee/wishes.ts`                                         |
-| Ending and the notebook lines    | `dulcinee/finale.ts`                                         |
-| "Continue" and other small words | `dulcinee/ui.ts`                                             |
-| Colors                           | `dulcinee/theme.ts` (seven hex values drive every color)     |
-| Card speed, pauses, flicker      | `dulcinee/timing.ts` (`photoSpeed`: lower is slower)         |
+| To change...                                       | Edit                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| Her name, URL, year, tab title                     | `dulcinee/profile.ts` (the name flows into every other file) |
+| The PIN, entrance text, hints                      | `dulcinee/gate.ts` (`pin` is the only place the code lives)  |
+| Photos and videos                                  | See "Photos and videos" below                                |
+| Order or crop                                      | `dulcinee/photos.ts`                                         |
+| Typed messages                                     | `dulcinee/messages.ts`                                       |
+| Music (YouTube link or mp3)                        | `dulcinee/music.ts`                                          |
+| Bible verse and prayer                             | `dulcinee/verse.ts`                                          |
+| Birthday message, the "20" sun, balloons, confetti | `dulcinee/wishes.ts` (`celebration`, `null` hides it)        |
+| Ending and the notebook lines                      | `dulcinee/finale.ts`                                         |
+| "Continue" and other small words                   | `dulcinee/ui.ts`                                             |
+| Colors                                             | `dulcinee/theme.ts` (`festive` colors balloons and confetti) |
+| Card speed, pauses, flicker                        | `dulcinee/timing.ts` (`photoSpeed`: lower is slower)         |
 
 ### Photos and videos
 
@@ -39,8 +39,10 @@ Each person has a folder here; the page for that person lives at
 3. Anything you do not want published can sit in
    `media-originals/birthday/dulcinee/_unused/`.
 
-Every photo and video in the public folder is shown, sorted by file name.
-Videos play muted on their card while it is on screen. Tapping a card
+Every photo and video in the public folder is shown, sorted by file name,
+with a video woven in after every few photos (`videoEvery: [3, 4]` in
+`photos.ts`; `[]` keeps the plain order). Videos play muted on their card
+while it is on screen. Tapping a card
 enlarges it for `timing.archive.focusMs` (7 seconds), then it returns.
 
 ### Music
@@ -53,6 +55,8 @@ enlarges it for `timing.archive.focusMs` (7 seconds), then it returns.
 - iPhones never start sound on their own. There the sound button shows
   "Tap for music", and that one tap starts it. The same applies to an mp3
   (`source: { kind: "file", src: "/audio/birthday/dulcinee/song.mp3" }`).
+- The song title next to the sound button (and the credit on the last
+  screen) opens the song on YouTube and pauses the page's music.
 - With an empty link the sound button does not appear.
 
 ### Previewing a chapter while editing (development only)

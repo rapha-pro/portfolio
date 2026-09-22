@@ -11,28 +11,32 @@ import { NotebookIllustration } from "./notebook-illustration"
 type FinalRevealProps = {
     finale: FinaleConfig
     timing: BirthdayTiming["finale"]
+    credit: { label: string; url: string } | null // the song, linked on YouTube
+    onCreditClick: () => void // pause the page music before leaving for YouTube
     onReplay: () => void
 }
 
-/** Silence before the first line, so "But..." lands on a held breath. */
+/** Silence before the first line, so it lands on a held breath. */
 const FIRST_BREATH_MS = 1400
 
 /**
  * Purpose:
- *   The turn at the end: "But..." and the lines that follow appear one at
- *   a time, then the notebook draws itself and the closing lines settle
- *   around it. The last screen stays; a quiet "begin again" link appears
- *   only after a long while.
+ *   The turn at the end: the closing lines appear one at a time, then the
+ *   notebook draws itself and the last words settle around it, with a
+ *   small credit linking the song. The last screen stays; a quiet "begin
+ *   again" link appears only after a long while.
  *
  * Args:
- *   - finale   : lines, instruction, closing title and blessing.
- *   - timing   : fades, holds and replay delay.
- *   - onReplay : restarts from the tunnel.
+ *   - finale        : lines, instruction, optional closing title, blessing.
+ *   - timing        : fades, holds and replay delay.
+ *   - credit        : song credit and its YouTube link, or null.
+ *   - onCreditClick : called when the credit is opened.
+ *   - onReplay      : restarts from the tunnel.
  *
  * Returns:
  *   The final section.
  */
-export function FinalReveal({ finale, timing, onReplay }: FinalRevealProps) {
+export function FinalReveal({ finale, timing, credit, onCreditClick, onReplay }: FinalRevealProps) {
     const [step, setStep] = useState(0)
     const [showReplay, setShowReplay] = useState(false)
     const pageVisible = useDocumentVisible()
@@ -41,7 +45,10 @@ export function FinalReveal({ finale, timing, onReplay }: FinalRevealProps) {
     const fadeIn = sec(timing.lineFadeMs)
     const fadeOut = sec(timing.lineFadeMs * 0.8)
     const scrollRef = useRef<HTMLDivElement>(null)
-    useFollowReveal(scrollRef, done ? [3, 5.4, 6.8] : [])
+    const hasTitle = finale.closingTitle.trim().length > 0
+    const blessingAt = hasTitle ? 6.8 : 5.4
+    const creditAt = blessingAt + 2.2
+    useFollowReveal(scrollRef, done ? [3, 5.4, blessingAt, creditAt] : [])
 
     useEffect(() => {
         if (!pageVisible) return
@@ -71,7 +78,7 @@ export function FinalReveal({ finale, timing, onReplay }: FinalRevealProps) {
 
     return (
         <motion.section
-            aria-label={finale.closingTitle}
+            aria-label={finale.closingTitle || finale.instruction}
             className="absolute inset-0 z-10 flex flex-col"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -143,20 +150,58 @@ export function FinalReveal({ finale, timing, onReplay }: FinalRevealProps) {
                                     transition={{ duration: 1.4, delay: 4.6, ease: EASE_OUT }}
                                 />
 
-                                <motion.h2
-                                    data-follow={1}
-                                    className="bd-serif bd-glow-warm text-[clamp(1.6rem,min(4.8vw,5.4dvh),2.5rem)] font-light italic leading-[1.2]"
-                                    {...settle(5.4, 2)}
-                                >
-                                    {finale.closingTitle}
-                                </motion.h2>
+                                {hasTitle && (
+                                    <motion.h2
+                                        data-follow={1}
+                                        className="bd-serif bd-glow-warm mb-3 text-[clamp(1.6rem,min(4.8vw,5.4dvh),2.5rem)] font-light italic leading-[1.2]"
+                                        {...settle(5.4, 2)}
+                                    >
+                                        {finale.closingTitle}
+                                    </motion.h2>
+                                )}
                                 <motion.p
                                     data-follow={2}
-                                    className="bd-serif mt-3 text-balance text-[clamp(1.05rem,min(2.6vw,3dvh),1.3rem)] font-medium text-[var(--bd-ink-muted)]"
-                                    {...settle(6.8, 2)}
+                                    className={
+                                        hasTitle
+                                            ? "bd-serif text-balance text-[clamp(1.05rem,min(2.6vw,3dvh),1.3rem)] font-medium text-[var(--bd-ink-muted)]"
+                                            : "bd-serif bd-glow-warm text-balance text-[clamp(1.35rem,min(4vw,4.4dvh),1.9rem)] italic leading-[1.3]"
+                                    }
+                                    {...settle(blessingAt, 2)}
                                 >
                                     {finale.blessing}
                                 </motion.p>
+
+                                {credit && (
+                                    <motion.a
+                                        data-follow={3}
+                                        href={credit.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={onCreditClick}
+                                        aria-label={`${credit.label}, open on YouTube`}
+                                        className="bd-label mt-10 inline-flex min-h-11 items-center gap-2 normal-case tracking-[0.16em] underline-offset-4 transition-colors duration-300 hover:text-[var(--bd-ink-muted)] hover:underline"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 1.6, delay: creditAt }}
+                                    >
+                                        <span aria-hidden>♪</span>
+                                        {credit.label}
+                                        <svg
+                                            aria-hidden
+                                            viewBox="0 0 12 12"
+                                            className="h-2.5 w-2.5"
+                                        >
+                                            <path
+                                                d="M4 2h6v6M10 2 3 9"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="1.3"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                    </motion.a>
+                                )}
                             </motion.div>
                         )}
                     </AnimatePresence>

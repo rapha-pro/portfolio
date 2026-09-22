@@ -3,45 +3,54 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import type { MusicConfig } from "@/lib/data/birthday/types"
+import { useMediaQuery } from "../shared/useMediaQuery"
 import type { MusicController } from "./useBirthdayMusic"
 
 type MusicDockProps = {
     music: MusicController
     config: MusicConfig
+    url: string | null // the song on YouTube, when there is one
     visible: boolean
+    phoneTitle: boolean // phones only show the title where no bottom button can collide
 }
 
 /**
  * Purpose:
- *   The small, always reachable sound control in the bottom corner. Shows
- *   a soft equalizer while playing and the song title for a few seconds
- *   whenever playback starts.
+ *   The small, always reachable sound control in the bottom corner, with a
+ *   soft equalizer while playing. Next to it the song title links to the
+ *   song on YouTube (and pauses the page's music so it does not play
+ *   twice). On wide screens the title stays; on phones it shows for a few
+ *   seconds whenever the music starts, so it never crowds the controls.
  *
  * Args:
  *   - music   : controller from useBirthdayMusic.
  *   - config  : labels, title and artist.
- *   - visible : shown once the music choice has been made.
+ *   - url     : link target for the title.
+ *   - visible    : shown once the music has been cued.
+ *   - phoneTitle : allow the short-lived title on phones (photo room only).
  *
  * Returns:
  *   The dock, or nothing when no music is configured.
  */
-export function MusicDock({ music, config, visible }: MusicDockProps) {
+export function MusicDock({ music, config, url, visible, phoneTitle }: MusicDockProps) {
     const playing = music.status === "playing"
     const blocked = music.status === "blocked"
-    const [showTitle, setShowTitle] = useState(false)
+    const wide = useMediaQuery("(min-width: 640px)")
+    const [recent, setRecent] = useState(false)
     const title = [config.title, config.artist].filter(Boolean).join("  ·  ")
 
     useEffect(() => {
         if (!playing || !title) return
-        const on = window.setTimeout(() => setShowTitle(true), 700)
-        const off = window.setTimeout(() => setShowTitle(false), 7500)
+        const on = window.setTimeout(() => setRecent(true), 700)
+        const off = window.setTimeout(() => setRecent(false), 10700)
         return () => {
             window.clearTimeout(on)
             window.clearTimeout(off)
         }
     }, [playing, title])
 
-    const label = blocked ? config.controls.blocked : showTitle && playing ? `♪  ${title}` : null
+    const showTitle =
+        Boolean(title) && !blocked && (wide ? music.status !== "idle" : recent && phoneTitle)
 
     return (
         <AnimatePresence>
@@ -53,26 +62,62 @@ export function MusicDock({ music, config, visible }: MusicDockProps) {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1.2 }}
                 >
-                    <AnimatePresence>
-                        {label && (
+                    <AnimatePresence mode="wait">
+                        {blocked ? (
                             <motion.span
-                                key={label}
-                                className="bd-label max-w-[52vw] truncate normal-case tracking-[0.14em]"
+                                key="blocked"
+                                className="bd-label normal-case tracking-[0.14em] text-[var(--bd-ink-muted)]"
+                                initial={{ opacity: 0, x: 6 }}
+                                animate={{ opacity: [0.5, 1, 0.5], x: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{
+                                    opacity: { duration: 2.2, repeat: Infinity },
+                                    x: { duration: 0.6 },
+                                }}
+                            >
+                                {config.controls.blocked}
+                            </motion.span>
+                        ) : showTitle ? (
+                            <motion.a
+                                key="title"
+                                href={url ?? undefined}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => music.pause()}
+                                aria-label={`${title}, open on YouTube`}
+                                className="bd-label flex max-w-[58vw] items-center gap-2 normal-case tracking-[0.14em] underline-offset-4 transition-colors duration-300 hover:text-[var(--bd-ink-muted)] hover:underline"
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                {label}
-                            </motion.span>
-                        )}
+                                <span aria-hidden>♪</span>
+                                <span className="truncate">{title}</span>
+                                {url && (
+                                    <svg
+                                        aria-hidden
+                                        viewBox="0 0 12 12"
+                                        className="h-2.5 w-2.5 shrink-0"
+                                    >
+                                        <path
+                                            d="M4 2h6v6M10 2 3 9"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="1.3"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                )}
+                            </motion.a>
+                        ) : null}
                     </AnimatePresence>
 
                     <button
                         type="button"
                         onClick={music.toggle}
                         aria-label={playing ? config.controls.pause : config.controls.play}
-                        className="grid h-11 w-11 place-items-center rounded-full border text-[var(--bd-light)] transition-colors duration-300"
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-full border text-[var(--bd-light)] transition-colors duration-300"
                         style={{
                             borderColor: "color-mix(in srgb, var(--bd-light) 26%, transparent)",
                             background: "color-mix(in srgb, var(--bd-bg) 70%, transparent)",

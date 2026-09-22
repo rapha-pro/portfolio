@@ -12,6 +12,10 @@ import type { PhotoConfig } from "../types"
  * `order: "shuffle"` gives a stable mixed order instead. Videos play muted
  * on their card; `<name>.poster.jpg` next to a video is used as its poster.
  *
+ * videoEvery weaves the videos between the photos: [3, 4] shows a video after
+ * 3 photos, then after 4, and so on (videos repeat when there are fewer of
+ * them than slots). Use [] to keep the plain file order.
+ *
  * To hand pick the order or crop a photo, list them instead:
  *   files: ["beach.jpg", { file: "concert.jpg", position: "50% 20%" }, "clip.mp4"]
  */
@@ -19,4 +23,5 @@ export const PHOTOS: PhotoConfig = {
     folder: "images/birthday/dulcinee",
     files: [],
     order: "name",
+    videoEvery: [3, 4],
 }

@@ -7,10 +7,13 @@ import { ContinueButton } from "../shared/continue-button"
 import { EASE_OUT } from "../shared/motion"
 import { useAutoAdvance } from "../shared/useAutoAdvance"
 import { useFollowReveal } from "../shared/useFollowReveal"
-import { RisingEmbers } from "./rising-embers"
+import { Balloons } from "./balloons"
+import { Confetti } from "./confetti"
+import { SunNumber } from "./sun-number"
 
 type BirthdayWishesProps = {
     wishes: WishesConfig
+    festive: string[] // balloon and confetti colors
     timing: BirthdayTiming["wishes"]
     continueLabel: string
     onComplete: () => void
@@ -21,13 +24,14 @@ const CHAR_STAGGER = 0.05
 
 /**
  * Purpose:
- *   The birthday chapter. The room warms (handled by the light rig), a few
- *   embers rise, and "Happy Birthday" condenses letter by letter out of a
- *   blur, followed by the blessing paragraphs. Still the same dark room,
- *   only warmer.
+ *   The birthday chapter. The room warms (handled by the light rig) and
+ *   "Happy Birthday" condenses letter by letter out of a blur. Then her
+ *   number lights up like a little sun, balloons rise and confetti falls,
+ *   and the blessing paragraphs follow.
  *
  * Args:
- *   - wishes        : kicker, title lines and paragraphs.
+ *   - wishes        : kicker, title lines, celebration and paragraphs.
+ *   - festive       : palette for balloons and confetti.
  *   - timing        : hold before continuing automatically.
  *   - continueLabel : text of the continue control.
  *   - onComplete    : moves on to the final reveal.
@@ -35,10 +39,19 @@ const CHAR_STAGGER = 0.05
  * Returns:
  *   The birthday section.
  */
-export function BirthdayWishes({ wishes, timing, continueLabel, onComplete }: BirthdayWishesProps) {
+export function BirthdayWishes({
+    wishes,
+    festive,
+    timing,
+    continueLabel,
+    onComplete,
+}: BirthdayWishesProps) {
     const titleText = wishes.title.join(" ")
     const titleChars = wishes.title.join("").length
-    const paragraphsStart = TITLE_START + titleChars * CHAR_STAGGER + 1.2
+    const titleEnd = TITLE_START + titleChars * CHAR_STAGGER + 1
+    const celebration = wishes.celebration
+    const showNumber = Boolean(celebration?.number)
+    const paragraphsStart = celebration ? titleEnd + 2.8 : titleEnd + 0.2
     const paragraphDelay = (i: number) => paragraphsStart + i * 1.7
     const { canContinue, advance } = useAutoAdvance(
         (paragraphDelay(Math.max(0, wishes.paragraphs.length - 1)) + 2.2) * 1000,
@@ -48,10 +61,7 @@ export function BirthdayWishes({ wishes, timing, continueLabel, onComplete }: Bi
 
     const titleLines = layoutTitle(wishes.title)
     const scrollRef = useRef<HTMLDivElement>(null)
-    useFollowReveal(
-        scrollRef,
-        wishes.paragraphs.map((_, i) => paragraphDelay(i))
-    )
+    useFollowReveal(scrollRef, [titleEnd, ...wishes.paragraphs.map((_, i) => paragraphDelay(i))])
 
     return (
         <motion.section
@@ -62,7 +72,9 @@ export function BirthdayWishes({ wishes, timing, continueLabel, onComplete }: Bi
             exit={{ opacity: 0, transition: { duration: 1.5 } }}
             transition={{ duration: 1.5 }}
         >
-            <RisingEmbers />
+            {celebration && celebration.balloons > 0 && (
+                <Balloons count={celebration.balloons} colors={festive} delay={titleEnd + 0.4} />
+            )}
 
             <div
                 ref={scrollRef}
@@ -125,11 +137,21 @@ export function BirthdayWishes({ wishes, timing, continueLabel, onComplete }: Bi
                         ))}
                     </h1>
 
-                    <div className="mt-10 flex flex-col gap-5">
+                    {showNumber && celebration && (
+                        <div data-follow={0}>
+                            <SunNumber
+                                value={celebration.number}
+                                rays={celebration.rays}
+                                delay={titleEnd}
+                            />
+                        </div>
+                    )}
+
+                    <div className={`${showNumber ? "mt-2" : "mt-10"} flex flex-col gap-5`}>
                         {wishes.paragraphs.map((paragraph, i) => (
                             <motion.p
                                 key={i}
-                                data-follow={i}
+                                data-follow={i + 1}
                                 className="bd-serif text-pretty text-[clamp(1.15rem,min(2.9vw,3.3dvh),1.5rem)] font-medium leading-[1.55] text-[var(--bd-ink-muted)]"
                                 initial={{ opacity: 0, y: 8, filter: "blur(6px)" }}
                                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -146,6 +168,9 @@ export function BirthdayWishes({ wishes, timing, continueLabel, onComplete }: Bi
                 </div>
             </div>
 
+            {celebration && celebration.confetti > 0 && (
+                <Confetti count={celebration.confetti} colors={festive} delay={titleEnd} />
+            )}
             <div aria-hidden className="bd-bottom-fade" />
             <ContinueButton visible={canContinue} label={continueLabel} onClick={advance} />
         </motion.section>
