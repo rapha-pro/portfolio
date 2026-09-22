@@ -8,9 +8,12 @@ import type { MusicConfig } from "../types"
  * with or without ?si=...), or just its id. startSeconds skips an intro.
  * The video itself stays hidden.
  *
- * Audio file (the one option iPhones always play without a tap): put an mp3
- * in public/audio/birthday/dulcinee/ and use
+ * Audio file instead of YouTube: put an mp3 in public/audio/birthday/dulcinee/
+ * and use
  *   source: { kind: "file", src: "/audio/birthday/dulcinee/song.mp3" }
+ *
+ * iPhones never start sound on their own; there the corner button shows
+ * "Tap for music" and one tap starts it (for YouTube and mp3 alike).
  *
  * Leave link empty for no music (the sound button disappears too).
  */

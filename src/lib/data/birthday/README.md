@@ -50,11 +50,9 @@ enlarges it for `timing.archive.focusMs` (7 seconds), then it returns.
 - It starts by itself when message number `startAtMessage` appears (3 = after
   the first three messages) and fades in. Typing the PIN counts as
   interaction, so browsers allow the sound.
-- iPhones never let YouTube start on its own. There the sound button shows
-  "Tap for music", and that one tap starts it. An mp3 in
-  `public/audio/birthday/dulcinee/` with
-  `source: { kind: "file", src: "/audio/birthday/dulcinee/song.mp3" }`
-  is the only way to avoid that tap on iPhones.
+- iPhones never start sound on their own. There the sound button shows
+  "Tap for music", and that one tap starts it. The same applies to an mp3
+  (`source: { kind: "file", src: "/audio/birthday/dulcinee/song.mp3" }`).
 - With an empty link the sound button does not appear.
 
 ### Previewing a chapter while editing (development only)
