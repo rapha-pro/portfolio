@@ -23,8 +23,8 @@ export const GATE: GateConfig = {
     successMessage: "Correct ! Ta date d'anniversaire à l'envers 😏",
     wrongMessages: ["Not quite...", "Close, maybe. Try again.", "Take your time..."],
     hints: [
-        { afterAttempts: 6, text: "C'est une date." },
-        { afterAttempts: 9, text: "Ta date d'anniversaire, à l'envers." },
+        { afterAttempts: 10, text: "anniversaire" },
+        { afterAttempts: 15, text: "date" },
     ],
     tunnelWhisper: "Come, let's go back for a moment.",
 }

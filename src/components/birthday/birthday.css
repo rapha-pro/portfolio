@@ -694,8 +694,7 @@
     .bd-frame {
         --bd-mat: clamp(9px, 2.4vw, 15px);
         position: relative;
-        width: clamp(150px, min(54vw, 30dvh), 260px);
-        aspect-ratio: 4 / 5;
+        width: clamp(170px, min(60vw, 32dvh), 280px);
         padding: var(--bd-mat);
         border-radius: 5px;
         background: linear-gradient(
@@ -711,7 +710,16 @@
     }
 
     .bd-frame-compact {
-        width: clamp(118px, min(38vw, 21dvh), 190px);
+        width: clamp(140px, min(46vw, 25dvh), 220px);
+    }
+
+    /* Landscape photos need the width, not the height */
+    .bd-frame[data-shape="landscape"] {
+        width: clamp(230px, min(88vw, 52dvh), 400px);
+    }
+
+    .bd-frame-compact[data-shape="landscape"] {
+        width: clamp(210px, min(80vw, 40dvh), 330px);
     }
 
     .bd-frame::before {
@@ -727,7 +735,6 @@
     .bd-frame-inner {
         position: relative;
         width: 100%;
-        height: 100%;
         overflow: hidden;
         border-radius: 2px;
         background: var(--bd-surface);

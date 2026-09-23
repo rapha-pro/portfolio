@@ -26,7 +26,7 @@ export const SIBLINGS: SiblingsConfig = {
             name: "Mon foyer 🥺",
             photo: "emma",
             message: [
-                "Cc ma juuu ❤️",
+                "Cc ma juju ❤️",
                 "Tout ceci, c'est vraiment pour te donner une expérience mémorable de ce jour mémorable. Le 23 septembre est l'un des jours les plus importants de ma vie sur terre, parce qu'il renvoie à la personne qui occupe un siège important dans ma vie : ma Sœur de L'ÉTERNITÉ, ma jumelle d'Amour, ma meilleure amie, et encore plus. Ma Joie en te regardant, c'est de réaliser qu'autant que tu l'es pour moi, je le suis aussi pour toi. Nous partageons la même mission, la même cause, le même combat (celui d'anéantir la mort), et nous partagerons la même Victoire quand nous aurons achevé la course et ramené à la Vie chaque Écriture qui nous concerne. Que notre lien soit Résurrection, que notre Force soit la Joie de L'ÉTERNEL, et que notre Amour ne se limite jamais à la gémellité, mais toujours à la Fraternité de Chez Nous. Aujourd'hui comme demain, n'oublie jamais QUE PAPA T'AIME, et qu'en dessous, ta SŒUR, ta jumelle Emma t'aime ❤️ Enjoy your day my lovely twin 👯‍♀️💖💖💖",
                 "Tu es une preuve de L'AMOUR DE DIEU Pour Moi ❤️",
             ],
@@ -34,8 +34,7 @@ export const SIBLINGS: SiblingsConfig = {
         {
             name: "Dany",
             photo: "dany",
-            message:
-                "Que Dieu te bénisse beaucoup Becky, et qu'il t'accorde les désirs de ton cœur. Happy Birthday 🎂",
+            message: "Joyeux anniversaire Becky, Que Dieu te bénisse, Je t'aime très fort 🎂",
         },
     ],
 }
