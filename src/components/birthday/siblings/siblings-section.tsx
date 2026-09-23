@@ -78,7 +78,7 @@ export function SiblingsSection({
                     key={index}
                     entry={entry}
                     personName={personName}
-                    kicker={siblings.kicker}
+                    kicker={entry.kicker ?? siblings.kicker}
                     position={index}
                     total={entries.length}
                     holdMs={timing.holdMs}

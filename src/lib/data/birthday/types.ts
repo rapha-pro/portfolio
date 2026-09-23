@@ -134,12 +134,13 @@ export type WishesConfig = {
 
 export type SiblingEntry = {
     name: string
+    kicker?: string // small line above the name; falls back to SiblingsConfig.kicker
     message: string | string[] // one paragraph, or several
     photo: string // file name in the siblings folder, or a path starting with "/"
 }
 
 export type SiblingsConfig = {
-    kicker: string | null // small line above each message
+    kicker: string | null // small line above each message, unless the entry has its own
     entries: SiblingEntry[] // shown one at a time, in order
 }
 
