@@ -204,6 +204,7 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                                 key="briefing"
                                 briefing={config.gate.briefing}
                                 timing={config.timing.gate}
+                                continueLabel={config.ui.continueLabel}
                                 onDone={startTunnel}
                             />
                         )}

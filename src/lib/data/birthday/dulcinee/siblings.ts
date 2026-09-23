@@ -24,6 +24,13 @@ export const SIBLINGS: SiblingsConfig = {
                 "Ma chère combi Becky, en ce jour très spécial du 23 septembre, le Seigneur voulait se voir étant une étoile, un réconfort, une aide et une personne très spéciale dans la vie de ceux qui l'entourent, et il a décidé de te faire naître. Je suis énormément reconnaissant de t'avoir dans ma vie. Comme je te l'ai toujours dit, tu es une grande bénédiction dans ma vie, et ma prière est que tu le sois avec toutes les personnes avec qui tu entreras en contact. Que le Seigneur te bénisse et qu'il te fasse chaque jour prendre conscience de qui tu es : Sa Terre épouse. I love you very much et je prie que cette journée se passe merveilleusement bien. Joyeuse réjouissance 💫🌈🥳🥳🩷🩷",
         },
         {
+            name: "Esther",
+            kicker: "Le 17e livre de la Bible",
+            photo: "esther",
+            message:
+                "Ma grande sœur d'amour, reçois ce cadeau avec beaucoup de bonheur et de joie. Je sais qu'on n'a pas toujours été “amourale” (en particulier moi), mais sache que tu occupes une place bien trop importante dans ma vie pour que tu ne reçoives pas mon amour. Merci d'être une bonne grande sœur pour moi, merci de veiller sur moi et merci de m'aider à grandir chaque jour. Aujourd'hui comme les autres jours, je veux te célébrer et te dire à quel point on t'aime tous. I love you my dear Sister ❤️",
+        },
+        {
             name: "Laurent",
             kicker: "Président de la fefacoot",
             photo: "laurent",
@@ -46,18 +53,11 @@ export const SIBLINGS: SiblingsConfig = {
             ],
         },
         {
-            name: "Esther",
-            kicker: "Le 17e livre de la Bible",
-            photo: "esther",
-            message:
-                "Ma grande sœur d'amour, reçois ce cadeau avec beaucoup de bonheur et de joie. Je sais qu'on n'a pas toujours été “amourale” (en particulier moi), mais sache que tu occupes une place bien trop importante dans ma vie pour que tu ne reçoives pas mon amour. Merci d'être une bonne grande sœur pour moi, merci de veiller sur moi et merci de m'aider à grandir chaque jour. Aujourd'hui comme les autres jours, je veux te célébrer et te dire à quel point on t'aime tous. I love you my dear Sister ❤️",
-        },
-        {
             name: "Keren",
             photo: "keren",
             message: [
                 "Hello Becky. Aujourd'hui, je te souhaite une Joyeuse Réjouissance, et je prie que tu continues de briller dans nos vies comme tu le fais déjà. Je t'aime ma grande sœur chérie 💖",
-                "Keren",
+                "- Keren",
             ],
         },
         {

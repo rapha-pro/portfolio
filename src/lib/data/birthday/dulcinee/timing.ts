@@ -10,7 +10,7 @@ export const TIMING: BirthdayTiming = {
         successHoldMs: 1800,
         unlockedLineMs: 2200,
         unlockedHoldMs: 7200,
-        briefingMs: 5000,
+        briefingRevealMs: 2600,
     },
     tunnel: {
         durationMs: 4800,

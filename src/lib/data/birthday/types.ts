@@ -182,7 +182,7 @@ export type BirthdayTiming = {
         successHoldMs: number // spark of the right code, before the unlock screen
         unlockedLineMs: number // between the unlock screen lines
         unlockedHoldMs: number // the unlock screen, from its first line to its exit
-        briefingMs: number // the headphones and landscape screen
+        briefingRevealMs: number // before continue appears on the briefing screen, which then waits
     }
     tunnel: {
         durationMs: number // acceleration until the flash
