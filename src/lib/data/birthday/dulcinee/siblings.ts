@@ -23,6 +23,18 @@ export const SIBLINGS: SiblingsConfig = {
                 "Ma chère combi Becky, en ce jour très spécial du 23 septembre, le Seigneur voulait se voir étant une étoile, un réconfort, une aide et une personne très spéciale dans la vie de ceux qui l'entourent, et il a décidé de te faire naître. Je suis énormément reconnaissant de t'avoir dans ma vie. Comme je te l'ai toujours dit, tu es une grande bénédiction dans ma vie, et ma prière est que tu le sois avec toutes les personnes avec qui tu entreras en contact. Que le Seigneur te bénisse et qu'il te fasse chaque jour prendre conscience de qui tu es : Sa Terre épouse. I love you very much et je prie que cette journée se passe merveilleusement bien. Joyeuse réjouissance 💫🌈🥳🥳🩷🩷",
         },
         {
+            name: "Laurent",
+            photo: "laurent",
+            message: [
+                "💖 Bonne note de réjouissances à toi, ma petite sœur BECKY ! 🎉🥰",
+                "Aujourd’hui est un jour particulier, car tu célèbres tes 20 ans. Deux décennies de vie, de sourires, de souvenirs et de belles étapes franchies. ❤️",
+                "Tu n’es pas seulement ma petite sœur, tu es une personne que je porte profondément dans mon cœur. 🥹❤️",
+                "Que cette nouvelle année de ta vie soit remplie de bonheur, d’amour, de paix, de réussite et de belles surprises. Que Dieu guide chacun de tes pas, protège ton cœur et t’accorde la force de réaliser tous tes rêves. 🙏🏽✨",
+                "BECKY, ma petite sœur je t’aime énormément et je suis heureux de te voir grandir ❤️",
+                "Bonne note de réjouissances à toi, ma petite sœur adorée. ❤️🎉 Que du bonheur pour toi aujourd’hui et pour toutes les années à venir ! 🥰🎊",
+            ],
+        },
+        {
             name: "Mon foyer 🥺",
             photo: "emma",
             message: [

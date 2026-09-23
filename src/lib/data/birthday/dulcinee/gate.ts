@@ -2,14 +2,17 @@ import type { GateConfig } from "../types"
 import { PROFILE } from "./profile"
 
 /**
- * The entrance screen.
+ * The entrance screen and the two screens that follow the right code.
  *
  * pin is the only place the code lives. It can be any length of digits;
  * the number of boxes follows it.
  *
- * successMessage is shown, with its own little animation, right after the
- * right code and before the tunnel starts. Its time on screen is
- * timing.gate.successHoldMs. Leave it "" to go straight to the tunnel.
+ * unlocked: after the spark, its lines fade in one after another. Each
+ * line is a list of pieces so a few words can be colored ("green" and
+ * "yellow" come from theme.ts). null goes straight to the briefing.
+ *
+ * briefing: the short "headphones and landscape" screen before the
+ * tunnel. Phones see `message`, wider screens see `desktopMessage`.
  *
  * Hints are revealed one after another once the matching number of wrong
  * attempts has been reached. Leave the array empty for no hints.
@@ -20,7 +23,24 @@ export const GATE: GateConfig = {
     subtitle: "Between two worlds",
     cornerLabel: `23rd September ${PROFILE.year}`,
     inputLabel: "Enter the four digit code",
-    successMessage: "Correct ! Ta date d'anniversaire à l'envers 😏",
+    unlocked: {
+        lines: [
+            [
+                { text: "Correcte, ta " },
+                { text: "date d'anniversaire à l'envers !", color: "green" },
+                { text: " 😏" },
+            ],
+            [
+                { text: "Félicitations", color: "yellow" },
+                { text: " 🎉 La quête était dure, mais t'as trouvé le code correct." },
+            ],
+        ],
+    },
+    briefing: {
+        message:
+            "Pour une meilleure expérience, veuillez bien mettre votre téléphone en mode paysage et mettre des écouteurs.",
+        desktopMessage: "Pour une meilleure expérience, veuillez bien mettre des écouteurs.",
+    },
     wrongMessages: ["Not quite...", "Close, maybe. Try again.", "Take your time..."],
     hints: [
         { afterAttempts: 10, text: "anniversaire" },

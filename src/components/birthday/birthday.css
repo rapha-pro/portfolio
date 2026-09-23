@@ -91,6 +91,16 @@
             0 0 2px color-mix(in srgb, var(--bd-ink) 25%, transparent);
     }
 
+    .bd-hl-green {
+        color: var(--bd-green);
+        text-shadow: 0 0 26px color-mix(in srgb, var(--bd-green) 35%, transparent);
+    }
+
+    .bd-hl-yellow {
+        color: var(--bd-yellow);
+        text-shadow: 0 0 26px color-mix(in srgb, var(--bd-yellow) 40%, transparent);
+    }
+
     .bd-glow-warm {
         color: color-mix(in srgb, var(--bd-light) 38%, var(--bd-ink));
         text-shadow:

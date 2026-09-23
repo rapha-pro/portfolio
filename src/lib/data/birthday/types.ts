@@ -21,13 +21,31 @@ export type PinHint = {
     text: string
 }
 
+export type HighlightColor = "green" | "yellow"
+
+/** A piece of a line, optionally in a highlight color. */
+export type RichPart = {
+    text: string
+    color?: HighlightColor
+}
+
+export type UnlockedConfig = {
+    lines: RichPart[][] // one entry per line; the lines fade in one after another
+}
+
+export type BriefingConfig = {
+    message: string // phones: headphones and landscape
+    desktopMessage: string // wide screens: headphones only
+}
+
 export type GateConfig = {
     pin: string // digits only; its length sets the number of boxes
     title: string
     subtitle: string
     cornerLabel: string // small line in the top corner of the entrance, "" to hide
     inputLabel: string // screen reader label for the code input
-    successMessage: string // shown after the right code, before the tunnel ("" to skip)
+    unlocked: UnlockedConfig | null // the screen right after the right code, null to skip
+    briefing: BriefingConfig | null // the "headphones and landscape" screen, null to skip
     wrongMessages: string[] // cycled on each wrong attempt
     hints: PinHint[] // revealed progressively, leave empty for none
     tunnelWhisper: string | null // short line inside the tunnel, null to hide
@@ -152,13 +170,18 @@ export type BirthdayTheme = {
     inkSubtle: string // labels
     light: string // the bulb, glows and highlights
     ember: string // warm accent for the birthday section
+    green: string // highlight on the unlock screen
+    yellow: string // highlight on the unlock screen
     festive: string[] // balloons and confetti
 }
 
 export type BirthdayTiming = {
     gate: {
         introDelayMs: number // before the title fades in
-        successHoldMs: number // success animation before the tunnel starts
+        successHoldMs: number // spark of the right code, before the unlock screen
+        unlockedLineMs: number // between the unlock screen lines
+        unlockedHoldMs: number // the unlock screen, from its first line to its exit
+        briefingMs: number // the headphones and landscape screen
     }
     tunnel: {
         durationMs: number // acceleration until the flash
@@ -177,6 +200,7 @@ export type BirthdayTiming = {
         fadeInMs: number
         fadeOutMs: number
         lineGapMs: number // pause between lines of a multi-line paragraph
+        phoneScale: number // phones type and pause this much slower (1 = same)
     }
     verse: {
         lineStaggerMs: number

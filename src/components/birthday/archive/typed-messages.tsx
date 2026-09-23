@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import type { BirthdayTiming, MessageTone, TypedMessage } from "@/lib/data/birthday/types"
 import { EASE_IN_OUT, EASE_OUT, sec } from "../shared/motion"
 import { useDocumentVisible } from "../shared/useDocumentVisible"
+import { useMediaQuery } from "../shared/useMediaQuery"
 
 type Stage = "entering" | "typing" | "holding" | "done"
 
@@ -57,6 +58,9 @@ export function TypedMessages({
     const completeRef = useRef(onComplete)
     const startRef = useRef(onMessageStart)
     const pageVisible = useDocumentVisible()
+    // Smaller screen, smaller bites: give her more time to take each line in.
+    const onPhone = useMediaQuery("(max-width: 640px)")
+    const pace = onPhone ? Math.max(1, timing.phoneScale) : 1
 
     useEffect(() => {
         completeRef.current = onComplete
@@ -78,8 +82,8 @@ export function TypedMessages({
 
     const fadeIn = message?.fadeInMs ?? timing.fadeInMs
     const fadeOut = message?.fadeOutMs ?? timing.fadeOutMs
-    const speed = message?.typeSpeedMs ?? timing.typeSpeedMs
-    const pauseAfter = message?.pauseAfterMs ?? timing.pauseAfterMs
+    const speed = (message?.typeSpeedMs ?? timing.typeSpeedMs) * pace
+    const pauseAfter = (message?.pauseAfterMs ?? timing.pauseAfterMs) * pace
     const previousFadeOut = index > 0 ? (messages[index - 1].fadeOutMs ?? timing.fadeOutMs) : 0
     const shown = reduceMotion ? total : Math.min(count, total)
 

@@ -7,7 +7,10 @@ import type { BirthdayTiming } from "../types"
 export const TIMING: BirthdayTiming = {
     gate: {
         introDelayMs: 600,
-        successHoldMs: 4500,
+        successHoldMs: 1800,
+        unlockedLineMs: 2200,
+        unlockedHoldMs: 7200,
+        briefingMs: 5000,
     },
     tunnel: {
         durationMs: 4800,
@@ -26,6 +29,7 @@ export const TIMING: BirthdayTiming = {
         fadeInMs: 1000,
         fadeOutMs: 900,
         lineGapMs: 750,
+        phoneScale: 1.3,
     },
     verse: {
         lineStaggerMs: 1500,

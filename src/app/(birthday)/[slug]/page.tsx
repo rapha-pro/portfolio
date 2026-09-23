@@ -15,6 +15,8 @@ type BirthdayPageRouteProps = BirthdayPageProps & {
 }
 
 const PREVIEW_CHAPTERS: Record<string, BirthdayChapter> = {
+    unlocked: "unlocked",
+    briefing: "briefing",
     room: "archive",
     verse: "verse",
     siblings: "siblings",
@@ -92,7 +94,7 @@ export async function generateViewport({ params }: BirthdayPageProps): Promise<V
  *   Resolves the photo and video folder on the server and hands everything to the
  *   client experience.
  *
- *   In development only, ?chapter=room|verse|siblings|wishes|finale opens
+ *   In development only, ?chapter=unlocked|briefing|room|verse|siblings|wishes|finale opens
  *   on that chapter so copy edits can be previewed without replaying the
  *   whole story. Production ignores it (and stays statically rendered).
  *

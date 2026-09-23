@@ -10,6 +10,6 @@ export const PROFILE: BirthdayProfile = {
     name: "Dulcinée",
     year: 2026,
     slug: "mystery",
-    pageTitle: "For Dulcinée",
+    pageTitle: "HBD Dulcinée",
     pageDescription: "A little something I made for you.",
 }

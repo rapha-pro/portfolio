@@ -7,7 +7,9 @@ import { AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion"
 import type { BirthdayConfig, BirthdayMedia, BirthdayTheme } from "@/lib/data/birthday/types"
 import { MemoryRoom } from "./archive/memory-room"
 import { FinalReveal } from "./finale/final-reveal"
+import { BriefingScreen } from "./gate/briefing-screen"
 import { PinGate } from "./gate/pin-gate"
+import { UnlockedScreen } from "./gate/unlocked-screen"
 import { MusicDock } from "./music/music-dock"
 import { MusicHost } from "./music/music-host"
 import { useBirthdayMusic } from "./music/useBirthdayMusic"
@@ -23,10 +25,26 @@ import { SiblingsSection } from "./siblings/siblings-section"
 import { VerseSection } from "./verse/verse-section"
 import { BirthdayWishes } from "./wishes/birthday-wishes"
 
-type Phase = "gate" | "tunnel" | "archive" | "verse" | "siblings" | "wishes" | "finale"
+type Phase =
+    | "gate"
+    | "unlocked"
+    | "briefing"
+    | "tunnel"
+    | "archive"
+    | "verse"
+    | "siblings"
+    | "wishes"
+    | "finale"
 
 /** Chapters a development preview can open on directly. */
-export type BirthdayChapter = "archive" | "verse" | "siblings" | "wishes" | "finale"
+export type BirthdayChapter =
+    | "unlocked"
+    | "briefing"
+    | "archive"
+    | "verse"
+    | "siblings"
+    | "wishes"
+    | "finale"
 
 type BirthdayExperienceProps = {
     config: BirthdayConfig
@@ -36,6 +54,8 @@ type BirthdayExperienceProps = {
 
 const LIGHT_FOR_PHASE: Record<Phase, LightMode> = {
     gate: "off",
+    unlocked: "off",
+    briefing: "off",
     tunnel: "off",
     archive: "archive",
     verse: "verse",
@@ -87,10 +107,33 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
         return () => window.clearTimeout(t)
     }, [photos])
 
-    const handleUnlock = useCallback((origin: { x: number; y: number }) => {
-        setTunnel({ origin })
+    // The right code leads to the unlock screen, then the briefing, then
+    // the tunnel. Screens that are not configured are simply skipped.
+    const startTunnel = useCallback(() => {
+        setTunnel({ origin: null })
         setPhase("tunnel")
     }, [])
+
+    const toBriefing = useCallback(() => {
+        if (config.gate.briefing) setPhase("briefing")
+        else startTunnel()
+    }, [config.gate.briefing, startTunnel])
+
+    const handleUnlock = useCallback(
+        (origin: { x: number; y: number }) => {
+            if (config.gate.unlocked) {
+                setPhase("unlocked")
+                return
+            }
+            if (config.gate.briefing) {
+                setPhase("briefing")
+                return
+            }
+            setTunnel({ origin })
+            setPhase("tunnel")
+        },
+        [config.gate.unlocked, config.gate.briefing]
+    )
 
     const handleFlash = useCallback(() => setPhase("archive"), [])
 
@@ -146,6 +189,22 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                                 gate={config.gate}
                                 timing={config.timing.gate}
                                 onUnlock={handleUnlock}
+                            />
+                        )}
+                        {phase === "unlocked" && config.gate.unlocked && (
+                            <UnlockedScreen
+                                key="unlocked"
+                                unlocked={config.gate.unlocked}
+                                timing={config.timing.gate}
+                                onDone={toBriefing}
+                            />
+                        )}
+                        {phase === "briefing" && config.gate.briefing && (
+                            <BriefingScreen
+                                key="briefing"
+                                briefing={config.gate.briefing}
+                                timing={config.timing.gate}
+                                onDone={startTunnel}
                             />
                         )}
                         {(phase === "tunnel" || phase === "archive") && (
@@ -241,5 +300,7 @@ function themeVariables(theme: BirthdayTheme): CSSProperties {
         "--bd-ink-subtle": theme.inkSubtle,
         "--bd-light": theme.light,
         "--bd-ember": theme.ember,
+        "--bd-green": theme.green,
+        "--bd-yellow": theme.yellow,
     } as CSSProperties
 }

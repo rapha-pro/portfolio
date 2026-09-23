@@ -14,5 +14,7 @@ export const THEME: BirthdayTheme = {
     inkSubtle: "#80776b",
     light: "#ffcf8f",
     ember: "#d9924f",
+    green: "#86d6a4",
+    yellow: "#ffd76a",
     festive: ["#e9c27a", "#f5e3c3", "#d8927f", "#b86b45", "#fff4df", "#a9bfa8"],
 }
