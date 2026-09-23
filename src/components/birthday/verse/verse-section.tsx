@@ -6,6 +6,7 @@ import type { BirthdayTiming, VerseConfig } from "@/lib/data/birthday/types"
 import { ContinueButton } from "../shared/continue-button"
 import { EASE_OUT, sec } from "../shared/motion"
 import { useAutoAdvance } from "../shared/useAutoAdvance"
+import { SwordIcon } from "../shared/sword-icon"
 import { useFollowReveal } from "../shared/useFollowReveal"
 
 type VerseSectionProps = {
@@ -126,10 +127,11 @@ export function VerseSection({ verse, timing, continueLabel, onComplete }: Verse
                     {verse.closing && (
                         <motion.p
                             data-follow={2}
-                            className="bd-serif bd-hl-yellow mt-7 text-balance text-[clamp(1.15rem,min(2.9vw,3.2dvh),1.5rem)] font-medium italic leading-[1.4]"
+                            className="bd-serif bd-hl-yellow mt-7 flex items-center justify-center gap-2 text-balance text-[clamp(1.15rem,min(2.9vw,3.2dvh),1.5rem)] font-medium italic leading-[1.4]"
                             {...reveal(closingDelay, 1.8)}
                         >
                             {verse.closing}
+                            <SwordIcon />
                         </motion.p>
                     )}
                 </div>

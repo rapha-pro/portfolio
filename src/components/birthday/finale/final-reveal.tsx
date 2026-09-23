@@ -6,6 +6,7 @@ import type { BirthdayMedia, BirthdayTiming, FinaleConfig } from "@/lib/data/bir
 import { EASE_IN_OUT, EASE_OUT, sec } from "../shared/motion"
 import { useDocumentVisible } from "../shared/useDocumentVisible"
 import { useFollowReveal } from "../shared/useFollowReveal"
+import { SwordIcon } from "../shared/sword-icon"
 import { NotebookIllustration } from "./notebook-illustration"
 import { PhotoBand } from "./photo-band"
 
@@ -308,12 +309,12 @@ export function FinalReveal({
                             animate={{ opacity: 1 }}
                             transition={{ duration: 2, delay: 1.6, ease: EASE_OUT }}
                         >
-                            <SwordIcon />
                             {finale.closing}
+                            <SwordIcon />
                         </motion.p>
                     )}
 
-                    <div style={{ height: "calc(env(safe-area-inset-bottom, 0px) + 30px)" }} />
+                    <div style={{ height: "calc(env(safe-area-inset-bottom, 0px) + 64px)" }} />
                 </motion.div>
             )}
 
@@ -344,26 +345,5 @@ export function FinalReveal({
                 )}
             </AnimatePresence>
         </motion.section>
-    )
-}
-
-/** A small line drawn sword, for the last line under the photographs. */
-function SwordIcon() {
-    return (
-        <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            className="h-[1.05em] w-[1.05em] shrink-0"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M20.8 3.2 12 12" />
-            <path d="M9.4 11.4 13.6 15.6" />
-            <path d="M12 12 9 15" />
-            <circle cx="7.6" cy="16.4" r="1.5" />
-        </svg>
     )
 }
