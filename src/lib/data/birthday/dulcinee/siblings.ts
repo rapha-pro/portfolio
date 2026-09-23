@@ -14,7 +14,7 @@ import type { SiblingsConfig } from "../types"
  * Set the whole export to null to skip the chapter.
  */
 export const SIBLINGS: SiblingsConfig = {
-    kicker: "A word from her family",
+    kicker: "A word from your precious family",
     entries: [
         {
             name: "Samy",
