@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, type CSSProperties } from "react"
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { motion } from "framer-motion"
 import { seededRandom } from "@/lib/birthday/random"
 import { EASE_OUT } from "../shared/motion"
@@ -11,12 +11,47 @@ type SunNumberProps = {
     delay: number // seconds before it appears
 }
 
+/** One full emission, from the first ray leaving to the last one fading. */
+const BURST_SECONDS = 3.2
+
 /**
  * Purpose:
- *   Her new age as a little sun, the way a child draws one: a shimmering
- *   gold number inside a ring, with long and short rays drawn one by one
- *   around it. The rays turn slowly and breathe; small four-pointed
- *   sparkles twinkle around the number.
+ *   Digits do not sit in the middle of their line box: a font leaves more
+ *   room above them than below, so a centered number looks low. This
+ *   measures the real ink of the glyphs and returns how far to lift them,
+ *   which keeps the number centered whatever font or value is used.
+ *
+ * Args:
+ *   - element : the rendered number.
+ *   - value   : the text it contains.
+ *
+ * Returns:
+ *   The correction in pixels (positive means "move up").
+ */
+function inkOffset(element: HTMLElement, value: string): number {
+    const style = getComputedStyle(element)
+    const ctx = document.createElement("canvas").getContext("2d")
+    if (!ctx) return 0
+    ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+    const m = ctx.measureText(value)
+    const size = parseFloat(style.fontSize)
+    const lineHeight = parseFloat(style.lineHeight) || size
+    const fontHeight = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent
+    const baseline = (lineHeight - fontHeight) / 2 + m.fontBoundingBoxAscent
+    const inkTop = baseline - m.actualBoundingBoxAscent
+    const inkCenter = inkTop + (m.actualBoundingBoxAscent + m.actualBoundingBoxDescent) / 2
+    const offset = inkCenter - lineHeight / 2
+    return Number.isFinite(offset) ? offset : 0
+}
+
+/**
+ * Purpose:
+ *   Her new age as a little sun: a shimmering gold number that keeps
+ *   sending out rays. Each ray starts short beside the number, stretches
+ *   outward along its own direction, then fades and disappears, in a wave
+ *   around the circle. Small four-pointed sparkles twinkle around it. The
+ *   number is centered on its glyphs, so the rays radiate from the middle
+ *   of the digits rather than from the middle of their line box.
  *
  * Args:
  *   - value : the number shown.
@@ -27,23 +62,40 @@ type SunNumberProps = {
  *   A square, centered block sized by --bd-sun.
  */
 export function SunNumber({ value, rays, delay }: SunNumberProps) {
+    const numberRef = useRef<HTMLSpanElement>(null)
+    const [lift, setLift] = useState(0)
+
+    // Fonts load late, so measure again once they are ready.
+    useEffect(() => {
+        const measure = () => {
+            const number = numberRef.current
+            if (number) setLift(inkOffset(number, value))
+        }
+        measure()
+        document.fonts?.ready.then(measure).catch(() => undefined)
+        window.addEventListener("resize", measure)
+        return () => window.removeEventListener("resize", measure)
+    }, [value])
+
     const lines = useMemo(() => {
         const rand = seededRandom("sun-rays")
         return Array.from({ length: rays }, (_, i) => {
             // A little irregularity makes it feel hand drawn.
-            const angle = (i / rays) * Math.PI * 2 + (rand() - 0.5) * 0.07
+            const degrees = (i / rays) * 360 + (rand() - 0.5) * 4
             const long = i % 2 === 0
-            const inner = 64 + rand() * 3
-            const outer = (long ? 94 : 82) + rand() * 4
+            const inner = 58 + rand() * 3
+            const length = (long ? 30 : 20) + rand() * 5
             return {
-                x1: Math.cos(angle) * inner,
-                y1: Math.sin(angle) * inner,
-                x2: Math.cos(angle) * outer,
-                y2: Math.sin(angle) * outer,
-                long,
+                degrees,
+                inner,
+                outer: inner + length,
+                width: long ? 4 : 3,
+                // Rays leave in a wave around the circle, each with its own pace.
+                delay: delay + 0.35 + (i / rays) * BURST_SECONDS * 0.85 + rand() * 0.25,
+                dur: BURST_SECONDS + rand() * 0.8,
             }
         })
-    }, [rays])
+    }, [rays, delay])
 
     const sparkles = useMemo(() => {
         const rand = seededRandom("sun-sparkles")
@@ -79,50 +131,47 @@ export function SunNumber({ value, rays, delay }: SunNumberProps) {
                 transition={{ duration: 1.6, delay, ease: EASE_OUT }}
             />
 
-            <div aria-hidden className="bd-sun-spin absolute inset-0">
-                <svg
-                    viewBox="-100 -100 200 200"
-                    className="bd-sun-breathe block h-full w-full overflow-visible"
-                    style={{ color: "color-mix(in srgb, var(--bd-light) 85%, white)" }}
-                >
-                    <motion.circle
-                        r="54"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeOpacity="0.75"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.1, delay: delay + 0.2, ease: EASE_OUT }}
-                    />
-                    {lines.map((l, i) => (
-                        <motion.line
-                            key={i}
-                            x1={l.x1}
-                            y1={l.y1}
-                            x2={l.x2}
-                            y2={l.y2}
+            <svg
+                aria-hidden
+                viewBox="-100 -100 200 200"
+                className="absolute inset-0 block h-full w-full overflow-visible"
+                style={{ color: "color-mix(in srgb, var(--bd-light) 85%, white)" }}
+            >
+                {lines.map((l, i) => (
+                    <g key={i} transform={`rotate(${l.degrees})`}>
+                        <line
+                            className="bd-ray"
+                            x1={l.inner}
+                            y1="0"
+                            x2={l.outer}
+                            y2="0"
                             stroke="currentColor"
-                            strokeWidth={l.long ? 4 : 3}
+                            strokeWidth={l.width}
                             strokeLinecap="round"
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{ pathLength: 1, opacity: 1 }}
-                            transition={{
-                                duration: 0.45,
-                                delay: delay + 0.6 + i * 0.045,
-                                ease: EASE_OUT,
-                            }}
+                            style={
+                                {
+                                    transformOrigin: `${l.inner}px 0px`,
+                                    "--delay": `${l.delay}s`,
+                                    "--dur": `${l.dur}s`,
+                                } as CSSProperties
+                            }
                         />
-                    ))}
-                </svg>
-            </div>
+                    </g>
+                ))}
+            </svg>
 
-            <span aria-hidden className="bd-serif bd-sun-glow absolute">
+            <span
+                aria-hidden
+                className="bd-serif bd-sun-glow absolute"
+                style={{ transform: `translateY(${-lift}px)` }}
+            >
                 {value}
             </span>
             <motion.span
+                ref={numberRef}
                 aria-hidden
                 className="bd-serif bd-sun-number relative"
+                style={{ top: -lift }}
                 initial={{ opacity: 0, scale: 0.3 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 150, damping: 11, delay }}

@@ -8,13 +8,11 @@ import type { VerseConfig } from "../types"
 export const VERSE: VerseConfig = {
     kicker: "A blessing",
     lines: [
-        "The Lord bless thee, and keep thee:",
-        "The Lord make his face shine upon thee,",
-        "and be gracious unto thee:",
-        "The Lord lift up his countenance upon thee,",
-        "and give thee peace.",
+        "Que l'Éternel te bénisse, et qu'il te garde!",
+        "Que l'Éternel fasse luire sa face sur toi, et qu'il t'accorde sa grâce!",
+        "Que l'Éternel tourne sa face vers toi, et qu'il te donne la paix!",
     ],
     reference: "Numbers 6:24-26",
-    prayerIntro: "My prayer for you this year is simple:",
+    prayerIntro: "My prayer for you this year:",
     prayer: "May God continue to guide your steps, protect you, strengthen you, and lead you exactly where He wants you to be.",
 }

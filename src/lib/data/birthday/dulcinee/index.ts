@@ -6,6 +6,7 @@ import { PHOTOS } from "./photos"
 import { MESSAGES } from "./messages"
 import { MUSIC } from "./music"
 import { VERSE } from "./verse"
+import { SIBLINGS } from "./siblings"
 import { WISHES } from "./wishes"
 import { FINALE } from "./finale"
 import { UI } from "./ui"
@@ -21,6 +22,7 @@ export const DULCINEE: BirthdayConfig = {
     messages: MESSAGES,
     music: MUSIC,
     verse: VERSE,
+    siblings: SIBLINGS,
     wishes: WISHES,
     finale: FINALE,
     ui: UI,

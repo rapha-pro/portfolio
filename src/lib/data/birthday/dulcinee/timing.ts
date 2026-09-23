@@ -31,6 +31,9 @@ export const TIMING: BirthdayTiming = {
         lineStaggerMs: 1500,
         holdMs: 22000,
     },
+    siblings: {
+        holdMs: 16000,
+    },
     wishes: {
         holdMs: 28000,
     },

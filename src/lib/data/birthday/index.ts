@@ -14,7 +14,7 @@ export const BIRTHDAYS: readonly BirthdayConfig[] = [DULCINEE]
  *   Finds the birthday config served at a given URL segment.
  *
  * Args:
- *   - slug : the URL segment, e.g. "23-september".
+ *   - slug : the URL segment, e.g. "mystery".
  *
  * Returns:
  *   The matching config, or undefined when no page uses that slug.

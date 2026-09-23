@@ -11,7 +11,7 @@
 export type BirthdayProfile = {
     name: string // display name, reused across all copy
     year: number // shown on the archive labels
-    slug: string // URL segment: "23-september" -> raphaelonana.dev/23-september
+    slug: string // URL segment: "mystery" -> raphaelonana.dev/mystery
     pageTitle: string // browser tab + link preview title
     pageDescription: string // link preview description
 }
@@ -77,7 +77,8 @@ export type MusicConfig = {
     artist: string
     volume: number // 0 to 100
     fadeInMs: number
-    startAtMessage: number // music starts as this message appears (0 = the first one)
+    startAtMessage: number // music starts as this message appears (0 = the first);
+    // any negative value starts it with the photos, before the first message
     controls: {
         play: string // accessible label of the corner button while paused
         pause: string // accessible label of the corner button while playing
@@ -100,11 +101,27 @@ export type CelebrationConfig = {
     confetti: number // 0 for none (phones show about half)
 }
 
+export type TitleLine = {
+    text: string
+    font?: "serif" | "script" // script is the calligraphy face
+}
+
 export type WishesConfig = {
     kicker: string | null
-    title: string[] // one entry per visual line
+    title: TitleLine[] // one entry per visual line
     celebration: CelebrationConfig | null // null hides the number, balloons and confetti
     paragraphs: string[]
+}
+
+export type SiblingEntry = {
+    name: string
+    message: string
+    photo: string // path under /public, "" leaves the frame empty
+}
+
+export type SiblingsConfig = {
+    kicker: string | null // small line above each message
+    entries: SiblingEntry[] // shown one at a time, in order
 }
 
 export type FinaleLine = {
@@ -164,6 +181,9 @@ export type BirthdayTiming = {
         lineStaggerMs: number
         holdMs: number | null // auto continue after the reveal, null to wait for a tap
     }
+    siblings: {
+        holdMs: number | null // per sibling
+    }
     wishes: {
         holdMs: number | null
     }
@@ -187,6 +207,7 @@ export type BirthdayConfig = {
     messages: TypedMessage[]
     music: MusicConfig
     verse: VerseConfig
+    siblings: SiblingsConfig | null // null skips the family chapter
     wishes: WishesConfig
     finale: FinaleConfig
     ui: InterfaceCopy

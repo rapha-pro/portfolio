@@ -8,7 +8,7 @@ Each person has a folder here; the page for that person lives at
 | ----------- | --------------------------------------------------------------- |
 | `index.ts`  | Registry of all birthday pages (`BIRTHDAYS`) + `getBirthday()`. |
 | `types.ts`  | The `BirthdayConfig` shape every person's folder must satisfy.  |
-| `dulcinee/` | Dulcinée's page, served at `/23-september`.                     |
+| `dulcinee/` | Dulcinée's page, served at `/mystery`.                          |
 
 ## Editing Dulcinée's page
 
@@ -21,6 +21,7 @@ Each person has a folder here; the page for that person lives at
 | Typed messages                                     | `dulcinee/messages.ts`                                       |
 | Music (YouTube link or mp3)                        | `dulcinee/music.ts`                                          |
 | Bible verse and prayer                             | `dulcinee/verse.ts`                                          |
+| Her siblings names, messages and photos            | `dulcinee/siblings.ts`                                       |
 | Birthday message, the "20" sun, balloons, confetti | `dulcinee/wishes.ts` (`celebration`, `null` hides it)        |
 | Ending and the notebook lines                      | `dulcinee/finale.ts`                                         |
 | "Continue" and other small words                   | `dulcinee/ui.ts`                                             |
@@ -45,6 +46,18 @@ with a video woven in after every few photos (`videoEvery: [3, 4]` in
 while it is on screen. Tapping a card
 enlarges it for `timing.archive.focusMs` (7 seconds), then it returns.
 
+### Her siblings
+
+`siblings.ts` holds one entry per sibling: name, message, and a photo of the
+two of them. They appear one at a time after the verse, with the name on top,
+the framed photo beside it and the message underneath.
+
+Put the photos in `public/images/birthday/dulcinee/siblings/` (that folder is
+ignored by the memory stream) and point `photo` at them, for example
+`"/images/birthday/dulcinee/siblings/grace.jpg"`. An empty `photo` leaves the
+frame empty, so the page works before the pictures arrive. Set the whole
+export to `null` to skip the chapter.
+
 ### Music
 
 - Paste any YouTube link (or just the id) into `source.link`. The video must
@@ -63,11 +76,12 @@ enlarges it for `timing.archive.focusMs` (7 seconds), then it returns.
 
 `pnpm dev`, then open any of:
 
-- `http://localhost:3000/23-september` (the full experience)
-- `http://localhost:3000/23-september?chapter=room`
-- `http://localhost:3000/23-september?chapter=verse`
-- `http://localhost:3000/23-september?chapter=wishes`
-- `http://localhost:3000/23-september?chapter=finale`
+- `http://localhost:3000/mystery` (the full experience)
+- `http://localhost:3000/mystery?chapter=room`
+- `http://localhost:3000/mystery?chapter=verse`
+- `http://localhost:3000/mystery?chapter=siblings`
+- `http://localhost:3000/mystery?chapter=wishes`
+- `http://localhost:3000/mystery?chapter=finale`
 
 The `chapter` shortcut is ignored in production, so the PIN cannot be skipped
 on the live site. While typing, tap (or press space) to finish a line or skip

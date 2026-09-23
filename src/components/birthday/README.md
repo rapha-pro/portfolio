@@ -12,7 +12,7 @@ Media preparation: `scripts/birthday-media.mjs` (`pnpm birthday:media <name>`).
 ## Flow
 
 ```
-gate ──PIN──▶ tunnel ──flash──▶ archive ──last message──▶ verse ──▶ wishes ──▶ finale
+gate ──PIN──▶ tunnel ──flash──▶ archive ──last message──▶ verse ──▶ siblings ──▶ wishes ──▶ finale
              (overlay; the room mounts underneath so photos preload)
 ```
 
@@ -41,8 +41,10 @@ gate ──PIN──▶ tunnel ──flash──▶ archive ──last message�
 | `music/youtubeApi.ts`              | Minimal IFrame API typings, a singleton loader, and `parseYouTubeId` for pasted links.                                                                                                                          |
 | `music/music-dock.tsx`             | Corner sound button with equalizer; the song title links to YouTube (always on wide screens, briefly on phones).                                                                                                |
 | `music/music-host.tsx`             | Where the YouTube iframe lives; placed invisibly under the sound button when an iPhone refuses a scripted start, so one tap starts it.                                                                          |
+| `siblings/siblings-section.tsx`    | Her siblings messages, one at a time: name, framed photo, message, progress dots.                                                                                                                               |
+| `siblings/photo-frame.tsx`         | Warm metal frame with a mat and glass, empty until a photo is set.                                                                                                                                              |
 | `verse/verse-section.tsx`          | Verse line by line, reference, divider, prayer.                                                                                                                                                                 |
-| `wishes/birthday-wishes.tsx`       | Warm chapter: letter by letter title, the celebration, blessing paragraphs.                                                                                                                                     |
+| `wishes/birthday-wishes.tsx`       | Warm chapter: the calligraphy line written left to right, her name letter by letter, the celebration, blessing paragraphs.                                                                                      |
 | `wishes/sun-number.tsx`            | Her age as a child-drawn sun: shimmering number, ring, long and short rays, sparkles.                                                                                                                           |
 | `wishes/balloons.tsx`              | Glossy balloons rising along the sides.                                                                                                                                                                         |
 | `wishes/confetti.tsx`              | Confetti tumbling down (about half on phones).                                                                                                                                                                  |

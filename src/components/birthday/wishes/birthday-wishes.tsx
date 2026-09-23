@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef } from "react"
-import { motion } from "framer-motion"
-import type { BirthdayTiming, WishesConfig } from "@/lib/data/birthday/types"
+import { useEffect, useRef } from "react"
+import { animate, motion, useMotionTemplate, useMotionValue, useReducedMotion } from "framer-motion"
+import type { BirthdayTiming, TitleLine, WishesConfig } from "@/lib/data/birthday/types"
 import { ContinueButton } from "../shared/continue-button"
 import { EASE_OUT } from "../shared/motion"
 import { useAutoAdvance } from "../shared/useAutoAdvance"
@@ -21,13 +21,15 @@ type BirthdayWishesProps = {
 
 const TITLE_START = 1.3
 const CHAR_STAGGER = 0.05
+const SCRIPT_REVEAL = 2.2 // seconds for a calligraphy line to be written
 
 /**
  * Purpose:
- *   The birthday chapter. The room warms (handled by the light rig) and
- *   "Happy Birthday" condenses letter by letter out of a blur. Then her
- *   number lights up like a little sun, balloons rise and confetti falls,
- *   and the blessing paragraphs follow.
+ *   The birthday chapter. The room warms (handled by the light rig),
+ *   "Happy Birthday" is written across one line in calligraphy and her
+ *   name condenses letter by letter out of a blur. Then her number lights
+ *   up like a little sun, balloons rise and confetti falls, and the
+ *   blessing paragraphs follow.
  *
  * Args:
  *   - wishes        : kicker, title lines, celebration and paragraphs.
@@ -46,9 +48,9 @@ export function BirthdayWishes({
     continueLabel,
     onComplete,
 }: BirthdayWishesProps) {
-    const titleText = wishes.title.join(" ")
-    const titleChars = wishes.title.join("").length
-    const titleEnd = TITLE_START + titleChars * CHAR_STAGGER + 1
+    const reduceMotion = useReducedMotion() ?? false
+    const titleText = wishes.title.map((line) => line.text).join(" ")
+    const { items, end: titleEnd } = layoutTitle(wishes.title)
     const celebration = wishes.celebration
     const showNumber = Boolean(celebration?.number)
     const paragraphsStart = celebration ? titleEnd + 2.8 : titleEnd + 0.2
@@ -59,7 +61,6 @@ export function BirthdayWishes({
         onComplete
     )
 
-    const titleLines = layoutTitle(wishes.title)
     const scrollRef = useRef<HTMLDivElement>(null)
     useFollowReveal(scrollRef, [titleEnd, ...wishes.paragraphs.map((_, i) => paragraphDelay(i))])
 
@@ -96,45 +97,56 @@ export function BirthdayWishes({
                         </motion.p>
                     )}
 
-                    <h1
-                        aria-label={titleText}
-                        className="bd-serif bd-glow-warm text-[clamp(2.8rem,min(10.5vw,11dvh),6.2rem)] font-light leading-[1.02] tracking-[-0.005em]"
-                    >
-                        {titleLines.map((words, li) => (
-                            <span key={li} aria-hidden className="block">
-                                {words.map(({ word, start }, wi) => (
-                                    <span key={wi} className="inline-block whitespace-nowrap">
-                                        {word.split("").map((ch, ci) => {
-                                            const delay = TITLE_START + (start + ci) * CHAR_STAGGER
-                                            return (
-                                                <motion.span
-                                                    key={delay}
-                                                    className="inline-block"
-                                                    initial={{
-                                                        opacity: 0,
-                                                        y: "0.3em",
-                                                        filter: "blur(12px)",
-                                                    }}
-                                                    animate={{
-                                                        opacity: 1,
-                                                        y: "0em",
-                                                        filter: "blur(0px)",
-                                                    }}
-                                                    transition={{
-                                                        duration: 1.2,
-                                                        delay,
-                                                        ease: EASE_OUT,
-                                                    }}
-                                                >
-                                                    {ch}
-                                                </motion.span>
-                                            )
-                                        })}
-                                        {wi < words.length - 1 && "\u00a0"}
-                                    </span>
-                                ))}
-                            </span>
-                        ))}
+                    <h1 aria-label={titleText} className="bd-glow-warm">
+                        {items.map((line, li) =>
+                            line.font === "script" ? (
+                                <ScriptLine
+                                    key={li}
+                                    text={line.text}
+                                    delay={line.delay}
+                                    reduceMotion={reduceMotion}
+                                />
+                            ) : (
+                                <span
+                                    key={li}
+                                    aria-hidden
+                                    className="bd-serif block text-[clamp(2.7rem,min(11.5vw,10dvh),5.8rem)] font-light leading-[1.05] tracking-[-0.005em]"
+                                >
+                                    {line.words.map(({ word, start }, wi) => (
+                                        <span key={wi} className="inline-block whitespace-nowrap">
+                                            {word.split("").map((ch, ci) => {
+                                                const delay =
+                                                    line.delay + (start + ci) * CHAR_STAGGER
+                                                return (
+                                                    <motion.span
+                                                        key={delay}
+                                                        className="inline-block"
+                                                        initial={{
+                                                            opacity: 0,
+                                                            y: "0.3em",
+                                                            filter: "blur(12px)",
+                                                        }}
+                                                        animate={{
+                                                            opacity: 1,
+                                                            y: "0em",
+                                                            filter: "blur(0px)",
+                                                        }}
+                                                        transition={{
+                                                            duration: 1.2,
+                                                            delay,
+                                                            ease: EASE_OUT,
+                                                        }}
+                                                    >
+                                                        {ch}
+                                                    </motion.span>
+                                                )
+                                            })}
+                                            {wi < line.words.length - 1 && " "}
+                                        </span>
+                                    ))}
+                                </span>
+                            )
+                        )}
                     </h1>
 
                     {showNumber && celebration && (
@@ -177,14 +189,74 @@ export function BirthdayWishes({
     )
 }
 
-/** Splits the title into words, remembering each word's first character index for the stagger. */
-function layoutTitle(lines: string[]): { word: string; start: number }[][] {
-    let offset = 0
-    return lines.map((line) =>
-        line.split(" ").map((word) => {
+type ScriptLineProps = {
+    text: string
+    delay: number
+    reduceMotion: boolean
+}
+
+/** A calligraphy line, written from left to right as if by hand. */
+function ScriptLine({ text, delay, reduceMotion }: ScriptLineProps) {
+    const progress = useMotionValue(reduceMotion ? 100 : 0)
+
+    useEffect(() => {
+        if (reduceMotion) {
+            progress.set(100)
+            return
+        }
+        const controls = animate(progress, 100, {
+            duration: SCRIPT_REVEAL,
+            delay,
+            ease: [0.4, 0, 0.2, 1],
+        })
+        return () => controls.stop()
+    }, [delay, reduceMotion, progress])
+
+    const mask = useMotionTemplate`linear-gradient(90deg, #000 ${progress}%, rgba(0,0,0,0.4) calc(${progress}% + 4%), transparent calc(${progress}% + 13%))`
+
+    return (
+        <motion.span
+            aria-hidden
+            className="bd-script block whitespace-nowrap text-[clamp(2.4rem,min(12.5vw,8.5dvh),5.2rem)] leading-[1.25]"
+            style={{ maskImage: mask, WebkitMaskImage: mask }}
+        >
+            {text}
+        </motion.span>
+    )
+}
+
+type LaidLine =
+    | { font: "script"; text: string; delay: number }
+    | { font: "serif"; text: string; delay: number; words: { word: string; start: number }[] }
+
+/**
+ * Purpose:
+ *   Works out when each title line starts, so the calligraphy is written
+ *   first and the name follows, and reports when the whole title is done.
+ *
+ * Args:
+ *   - lines : the configured title lines.
+ *
+ * Returns:
+ *   The lines with their delays, plus `end` in seconds.
+ */
+function layoutTitle(lines: TitleLine[]): { items: LaidLine[]; end: number } {
+    let at = TITLE_START
+    const items = lines.map((line): LaidLine => {
+        if ((line.font ?? "serif") === "script") {
+            const item: LaidLine = { font: "script", text: line.text, delay: at }
+            at += SCRIPT_REVEAL * 0.8
+            return item
+        }
+        let offset = 0
+        const words = line.text.split(" ").map((word) => {
             const start = offset
             offset += word.length
             return { word, start }
         })
-    )
+        const item: LaidLine = { font: "serif", text: line.text, delay: at, words }
+        at += offset * CHAR_STAGGER + 1
+        return item
+    })
+    return { items, end: at }
 }

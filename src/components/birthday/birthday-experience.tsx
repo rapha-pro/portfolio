@@ -19,13 +19,14 @@ import { FilmGrain } from "./stage/film-grain"
 import { LightRig } from "./stage/light-rig"
 import type { LightMode } from "./stage/lightModes"
 import { TunnelTransition } from "./tunnel/tunnel-transition"
+import { SiblingsSection } from "./siblings/siblings-section"
 import { VerseSection } from "./verse/verse-section"
 import { BirthdayWishes } from "./wishes/birthday-wishes"
 
-type Phase = "gate" | "tunnel" | "archive" | "verse" | "wishes" | "finale"
+type Phase = "gate" | "tunnel" | "archive" | "verse" | "siblings" | "wishes" | "finale"
 
 /** Chapters a development preview can open on directly. */
-export type BirthdayChapter = "archive" | "verse" | "wishes" | "finale"
+export type BirthdayChapter = "archive" | "verse" | "siblings" | "wishes" | "finale"
 
 type BirthdayExperienceProps = {
     config: BirthdayConfig
@@ -38,6 +39,7 @@ const LIGHT_FOR_PHASE: Record<Phase, LightMode> = {
     tunnel: "off",
     archive: "archive",
     verse: "verse",
+    siblings: "finale",
     wishes: "warm",
     finale: "finale",
 }
@@ -111,7 +113,11 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
         beginPlayback()
     }, [musicCued, beginPlayback])
 
+    const family = config.siblings
+    const hasFamily = Boolean(family && family.entries.length > 0)
+
     const toVerse = useCallback(() => setPhase("verse"), [])
+    const toSiblings = useCallback(() => setPhase(hasFamily ? "siblings" : "wishes"), [hasFamily])
     const toWishes = useCallback(() => setPhase("wishes"), [])
     const toFinale = useCallback(() => setPhase("finale"), [])
 
@@ -159,6 +165,16 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                                 key="verse"
                                 verse={config.verse}
                                 timing={config.timing.verse}
+                                continueLabel={config.ui.continueLabel}
+                                onComplete={toSiblings}
+                            />
+                        )}
+                        {phase === "siblings" && family && (
+                            <SiblingsSection
+                                key="siblings"
+                                siblings={family}
+                                personName={config.profile.name}
+                                timing={config.timing.siblings}
                                 continueLabel={config.ui.continueLabel}
                                 onComplete={toWishes}
                             />

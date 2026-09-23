@@ -5,7 +5,7 @@ import { PROFILE } from "./profile"
 export const ARCHIVE: ArchiveConfig = {
     title: "Memory Archive",
     reference: "Ref. 23 / 09",
-    subject: `${PROFILE.name} / ${PROFILE.year}`,
+    subject: `Memories / ${PROFILE.year}`,
     counter: "{count} frames",
     streamLabel: "Photographs from our time together, drifting slowly across the room.",
 }

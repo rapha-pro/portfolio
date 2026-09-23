@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { BIRTHDAYS, getBirthday } from "@/lib/data/birthday"
 import { resolveMedia } from "@/lib/birthday/resolveMedia"
 import { BirthdayExperience, type BirthdayChapter } from "@/components/birthday/birthday-experience"
-import { birthdaySerif } from "@/components/birthday/shared/fonts"
+import { birthdaySerif, birthdayScript } from "@/components/birthday/shared/fonts"
 
 type BirthdayPageProps = {
     params: Promise<{ slug: string }>
@@ -16,6 +16,7 @@ type BirthdayPageRouteProps = BirthdayPageProps & {
 const PREVIEW_CHAPTERS: Record<string, BirthdayChapter> = {
     room: "archive",
     verse: "verse",
+    siblings: "siblings",
     wishes: "wishes",
     finale: "finale",
 }
@@ -86,11 +87,11 @@ export async function generateViewport({ params }: BirthdayPageProps): Promise<V
 
 /**
  * Purpose:
- *   A personal birthday experience, e.g. raphaelonana.dev/23-september.
+ *   A personal birthday experience, e.g. raphaelonana.dev/mystery.
  *   Resolves the photo and video folder on the server and hands everything to the
  *   client experience.
  *
- *   In development only, ?chapter=room|verse|wishes|finale opens straight
+ *   In development only, ?chapter=room|verse|siblings|wishes|finale opens
  *   on that chapter so copy edits can be previewed without replaying the
  *   whole story. Production ignores it (and stays statically rendered).
  *
@@ -115,7 +116,7 @@ export default async function BirthdayPage({ params, searchParams }: BirthdayPag
     }
 
     return (
-        <div className={birthdaySerif.variable}>
+        <div className={`${birthdaySerif.variable} ${birthdayScript.variable}`}>
             <BirthdayExperience config={config} photos={photos} startAt={startAt} />
         </div>
     )

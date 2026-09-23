@@ -14,16 +14,20 @@ import type { TypedMessage } from "../types"
  * (see music.ts); typing waits there until she chooses.
  */
 export const MESSAGES: TypedMessage[] = [
-    { text: "Some memories deserve to be remembered." },
-    { text: "A month can sound like a long time..." },
-    { text: "Until you realize how quickly moments become memories." },
+    { text: "Some memories deserve to be remembered" },
+    { text: "A month can sound like a long time.." },
+    { text: "Until you realize how quickly moments become memories" },
     {
-        text: ["The outings.", "The music.", "The conversations.", "The laughter."],
+        text: ["The outings", "The music", "The conversations", "The laughter..."],
         typeSpeedMs: 60,
         pauseAfterMs: 2600,
     },
-    { text: "The moments that weren't planned.", tone: "quiet" },
-    { text: "And the people who made the whole experience special." },
-    { text: "I'm grateful for this month.", pauseAfterMs: 2000 },
-    { text: "I'm grateful for you.", tone: "emphasis", typeSpeedMs: 85, pauseAfterMs: 3600 },
+    {
+        text: "The moments that aren't planned are always the best",
+        tone: "quiet",
+        pauseAfterMs: 3000,
+    },
+    { text: "And the people who made the whole experience special.." },
+    { text: "I'm just grateful.", pauseAfterMs: 2000 },
+    // { text: "I'm grateful for you.", tone: "emphasis", typeSpeedMs: 85, pauseAfterMs: 3600 },
 ]

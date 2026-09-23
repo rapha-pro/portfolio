@@ -11,6 +11,9 @@ import type { CardOpening } from "./photo-card"
 import { PhotoStream } from "./photo-stream"
 import { TypedMessages } from "./typed-messages"
 
+/** Breath between the tunnel flash and the music, when it starts with the photos. */
+const MUSIC_WITH_PHOTOS_MS = 1400
+
 type MemoryRoomProps = {
     config: BirthdayConfig
     photos: BirthdayMedia[]
@@ -26,7 +29,8 @@ type MemoryRoomProps = {
  *   The memory archive: labels in the corners, the photo and video stream
  *   under the bulb, and the typed messages just beneath it. A tapped card
  *   is lifted and enlarged for a few seconds (stream and typing pause
- *   meanwhile). The music is cued when the configured message appears.
+ *   meanwhile). The music is cued with the photos, or when the configured
+ *   message appears.
  *   After the last message the photographs blur and fade away before the
  *   story moves on to the verse.
  *
@@ -87,9 +91,23 @@ export function MemoryRoom({
     )
 
     const startAt = config.music.startAtMessage
+    const cueRef = useRef(onMusicCue)
+
+    useEffect(() => {
+        cueRef.current = onMusicCue
+    }, [onMusicCue])
+
+    // A negative startAtMessage means the music rises with the photographs,
+    // before any message is typed.
+    useEffect(() => {
+        if (!active || !pageVisible || startAt >= 0) return
+        const t = window.setTimeout(() => cueRef.current(), MUSIC_WITH_PHOTOS_MS)
+        return () => window.clearTimeout(t)
+    }, [active, pageVisible, startAt])
+
     const handleMessageStart = useCallback(
         (index: number) => {
-            if (index >= startAt) onMusicCue()
+            if (startAt >= 0 && index >= startAt) onMusicCue()
         },
         [startAt, onMusicCue]
     )
