@@ -15,5 +15,6 @@ export const FINALE: FinaleConfig = {
     instruction: "I left a little something",
     closingTitle: "",
     blessing: "May God bless this new chapter of your life.",
+    closing: "We are Hebrews 11.40",
     replayLabel: "Begin again",
 }

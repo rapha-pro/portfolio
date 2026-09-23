@@ -111,6 +111,7 @@ export type VerseConfig = {
     reference: string
     prayerIntro: string
     prayer: string
+    closing: string | null // a last line under the prayer, in the highlight color
 }
 
 export type CelebrationConfig = {
@@ -154,6 +155,7 @@ export type FinaleConfig = {
     instruction: string
     closingTitle: string // "" to hide
     blessing: string
+    closing: string | null // last line, under the bottom photo row, with a small sword
     replayLabel: string
 }
 
@@ -217,6 +219,10 @@ export type BirthdayTiming = {
         lineFadeMs: number
         defaultHoldMs: number
         replayAfterMs: number // the replay link appears this long after the last screen
+        photosAfterMs: number // after the last words have settled, before the two photo rows
+        bookExitAfterMs: number // after the rows, the notebook and its line step aside
+        photoSpeed: number // the two closing photo rows, pixels per second
+        photoSpeedMobile: number // the same rows on phones
     }
     flicker: {
         enabled: boolean

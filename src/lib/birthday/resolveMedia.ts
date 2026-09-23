@@ -18,6 +18,10 @@ type Entry = { file: string; position?: string; poster?: string }
  *   next to it; posters are never listed as photos themselves. Videos are
  *   then woven between the photos following `videoEvery`.
  *
+ *   "shuffle" mixes the photographs only, from a seed, so the order is the
+ *   same on the server and in the browser. The videos always keep the order
+ *   they were given, since they tell their bit of the story in sequence.
+ *
  * Args:
  *   - config : the person's photo settings.
  *   - seed   : stable seed for the "shuffle" order (the page slug).
@@ -29,11 +33,10 @@ export function resolveMedia(config: PhotoConfig, seed: string): BirthdayMedia[]
     const folder = config.folder.replace(/^\/+|\/+$/g, "")
     const listing = listFolder(folder)
     const entries = config.files.length > 0 ? config.files.map(toEntry) : defaultEntries(listing)
-    const ordered = config.order === "shuffle" ? seededShuffle(entries, seed) : entries
     const base = folder.split("/").map(encodeURIComponent).join("/")
     const url = (file: string) => `/${base}/${encodeURIComponent(file)}`
 
-    const media = ordered
+    const media = entries
         .filter((e) => IMAGE_FILE.test(e.file) || VIDEO_FILE.test(e.file))
         .map((entry): BirthdayMedia => {
             const kind = VIDEO_FILE.test(entry.file) ? "video" : "image"
@@ -47,7 +50,21 @@ export function resolveMedia(config: PhotoConfig, seed: string): BirthdayMedia[]
             }
         })
 
-    return weaveVideos(media, config.videoEvery)
+    const ordered = config.order === "shuffle" ? shufflePhotos(media, seed) : media
+    return weaveVideos(ordered, config.videoEvery)
+}
+
+/**
+ * Mixes the photographs among themselves and leaves the videos where they
+ * are, so a sequence of clips still reads in the order it was filmed.
+ */
+function shufflePhotos(media: BirthdayMedia[], seed: string): BirthdayMedia[] {
+    const photos = seededShuffle(
+        media.filter((m) => m.kind === "image"),
+        seed
+    )
+    let next = 0
+    return media.map((m) => (m.kind === "image" ? photos[next++] : m))
 }
 
 /**

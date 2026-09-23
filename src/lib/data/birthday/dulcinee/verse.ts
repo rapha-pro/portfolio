@@ -15,4 +15,5 @@ export const VERSE: VerseConfig = {
     reference: "Numbers 6:24-26",
     prayerIntro: "My prayer for you this year:",
     prayer: "May God continue to guide your steps, protect you, strengthen you, and lead you exactly where He wants you to be.",
+    closing: "We are Hebrews 11.40",
 }

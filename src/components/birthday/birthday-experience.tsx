@@ -254,6 +254,8 @@ export function BirthdayExperience({ config, photos, startAt }: BirthdayExperien
                                 key="finale"
                                 finale={config.finale}
                                 timing={config.timing.finale}
+                                photos={photos}
+                                reduceMotion={reduceMotion}
                                 credit={credit}
                                 onCreditClick={pauseForLink}
                                 onReplay={handleReplay}

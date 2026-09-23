@@ -9,8 +9,9 @@ import type { PhotoConfig } from "../types"
  *
  * With `files` empty, every photo (jpg, jpeg, png, webp, avif, gif) and
  * video (mp4, webm, m4v) in that public folder is used, sorted by file name;
- * `order: "shuffle"` gives a stable mixed order instead. Videos play muted
- * on their card; `<name>.poster.jpg` next to a video is used as its poster.
+ * `order: "shuffle"` mixes the photographs instead, always the same way, and
+ * leaves the videos in their file order. Videos play muted on their card;
+ * `<name>.poster.jpg` next to a video is used as its poster.
  *
  * videoEvery weaves the videos between the photos: [3, 4] shows a video after
  * 3 photos, then after 4, and so on (videos repeat when there are fewer of
@@ -22,6 +23,6 @@ import type { PhotoConfig } from "../types"
 export const PHOTOS: PhotoConfig = {
     folder: "images/birthday/dulcinee",
     files: [],
-    order: "name",
+    order: "shuffle",
     videoEvery: [3, 4],
 }

@@ -46,10 +46,12 @@ export function VerseSection({ verse, timing, continueLabel, onComplete }: Verse
     const dividerDelay = referenceDelay + 1.3
     const introDelay = dividerDelay + 0.7
     const prayerDelay = introDelay + 1.5
+    const closingDelay = prayerDelay + 2.2
+    const lastDelay = verse.closing ? closingDelay : prayerDelay
     const scrollRef = useRef<HTMLDivElement>(null)
-    useFollowReveal(scrollRef, [referenceDelay, prayerDelay])
+    useFollowReveal(scrollRef, [referenceDelay, prayerDelay, closingDelay])
     const { canContinue, advance } = useAutoAdvance(
-        (prayerDelay + 2.4) * 1000,
+        (lastDelay + 2.4) * 1000,
         timing.holdMs,
         onComplete
     )
@@ -120,6 +122,16 @@ export function VerseSection({ verse, timing, continueLabel, onComplete }: Verse
                     >
                         {verse.prayer}
                     </motion.p>
+
+                    {verse.closing && (
+                        <motion.p
+                            data-follow={2}
+                            className="bd-serif bd-hl-yellow mt-7 text-balance text-[clamp(1.15rem,min(2.9vw,3.2dvh),1.5rem)] font-medium italic leading-[1.4]"
+                            {...reveal(closingDelay, 1.8)}
+                        >
+                            {verse.closing}
+                        </motion.p>
+                    )}
                 </div>
             </div>
 

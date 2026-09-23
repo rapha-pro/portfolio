@@ -44,7 +44,11 @@ export const TIMING: BirthdayTiming = {
     finale: {
         lineFadeMs: 1200,
         defaultHoldMs: 2000,
-        replayAfterMs: 30000,
+        replayAfterMs: 42000,
+        photosAfterMs: 6000,
+        bookExitAfterMs: 12000,
+        photoSpeed: 26, // lower is slower
+        photoSpeedMobile: 19,
     },
     flicker: {
         enabled: true,
