@@ -78,8 +78,11 @@ export function PinGate({ gate, timing, onUnlock }: PinGateProps) {
             return r ? cx - (r.left + r.width / 2) : 0
         })
 
-        later(() => setConverge(offsets), 520)
-        later(() => setSpark({ x: cx, y: cy }), 820)
+        // The code is right: hold on the little message, then fold the
+        // boxes into the point of light the tunnel starts from.
+        const convergeAt = Math.max(520, timing.successHoldMs - 1000)
+        later(() => setConverge(offsets), convergeAt)
+        later(() => setSpark({ x: cx, y: cy }), convergeAt + 300)
         later(() => onUnlock({ x: cx, y: cy }), timing.successHoldMs)
     }
 
@@ -231,6 +234,26 @@ export function PinGate({ gate, timing, onUnlock }: PinGateProps) {
                     />
                 </motion.div>
             </motion.div>
+
+            {leaving && gate.successMessage && (
+                <motion.p
+                    aria-live="polite"
+                    className="bd-serif bd-glow-warm mt-9 max-w-[26ch] text-[clamp(1.25rem,4.6vw,1.75rem)] font-medium leading-[1.35]"
+                    initial={{ opacity: 0, y: 10, scale: 0.96, filter: "blur(10px)" }}
+                    animate={
+                        converge
+                            ? { opacity: 0, y: -8, filter: "blur(8px)" }
+                            : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+                    }
+                    transition={{
+                        duration: converge ? 0.5 : 0.9,
+                        delay: converge ? 0 : 0.45,
+                        ease: EASE_OUT,
+                    }}
+                >
+                    {gate.successMessage}
+                </motion.p>
+            )}
 
             <motion.div
                 id="bd-pin-status"

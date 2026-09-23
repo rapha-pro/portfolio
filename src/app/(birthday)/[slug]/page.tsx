@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 import { BIRTHDAYS, getBirthday } from "@/lib/data/birthday"
 import { resolveMedia } from "@/lib/birthday/resolveMedia"
+import { resolveSiblings } from "@/lib/birthday/resolveSiblings"
 import { BirthdayExperience, type BirthdayChapter } from "@/components/birthday/birthday-experience"
 import { birthdaySerif, birthdayScript } from "@/components/birthday/shared/fonts"
 
@@ -108,6 +109,10 @@ export default async function BirthdayPage({ params, searchParams }: BirthdayPag
     if (!config) notFound()
 
     const photos = resolveMedia(config.photos, config.profile.slug)
+    const withSiblings = {
+        ...config,
+        siblings: resolveSiblings(config.siblings, config.photos.folder),
+    }
 
     let startAt: BirthdayChapter | undefined
     if (process.env.NODE_ENV === "development") {
@@ -117,7 +122,7 @@ export default async function BirthdayPage({ params, searchParams }: BirthdayPag
 
     return (
         <div className={`${birthdaySerif.variable} ${birthdayScript.variable}`}>
-            <BirthdayExperience config={config} photos={photos} startAt={startAt} />
+            <BirthdayExperience config={withSiblings} photos={photos} startAt={startAt} />
         </div>
     )
 }

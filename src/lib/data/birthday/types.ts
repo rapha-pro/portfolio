@@ -27,6 +27,7 @@ export type GateConfig = {
     subtitle: string
     cornerLabel: string // small line in the top corner of the entrance, "" to hide
     inputLabel: string // screen reader label for the code input
+    successMessage: string // shown after the right code, before the tunnel ("" to skip)
     wrongMessages: string[] // cycled on each wrong attempt
     hints: PinHint[] // revealed progressively, leave empty for none
     tunnelWhisper: string | null // short line inside the tunnel, null to hide
@@ -115,8 +116,8 @@ export type WishesConfig = {
 
 export type SiblingEntry = {
     name: string
-    message: string
-    photo: string // path under /public, "" leaves the frame empty
+    message: string | string[] // one paragraph, or several
+    photo: string // file name in the siblings folder, or a path starting with "/"
 }
 
 export type SiblingsConfig = {

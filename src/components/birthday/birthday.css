@@ -710,6 +710,10 @@
             0 0 45px -14px color-mix(in srgb, var(--bd-light) 26%, transparent);
     }
 
+    .bd-frame-compact {
+        width: clamp(118px, min(38vw, 21dvh), 190px);
+    }
+
     .bd-frame::before {
         content: "";
         position: absolute;

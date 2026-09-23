@@ -7,7 +7,7 @@ import type { BirthdayTiming } from "../types"
 export const TIMING: BirthdayTiming = {
     gate: {
         introDelayMs: 600,
-        successHoldMs: 1500,
+        successHoldMs: 4500,
     },
     tunnel: {
         durationMs: 4800,
@@ -32,7 +32,7 @@ export const TIMING: BirthdayTiming = {
         holdMs: 22000,
     },
     siblings: {
-        holdMs: 16000,
+        holdMs: null, // their letters are long: she moves on when she is ready
     },
     wishes: {
         holdMs: 28000,

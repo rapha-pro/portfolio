@@ -1,12 +1,11 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import type { BirthdayTiming, SiblingEntry, SiblingsConfig } from "@/lib/data/birthday/types"
 import { ContinueButton } from "../shared/continue-button"
 import { EASE_OUT } from "../shared/motion"
 import { useAutoAdvance } from "../shared/useAutoAdvance"
-import { useFollowReveal } from "../shared/useFollowReveal"
 import { PhotoFrame } from "./photo-frame"
 
 type SiblingsSectionProps = {
@@ -112,10 +111,11 @@ function SiblingSlide({
     continueLabel,
     onNext,
 }: SiblingSlideProps) {
-    const scrollRef = useRef<HTMLDivElement>(null)
-    useFollowReveal(scrollRef, [MESSAGE_AT])
     const { canContinue, advance } = useAutoAdvance(REVEAL_MS, holdMs, onNext)
     const tilt = position % 2 === 0 ? -1.6 : 1.6
+    const paragraphs = Array.isArray(entry.message) ? entry.message : [entry.message]
+    // A long letter reads better ranged left and a little smaller.
+    const long = paragraphs.join(" ").length > 240
 
     return (
         <motion.div
@@ -126,14 +126,17 @@ function SiblingSlide({
             transition={{ duration: 1 }}
         >
             <div
-                ref={scrollRef}
                 className="bd-scroll flex min-h-0 flex-1 flex-col px-6"
                 style={{
                     paddingTop: "calc(var(--bd-top) * 0.8)",
                     paddingBottom: "var(--bd-bottom)",
                 }}
             >
-                <div className="m-auto flex w-full max-w-[46rem] flex-col items-center gap-7 text-center sm:flex-row sm:items-center sm:gap-12 sm:text-left">
+                <div
+                    className={`m-auto flex w-full max-w-[46rem] flex-col items-center gap-7 sm:flex-row sm:items-center sm:gap-12 sm:text-left ${
+                        long ? "text-left" : "text-center"
+                    }`}
+                >
                     <PhotoFrame
                         src={entry.photo}
                         alt={
@@ -143,9 +146,14 @@ function SiblingSlide({
                         }
                         tilt={tilt}
                         delay={FRAME_AT}
+                        compact={long}
                     />
 
-                    <div className="flex flex-col items-center sm:items-start">
+                    <div
+                        className={`flex max-w-[34rem] flex-col sm:items-start ${
+                            long ? "items-start" : "items-center"
+                        }`}
+                    >
                         {kicker && (
                             <motion.p className="bd-label mb-3" {...reveal(0.3, 1.4)}>
                                 {kicker}
@@ -159,13 +167,23 @@ function SiblingSlide({
                             {entry.name}
                         </motion.h2>
 
-                        <motion.p
-                            data-follow={0}
-                            className="bd-serif mt-4 text-pretty text-[clamp(1.1rem,min(2.9vw,3.3dvh),1.5rem)] font-medium leading-[1.55] text-[var(--bd-ink-muted)]"
+                        <motion.div
+                            className={`mt-4 flex flex-col gap-3 ${
+                                long
+                                    ? "text-[clamp(1rem,min(2.5vw,2.9dvh),1.2rem)] leading-[1.7]"
+                                    : "text-[clamp(1.1rem,min(2.9vw,3.3dvh),1.5rem)] leading-[1.55]"
+                            }`}
                             {...reveal(MESSAGE_AT, 1.9)}
                         >
-                            {entry.message}
-                        </motion.p>
+                            {paragraphs.map((paragraph, i) => (
+                                <p
+                                    key={i}
+                                    className="bd-serif text-pretty font-medium text-[var(--bd-ink-muted)]"
+                                >
+                                    {paragraph}
+                                </p>
+                            ))}
+                        </motion.div>
 
                         {total > 1 && (
                             <motion.div

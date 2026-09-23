@@ -141,7 +141,7 @@ export function BirthdayWishes({
                                                     </motion.span>
                                                 )
                                             })}
-                                            {wi < line.words.length - 1 && " "}
+                                            {wi < line.words.length - 1 && "\u00a0"}
                                         </span>
                                     ))}
                                 </span>
