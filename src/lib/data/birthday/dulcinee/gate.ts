@@ -32,7 +32,7 @@ export const GATE: GateConfig = {
             ],
             [
                 { text: "Félicitations", color: "yellow" },
-                { text: " 🎉 La quête était dure, mais t'as trouvé le code correct." },
+                { text: " 🎉 La quête était dure, mais t'as trouvé le code secret." },
             ],
         ],
     },
