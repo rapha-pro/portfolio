@@ -110,7 +110,7 @@ public/
 
 ### Education tab
 
-- Schools stack + year selector (Freshman/Sophomore/Junior/Senior).
+- Schools stack + year selector (Senior/Junior/Sophomore/Freshman, most recent first and Senior selected by default; order follows `YEARS`).
 - Course banners: `public/images/courses/{year}/filename.ext`.
 
 ### Hobbies tab
