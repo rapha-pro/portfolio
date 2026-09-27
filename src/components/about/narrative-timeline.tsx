@@ -226,6 +226,7 @@ function PhotoBlock({ block }: { block: NarrativePhotoBlock }) {
                         src={block.src}
                         alt={block.alt}
                         className="absolute inset-0 h-full w-full object-cover"
+                        style={{ objectPosition: block.objectPosition ?? "center" }}
                         draggable={false}
                     />
                     <div
