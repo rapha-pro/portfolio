@@ -69,37 +69,154 @@ export type YearBlock = {
 }
 
 /**
- * Four-year arc. Junior-year course descriptions are intentionally left
- * for future edits.
+ * Four-year arc, most recent first. The first entry is the year selected
+ * by default in the Education tab. Descriptions follow the Carleton
+ * undergraduate calendar.
  */
 export const YEARS: readonly YearBlock[] = [
     {
-        key: "freshman",
-        label: "Freshman",
-        period: "2022 – 2023",
+        key: "senior",
+        label: "Senior",
+        period: "2026 – 2027",
+        inProgress: true,
         courses: [
             {
-                code: "COMP 1405",
-                title: "Intro to Computer Science I",
+                code: "COMP 3106",
+                title: "Introduction to Artificial Intelligence",
+                language: "Python",
+                description:
+                    "Principles and tools of AI: knowledge representation, reinforcement learning, nature based computing, heuristic search through the state space, and adversarial problem solving modeled as two person and multi person games.",
+                banner: "/images/courses/senior/comp%203106%20intro%20to%20AI.png",
+                accent: "#8B5CF6",
+            },
+            {
+                code: "COMP 4107",
+                title: "Neural Networks",
+                language: "Python",
+                description:
+                    "An introduction to neural networks and deep learning: network architectures, methods for improving optimization and generalization, and neural networks for unsupervised learning.",
+                accent: "#F43F5E",
+            },
+            {
+                code: "COMP 4010",
+                title: "Reinforcement Learning",
+                language: "Python",
+                description:
+                    "Designing and programming agents that perform complex tasks in interactive environments: Markov decision processes, dynamic programming, Monte Carlo and temporal difference methods, function approximation, policy gradients, and deep reinforcement learning.",
+                accent: "#0EA5E9",
+            },
+            {
+                code: "COMP 4900",
+                title: "Generative AI & LLMs",
+                accent: "#10B981",
+            },
+            {
+                code: "COMP 4114",
+                title: "Quantum Computing and Information",
+                description:
+                    "The ideas behind quantum computing and information: mathematical foundations, quantum theory, architecture and gates, basic quantum algorithms, applications to cryptography, and quantum error correction.",
+                banner: "/images/courses/senior/comp%204114%20quantum.jpg",
+                accent: "#F59E0B",
+            },
+            {
+                code: "MATH 2404",
+                title: "Ordinary Differential Equations I",
+                description:
+                    "First order equations, linear second and higher order equations, linear systems, and stability of second order systems.",
+                banner: "/images/courses/senior/Math%202404%20-%20Differential%20equations.png",
+                accent: "#F59E0B",
+            },
+            {
+                code: "SPAN 2010",
+                title: "Second Year Spanish I",
+                description:
+                    "Further study of Spanish toward a more advanced level of proficiency in a range of situations, with equal emphasis on oral and written language.",
+                banner: "/images/courses/senior/Span%202010%20-%20Second%20year%20Spanish%20I.png",
+                accent: "#EF4444",
+            },
+        ],
+    },
+    {
+        key: "junior",
+        label: "Junior",
+        period: "2024 – 2025",
+        courses: [
+            {
+                code: "COMP 3000",
+                title: "Operating Systems",
+                language: "C, kernel",
+                grade: "A",
+                banner: "/images/courses/junior/3000_operating_systems.png",
+                description:
+                    "Operating system implementation, stressing fundamental design issues and how they relate to modern computer architectures. Assignments modify and extend a multitasking operating system.",
+                accent: "#0EA5E9",
+            },
+            {
+                code: "COMP 3004",
+                title: "Object-Oriented Software Engineering",
+                language: "C++",
+                grade: "A+",
+                banner: "/images/courses/junior/comp3004_banner.png",
+                description:
+                    "Theory and practice of developing object oriented systems: computer ethics, development processes, requirements, class, scenario and state modeling, UML, design patterns and traceability, through a team project.",
+                accent: "#7C3AED",
+            },
+            {
+                code: "COMP 3005",
+                title: "Database Management Systems",
+                language: "SQL, Postgres",
+                grade: "A+",
+                banner: "/images/courses/junior/comp3005_banner.png",
+                description:
+                    "Database management systems and design: entity relationship modelling, normalization, relational schemas, SQL, file organization, indexing, hashing, join algorithms, query processing and optimization, and concurrency control.",
+                accent: "#10B981",
+            },
+            {
+                code: "COMP 3007",
+                title: "Programming Paradigms",
+                language: "Haskell",
+                grade: "A+",
+                banner: "/images/courses/junior/comp3007_banner.png",
+                description:
+                    "An introduction to alternative programming paradigms such as functional, constraint based, concurrent, and logic programming.",
+                accent: "#5E5086",
+            },
+            {
+                code: "COMP 3105",
+                title: "Machine Learning",
                 language: "Python",
                 grade: "A+",
-                accent: "#3B82F6",
+                banner: "/images/courses/junior/3105_Machine Learning_cover.png",
+                description:
+                    "Methods for learning relationships from empirical data: supervised and unsupervised learning, specific algorithms and their applications, evaluating ML systems, and data ethics.",
+                accent: "#F7931E",
             },
             {
-                code: "COMP 1406",
-                title: "Intro to Computer Science II",
-                language: "Java",
+                code: "COMP 3804",
+                title: "Design and Analysis of Algorithms",
                 grade: "A+",
-                accent: "#DC2626",
+                banner: "/images/courses/junior/3804_algorithms_design_cover.jpg",
+                description:
+                    "Design and analysis of algorithms: divide and conquer, dynamic programming, linear programming, greedy algorithms, graph algorithms, and NP completeness.",
+                accent: "#EF4444",
             },
-            { code: "COMP 1805", title: "Discrete Maths I", grade: "A", accent: "#8B5CF6" },
-            { code: "MATH 1007", title: "Calculus I", grade: "A+", accent: "#F59E0B" },
-            { code: "MATH 1107", title: "Linear Algebra I", grade: "A+", accent: "#F59E0B" },
             {
-                code: "STAT 2507",
-                title: "Stats & Modelling",
-                language: "SAS",
+                code: "MATH 3007",
+                title: "Complex Analysis",
                 grade: "A+",
+                banner: "/images/courses/junior/Math_3007_complex_analysis.jpg",
+                description:
+                    "Analytic functions, contour integration, residue calculus, and conformal mapping.",
+                accent: "#F59E0B",
+            },
+            {
+                code: "STAT 3504",
+                title: "Analysis of Variance & Experimental Design",
+                language: "R",
+                grade: "A+",
+                banner: "/images/courses/junior/stat3504_banner.png",
+                description:
+                    "Single and multifactor analysis of variance, contrasts and multiple comparisons, analysis of covariance, nested, crossed and repeated measures designs, randomized block, Latin square and factorial experiments.",
                 accent: "#0EA5E9",
             },
         ],
@@ -114,6 +231,8 @@ export const YEARS: readonly YearBlock[] = [
                 title: "Systems Programming",
                 language: "C",
                 grade: "A+",
+                description:
+                    "Introduction to system level programming and fundamental OS concepts: process and memory management, synchronization, inter process communication, file systems, networking, pointers, heap and stack memory, and system calls.",
                 accent: "#64748B",
             },
             {
@@ -121,6 +240,8 @@ export const YEARS: readonly YearBlock[] = [
                 title: "Abstract Data Types & Algorithms",
                 language: "Java",
                 grade: "A+",
+                description:
+                    "Design and implementation of abstract data types and complexity analysis of data structures such as stacks, queues, lists, trees and graphs, with attention to abstraction, interface specification and hierarchical design.",
                 accent: "#DC2626",
             },
             {
@@ -128,6 +249,8 @@ export const YEARS: readonly YearBlock[] = [
                 title: "Web Development & Databases",
                 language: "Node.js, Express, MongoDB",
                 grade: "A+",
+                description:
+                    "Internet application development with an emphasis on the fundamentals behind web applications: scripting and functional languages, virtual machines, database query languages, remote procedure calls, and performance and security in distributed applications.",
                 accent: "#10B981",
             },
             {
@@ -135,107 +258,84 @@ export const YEARS: readonly YearBlock[] = [
                 title: "Intro to Software Engineering",
                 language: "C++",
                 grade: "A+",
+                description:
+                    "Object oriented software development with an emphasis on maintainable, reusable software: abstraction, modularity, encapsulation, and an introduction to design patterns.",
                 accent: "#7C3AED",
             },
-            { code: "COMP 2804", title: "Discrete Structures II", grade: "A+", accent: "#8B5CF6" },
-            { code: "MATH 2007", title: "Calculus III", grade: "A+", accent: "#F59E0B" },
+            {
+                code: "COMP 2804",
+                title: "Discrete Structures II",
+                grade: "A+",
+                description:
+                    "A second course in discrete mathematics: counting, sequences and sums, discrete probability, basic statistics, recurrence relations and randomized algorithms, illustrated through examples from computing.",
+                accent: "#8B5CF6",
+            },
+            {
+                code: "MATH 2007",
+                title: "Calculus III",
+                grade: "A+",
+                description:
+                    "Techniques of integration, improper integrals, polar coordinates, parametric equations, indeterminate forms, sequences and series, and Taylor's formula and series.",
+                accent: "#F59E0B",
+            },
         ],
     },
     {
-        key: "junior",
-        label: "Junior",
-        period: "2024 – 2025",
+        key: "freshman",
+        label: "Freshman",
+        period: "2022 – 2023",
         courses: [
             {
-                code: "COMP 3000",
-                title: "Operating Systems",
-                language: "C, kernel",
-                grade: "A",
-                banner: "/images/courses/junior/3000_operating_systems.png",
-                accent: "#0EA5E9",
-            },
-            {
-                code: "COMP 3004",
-                title: "Object-Oriented Software Engineering",
-                language: "C++",
-                grade: "A+",
-                banner: "/images/courses/junior/comp3004_banner.png",
-                accent: "#7C3AED",
-            },
-            {
-                code: "COMP 3005",
-                title: "Database Management Systems",
-                language: "SQL, Postgres",
-                grade: "A+",
-                banner: "/images/courses/junior/comp3005_banner.png",
-                accent: "#10B981",
-            },
-            {
-                code: "COMP 3007",
-                title: "Programming Paradigms",
-                language: "Haskell",
-                grade: "A+",
-                banner: "/images/courses/junior/comp3007_banner.png",
-                accent: "#5E5086",
-            },
-            {
-                code: "COMP 3105",
-                title: "Machine Learning",
+                code: "COMP 1405",
+                title: "Intro to Computer Science I",
                 language: "Python",
                 grade: "A+",
-                banner: "/images/courses/junior/3105_Machine Learning_cover.png",
-                accent: "#F7931E",
+                description:
+                    "Introduction to computer science and programming: algorithm design, control structures, variables and types, linear collections, functions, debugging and testing, with a focus on procedural programming, computational thinking, and problem decomposition.",
+                accent: "#3B82F6",
             },
             {
-                code: "COMP 3804",
-                title: "Design and Analysis of Algorithms",
+                code: "COMP 1406",
+                title: "Intro to Computer Science II",
+                language: "Java",
                 grade: "A+",
-                banner: "/images/courses/junior/3804_algorithms_design_cover.jpg",
-                accent: "#EF4444",
+                description:
+                    "A second programming course emphasizing problem solving and computational thinking in an object oriented language: abstraction, mutable data structures, inheritance, polymorphism, recursion, program efficiency, testing and debugging.",
+                accent: "#DC2626",
             },
             {
-                code: "MATH 3007",
-                title: "Complex Analysis",
+                code: "COMP 1805",
+                title: "Discrete Maths I",
+                grade: "A",
+                description:
+                    "Introduction to discrete mathematics: propositional logic, predicate calculus, set theory, complexity of algorithms, proof techniques, recurrences, induction, finite automata and graph theory, illustrated through examples from computing.",
+                accent: "#8B5CF6",
+            },
+            {
+                code: "MATH 1007",
+                title: "Calculus I",
                 grade: "A+",
-                banner: "/images/courses/junior/Math_3007_complex_analysis.jpg",
+                description:
+                    "Limits and differentiation of the elementary functions, applications such as max and min problems and curve sketching, and an introduction to integration up to the fundamental theorem of calculus.",
                 accent: "#F59E0B",
             },
             {
-                code: "STAT 3504",
-                title: "Analysis of Variance & Experimental Design",
-                language: "R",
+                code: "MATH 1107",
+                title: "Linear Algebra I",
                 grade: "A+",
-                banner: "/images/courses/junior/stat3504_banner.png",
+                description:
+                    "Systems of linear equations, vector spaces, bases, matrix transformations, kernel and range, matrix algebra and determinants, complex numbers, eigenvalues, diagonalization and applications.",
+                accent: "#F59E0B",
+            },
+            {
+                code: "STAT 2507",
+                title: "Stats & Modelling",
+                language: "SAS",
+                grade: "A+",
+                description:
+                    "A data driven introduction to statistics: descriptive statistics, probability, random variables and distributions, sampling distributions, the Central Limit Theorem, interval estimation and hypothesis testing, using a statistical software package.",
                 accent: "#0EA5E9",
             },
-        ],
-    },
-    {
-        key: "senior",
-        label: "Senior",
-        period: "Incoming · 2025 – 2026",
-        inProgress: true,
-        courses: [
-            {
-                code: "COMP 3106",
-                title: "Artificial Intelligence",
-                language: "Python",
-                accent: "#8B5CF6",
-            },
-            { code: "COMP 4107", title: "Neural Networks", language: "Python", accent: "#F43F5E" },
-            {
-                code: "COMP 4010",
-                title: "Reinforcement Learning",
-                language: "Python",
-                accent: "#0EA5E9",
-            },
-            {
-                code: "COMP 4102",
-                title: "Natural Language Processing",
-                language: "Python",
-                accent: "#10B981",
-            },
-            { code: "COMP 4114", title: "Quantum Computing and Information", accent: "#F59E0B" },
         ],
     },
 ] as const

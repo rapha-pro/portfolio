@@ -77,8 +77,11 @@ export function ProjectsSection() {
                     aria-hidden
                     className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center px-8"
                 >
-                    <p className="max-w-sm text-center text-3xl font-black leading-snug text-neutral-300 dark:text-neutral-700 md:text-4xl">
-                        {PROJECTS_COPY.secretText}
+                    <p className="max-w-sm text-center text-3xl font-semibold leading-snug text-neutral-300 dark:text-neutral-700 md:text-4xl">
+                        <EmphasizedText
+                            text={PROJECTS_COPY.secretText}
+                            emphasis={PROJECTS_COPY.secretEmphasis}
+                        />
                     </p>
                 </div>
 
@@ -133,5 +136,31 @@ export function ProjectsSection() {
                 </div>
             </div>
         </section>
+    )
+}
+
+/**
+ * Purpose:
+ *   Renders text with one phrase wrapped in <strong>, so copy files can mark
+ *   emphasis without holding JSX.
+ *
+ * Args:
+ *   - text : the full sentence
+ *   - emphasis : the phrase to bold; rendered plain if it is not found
+ *
+ * Returns:
+ *   The text as a fragment, with the first match of the phrase in bold.
+ */
+function EmphasizedText({ text, emphasis }: { text: string; emphasis: string }) {
+    const at = text.indexOf(emphasis)
+    if (at === -1) return <>{text}</>
+    return (
+        <>
+            {text.slice(0, at)}
+            <strong className="font-black text-neutral-400 dark:text-neutral-500">
+                {emphasis}
+            </strong>
+            {text.slice(at + emphasis.length)}
+        </>
     )
 }

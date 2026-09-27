@@ -9,27 +9,27 @@ All content lives in `src/lib/data/*.ts`, so adding a new job, course, hobby, or
 
 ## Files
 
-| File | Role |
-| ---- | ---- |
-| `index.tsx` | Top-level orchestrator — renders the section heading, `<NarrativeTimeline />`, and `<TabSwitcher />`. Default export consumed by `app/page.tsx`. |
+| File                     | Role                                                                                                                                                                                                                                                            |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.tsx`              | Top-level orchestrator — renders the section heading, `<NarrativeTimeline />`, and `<TabSwitcher />`. Default export consumed by `app/page.tsx`.                                                                                                                |
 | `narrative-timeline.tsx` | Paired zig-zag story timeline. Groups `NARRATIVE` blocks into pairs of two and places each pair side-by-side (left + right columns) with a center rail node between rows. Prose blocks render without a card background so text floats naturally beside photos. |
-| `tab-switcher.tsx` | Reusable animated tab switcher with a `layoutId` sliding pill. Also exports inline SVG tab icons (`IconBriefcase`, `IconGrad`, `IconTrophy`, `IconSparkles`). |
-| `experience-tab.tsx` | Zig-zag timeline of jobs from `lib/data/experience.ts`. **Desktop:** even entries go left, odd go right, with company-initial nodes on the center rail. **Mobile:** single column with left-side rail. |
-| `education-tab.tsx` | School stack + year sub-selector (Freshman / Sophomore / Junior / Senior). Drives a course grid below, using data from `lib/data/education.ts`. |
-| `course-card.tsx` | One course tile. Shows banner/monogram, code, title, language, and reveals grade on hover/tap. |
-| `achievements-tab.tsx` | Two-column layout: Awards (left) + Activities (right). Data from `lib/data/achievements.ts`. |
-| `hobbies-tab.tsx` | Responsive card grid. `imageSrc` is optional — omitting it hides the media block entirely (e.g. soccer). Data from `lib/data/hobbies.ts`. |
-| `company-logo.tsx` | Smart logo tile: local image → Simple Icons CDN → letter-monogram. Supports `bgOverride` (exact hex tile background) and `lightBg` (white background for dark wordmarks). Used by Experience and Education. |
+| `tab-switcher.tsx`       | Reusable animated tab switcher with a `layoutId` sliding pill. Also exports inline SVG tab icons (`IconBriefcase`, `IconGrad`, `IconTrophy`, `IconSparkles`).                                                                                                   |
+| `experience-tab.tsx`     | Zig-zag timeline of jobs from `lib/data/experience.ts`. **Desktop:** even entries go left, odd go right, with company-initial nodes on the center rail. **Mobile:** single column with left-side rail.                                                          |
+| `education-tab.tsx`      | School stack + year sub-selector (Senior / Junior / Sophomore / Freshman, most recent first; the first year in `YEARS` is selected by default). Drives a course grid below, using data from `lib/data/education.ts`.                                            |
+| `course-card.tsx`        | One course tile. Shows banner/monogram, code, title, language, and reveals grade on hover/tap.                                                                                                                                                                  |
+| `achievements-tab.tsx`   | Two-column layout: Awards (left) + Activities (right). Data from `lib/data/achievements.ts`.                                                                                                                                                                    |
+| `hobbies-tab.tsx`        | Responsive card grid. `imageSrc` is optional — omitting it hides the media block entirely (e.g. soccer). Data from `lib/data/hobbies.ts`.                                                                                                                       |
+| `company-logo.tsx`       | Smart logo tile: local image → Simple Icons CDN → letter-monogram. Supports `bgOverride` (exact hex tile background) and `lightBg` (white background for dark wordmarks). Used by Experience and Education.                                                     |
 
 ## Data sources
 
-| File | What it drives |
-| ---- | -------------- |
-| `src/lib/data/narrative.ts` | Story blocks for the narrative timeline (prose + photo). Blocks come in pairs — each pair fills one two-column row. |
-| `src/lib/data/experience.ts` | Employment history, most-recent first. |
-| `src/lib/data/education.ts` | Schools + per-year course catalog. Course banners live in `public/images/courses/{year}/`. |
-| `src/lib/data/achievements.ts` | Awards + activities. |
-| `src/lib/data/hobbies.ts` | Hobby cards. `imageSrc` is optional. |
+| File                           | What it drives                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `src/lib/data/narrative.ts`    | Story blocks for the narrative timeline (prose + photo). Blocks come in pairs — each pair fills one two-column row. |
+| `src/lib/data/experience.ts`   | Employment history, most-recent first.                                                                              |
+| `src/lib/data/education.ts`    | Schools + per-year course catalog. Course banners live in `public/images/courses/{year}/`.                          |
+| `src/lib/data/achievements.ts` | Awards + activities.                                                                                                |
+| `src/lib/data/hobbies.ts`      | Hobby cards. `imageSrc` is optional.                                                                                |
 
 ## Adding content
 

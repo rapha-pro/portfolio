@@ -21,6 +21,7 @@ export type NarrativePhotoBlock = {
     alt: string
     caption: string // Short italic caption shown below the image.
     aspectRatio?: string // Tailwind aspect-ratio value e.g. "4/3" (default) or "5/4" for taller images.
+    objectPosition?: string // CSS object-position for the crop, e.g. "center 85%" to show more of the bottom (default "center").
 }
 
 export type NarrativeBlock = NarrativeProseBlock | NarrativePhotoBlock
@@ -37,6 +38,7 @@ export const NARRATIVE: readonly NarrativeBlock[] = [
         alt: "Raphaël — a snapshot",
         caption: "A little bit about me, above and beyond",
         aspectRatio: "5/4",
+        objectPosition: "center 85%",
     },
     {
         kind: "prose",

@@ -40,12 +40,12 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
     {
         company: "TD Bank",
         role: "Data Scientist",
-        kind: "Co-op",
-        location: "Toronto, ON",
-        period: "2026",
+        kind: "Internship",
+        location: "Ottawa, ON",
+        period: "May – Jul 2026",
         bullets: [
-            "Joining the AI2 (Analytics Insights and Artificial Intelligence) team, performing data analysis and building dashboards with Power BI.",
-            "Code refactoring and migration of legacy SAS pipelines to Python, modernizing analytics workflows.",
+            "Automated a manual Azure Databricks pipeline that measures how much TD Helps hardship tools reduce write-offs, now running every month, quarter, and fiscal year into Azure Synapse as one source of truth for managers and 3+ partner teams.",
+            "Delivered a seven-page Power BI dashboard tracking daily Promise to Pay agreements for 20+ team managers, using TD approved GenAI tools to speed up development and save 10+ hours of manual work weekly.",
         ],
         logo: "/images/experience/TD-Bank-Logo.png",
         accent: "#00B04F",
