@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Globe } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Globe } from "lucide-react"
 import { PROJECTS } from "@/lib/data/projects"
 import { TechBadge } from "@/components/projects/tech-badge"
 import { notFound } from "next/navigation"
@@ -63,10 +63,17 @@ export default function FloTunesPage() {
                 </div>
 
                 {/* Standby notice */}
-                <div className="mb-10 rounded-xl border border-app bg-[var(--glass)] px-5 py-4 text-[14px] text-muted">
-                    <span className="mr-2 font-semibold text-brand">Note:</span>
-                    FloTunes is currently on standby. The site is live but the transfer feature may
-                    not be available at this time.
+                <div className="mb-10 flex items-start gap-3 rounded-xl border border-amber-400/40 bg-amber-400/10 px-5 py-4 text-[14px] text-muted">
+                    <AlertTriangle
+                        size={18}
+                        className="mt-0.5 shrink-0 text-amber-500"
+                        aria-hidden
+                    />
+                    <p>
+                        <span className="mr-2 font-semibold text-brand">Note:</span>
+                        FloTunes is currently on standby. The site is live but the transfer feature
+                        may not be available at this time.
+                    </p>
                 </div>
 
                 {/* Write-up sections */}
