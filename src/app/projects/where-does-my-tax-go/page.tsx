@@ -12,12 +12,12 @@ const DEVPOST_URL = "https://devpost.com/software/wheredoesmytaxgo"
 /**
  * Purpose:
  *   Custom detail page for Where Does My Tax Go?, built at Hack the Hill III.
- *   Covers the idea, how the app works, the data and backend work I owned
- *   on the team, and screenshots of the live site.
+ *   Leads with the problem and what the app makes easy for Canadians, then
+ *   who it is for, and ends with a short note on my role on the team.
  *
  * Returns:
  *   Full project detail page with hero image, link buttons, structured
- *   sections, an inline receipt screenshot, and tech stack.
+ *   sections, inline screenshots, and tech stack.
  */
 export default function WhereDoesMyTaxGoPage() {
     if (!project) notFound()
@@ -79,31 +79,45 @@ export default function WhereDoesMyTaxGoPage() {
 
                 {/* Write-up sections */}
                 <div className="flex flex-col gap-10">
-                    <Section title="The Idea">
+                    <Section title="The Problem">
                         <p>
-                            Canadians hear about federal spending in two ways: headlines about one
-                            scandal at a time, with no sense of scale, or budget documents most
-                            people can&apos;t read. Neither shows a person what their own money paid
-                            for, and neither gives them anything to do about it.
-                        </p>
-                        <p>
-                            We built Where Does My Tax Go? in a team of four at Hack the Hill III.
-                            You enter your income and province, and the app hands you a federal tax
-                            receipt: what you paid, and where it went, line by line.
+                            Every Canadian who works pays federal tax, yet almost nobody can say
+                            what their own money actually paid for. Spending reaches people in two
+                            ways: headlines about one scandal at a time, with no sense of scale, or
+                            budget documents written in billions and program codes most people
+                            can&apos;t use. People get angry for a week, then move on, because there
+                            is nothing obvious to do about it.
                         </p>
                     </Section>
 
-                    <Section title="What It Does">
-                        <ul className="flex flex-col gap-2 text-[15px] leading-relaxed text-muted">
+                    <Section title="What It Makes Easy">
+                        <ul className="flex flex-col gap-3 text-[15px] leading-relaxed text-muted">
                             {[
-                                "Estimates your federal income tax and splits it across the biggest federal programs, using real 2024 to 2025 government spending",
-                                "Shows a feed of spending stories, built from programs whose budgets jumped between years plus recent news, each with your personal share of the cost",
-                                "Lets you start or join a campaign on a story you care about",
-                                "Once a campaign gathers enough supporters, the team asks an MP to sponsor it and opens an official e-petition on ourcommons.ca, which supporters can then sign",
+                                {
+                                    lead: "Seeing your own money.",
+                                    body: "Enter your income and province and you get a receipt, in your own dollars instead of billions: how much federal tax you paid and how much of it went to pensions, health care transfers, interest on the debt, and more. More than half goes to just 7 of the 1,228 federal programs.",
+                                },
+                                {
+                                    lead: "Understanding the news in personal terms.",
+                                    body: "Every spending story, from budget jumps in the public data to recent headlines, shows what it cost you personally. A $162 million program becomes about $3 out of your pocket, which makes it much easier to judge whether it was worth it.",
+                                },
+                                {
+                                    lead: "Turning an opinion into a voice.",
+                                    body: "If a story matters to you, you can start or join a campaign on it. Once a campaign gathers enough supporters, the team asks an MP to sponsor it and opens an official House of Commons e-petition, where 500 signatures means the government has to answer in writing.",
+                                },
+                                {
+                                    lead: "Trusting what you see.",
+                                    body: "The numbers come from the government's own open data, with sources shown, and your income is calculated on your device and never sent anywhere.",
+                                },
                             ].map((item) => (
-                                <li key={item} className="flex gap-2">
-                                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--accent)]" />
-                                    {item}
+                                <li key={item.lead} className="flex gap-2">
+                                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--accent)]" />
+                                    <span>
+                                        <span className="font-semibold text-brand">
+                                            {item.lead}
+                                        </span>{" "}
+                                        {item.body}
+                                    </span>
                                 </li>
                             ))}
                         </ul>
@@ -114,32 +128,27 @@ export default function WhereDoesMyTaxGoPage() {
                         alt="Federal tax receipt screen"
                     />
 
-                    <Section title="My Part: Data and Backend">
+                    <Section title="Who It Is For">
                         <p>
-                            I owned the data side. The tax calculator covers every province and
-                            territory with 2024 federal and provincial brackets, CPP and QPP, EI,
-                            and the basic personal amount phase outs, checked against Canada Revenue
-                            Agency tables. It runs in the browser, so your income never leaves your
-                            device.
+                            The working Canadian who just read a spending headline and has five
+                            minutes of motivation: not sure whether to be angry, how big the problem
+                            really is, or what they could do about it. The app answers all three,
+                            without needing to know how a federal budget works.
                         </p>
+                    </Section>
+
+                    <Screenshot
+                        src="/images/projects/tax_news.png"
+                        alt="Spending stories feed with your personal share of each item"
+                    />
+
+                    <Section title="My Role">
                         <p>
-                            For spending, I loaded the GC InfoBase open data into a Neon Postgres
-                            database with Drizzle, computed total federal spending for the year, and
-                            gave the seven largest programs plain English names. That feeds the
-                            breakdown API behind the receipt, along with the spending feed and
-                            department filter endpoints behind the stories screens.
-                        </p>
-                        <p>
-                            I also built the campaign and petition backend. The database enforces
-                            one campaign per person per story, and a supporter&apos;s postal code is
-                            never stored, only their riding. Since ourcommons.ca has no API, the app
-                            reads each petition&apos;s public page for its signature count,
-                            sponsoring MP, and key dates, and moves campaigns to live or closed on
-                            its own.
-                        </p>
-                        <p>
-                            The backend is covered by Vitest tests that run each route against an in
-                            memory Postgres.
+                            We were a team of four at Hack the Hill III. I owned the data and
+                            backend: the tax calculator for every province and territory, the
+                            spending breakdown built from GC InfoBase open data, the APIs behind the
+                            receipt and the stories feed, and the campaign and petition backend,
+                            including reading live petition status from ourcommons.ca.
                         </p>
                     </Section>
 

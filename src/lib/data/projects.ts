@@ -127,7 +127,11 @@ export const PROJECTS: readonly Project[] = [
         description:
             "Turns your income into a personal federal tax receipt, shows your share of real government spending, and lets Canadians rally behind official House of Commons e-petitions.",
         image: "/images/projects/tax_banner.png",
-        images: ["/images/projects/tax_banner.png", "/images/projects/tax_receipt.png"],
+        images: [
+            "/images/projects/tax_banner.png",
+            "/images/projects/tax_receipt.png",
+            "/images/projects/tax_news.png",
+        ],
         tech: [
             "Next.js",
             "TypeScript",
