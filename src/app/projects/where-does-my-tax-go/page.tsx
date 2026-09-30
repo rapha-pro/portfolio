@@ -11,9 +11,9 @@ const DEVPOST_URL = "https://devpost.com/software/wheredoesmytaxgo"
 
 /**
  * Purpose:
- *   Custom detail page for Where Does My Tax Go?, built at Hack the Hill III.
- *   Leads with the problem and what the app makes easy for Canadians, then
- *   who it is for, and ends with a short note on my role on the team.
+ *   Custom detail page for Where Does My Tax Money Go?, built at Hack the
+ *   Hill III. Leads with what the app makes easy for Canadians, then its
+ *   target audience, and ends with a short note on my role on the team.
  *
  * Returns:
  *   Full project detail page with hero image, link buttons, structured
@@ -79,17 +79,6 @@ export default function WhereDoesMyTaxGoPage() {
 
                 {/* Write-up sections */}
                 <div className="flex flex-col gap-10">
-                    <Section title="The Problem">
-                        <p>
-                            Every Canadian who works pays federal tax, yet almost nobody can say
-                            what their own money actually paid for. Spending reaches people in two
-                            ways: headlines about one scandal at a time, with no sense of scale, or
-                            budget documents written in billions and program codes most people
-                            can&apos;t use. People get angry for a week, then move on, because there
-                            is nothing obvious to do about it.
-                        </p>
-                    </Section>
-
                     <Section title="What It Makes Easy">
                         <ul className="flex flex-col gap-3 text-[15px] leading-relaxed text-muted">
                             {[
@@ -128,12 +117,13 @@ export default function WhereDoesMyTaxGoPage() {
                         alt="Federal tax receipt screen"
                     />
 
-                    <Section title="Who It Is For">
+                    <Section title="Target Audience: Who Is It For">
                         <p>
-                            The working Canadian who just read a spending headline and has five
-                            minutes of motivation: not sure whether to be angry, how big the problem
-                            really is, or what they could do about it. The app answers all three,
-                            without needing to know how a federal budget works.
+                            Basically every Canadian. Anyone who earns an income pays federal tax,
+                            and anyone who reads a spending headline deserves to know what it means
+                            for them. The app needs no knowledge of how a federal budget works: an
+                            income and a province are enough to see where your money goes and to
+                            have a say in how it is spent.
                         </p>
                     </Section>
 
@@ -148,7 +138,8 @@ export default function WhereDoesMyTaxGoPage() {
                             backend: the tax calculator for every province and territory, the
                             spending breakdown built from GC InfoBase open data, the APIs behind the
                             receipt and the stories feed, and the campaign and petition backend,
-                            including reading live petition status from ourcommons.ca.
+                            including reading live petition status from ourcommons.ca. The app was
+                            built with LLM assisted coding.
                         </p>
                     </Section>
 
