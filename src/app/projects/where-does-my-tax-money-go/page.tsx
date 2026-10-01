@@ -5,14 +5,14 @@ import { PROJECTS } from "@/lib/data/projects"
 import { TechBadge } from "@/components/projects/tech-badge"
 import { notFound } from "next/navigation"
 
-const project = PROJECTS.find((p) => p.slug === "where-does-my-tax-go")!
+const project = PROJECTS.find((p) => p.slug === "where-does-my-tax-money-go")!
 
 const DEVPOST_URL = "https://devpost.com/software/wheredoesmytaxgo"
 
 /**
  * Purpose:
  *   Custom detail page for Where Does My Tax Money Go?, built at Hack the
- *   Hill III. Leads with what the app makes easy for Canadians, then its
+ *   Hill III. Opens on the problem, then what the app makes easy for Canadians, then its
  *   target audience, and ends with a short note on my role on the team.
  *
  * Returns:
@@ -79,6 +79,17 @@ export default function WhereDoesMyTaxGoPage() {
 
                 {/* Write-up sections */}
                 <div className="flex flex-col gap-10">
+                    <div className="flex flex-col gap-4 text-[15px] leading-relaxed text-muted">
+                        <p>
+                            Every Canadian who works pays federal tax, yet almost nobody can say
+                            what their own money actually paid for. Spending reaches people in two
+                            ways: headlines about one scandal at a time, with no sense of scale, or
+                            budget documents written in billions and program codes most people
+                            can&apos;t use. People get angry for a week, then move on, because there
+                            is nothing obvious to do about it.
+                        </p>
+                    </div>
+
                     <Section title="What It Makes Easy">
                         <ul className="flex flex-col gap-3 text-[15px] leading-relaxed text-muted">
                             {[
