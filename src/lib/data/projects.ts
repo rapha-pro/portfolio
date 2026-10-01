@@ -122,7 +122,7 @@ export const PROJECTS: readonly Project[] = [
         customPage: true,
     },
     {
-        slug: "where-does-my-tax-go",
+        slug: "where-does-my-tax-money-go",
         title: "Where Does My Tax Money Go?",
         description:
             "Turns your income into a personal federal tax receipt, shows your share of real government spending, and lets Canadians rally behind official House of Commons e-petitions.",
