@@ -8,7 +8,7 @@
  */
 
 export const PROJECTS_COPY = {
-    heading: "Projects",
+    heading: "Projects Blog",
     subheading: "Drag the cards around — click one to read more.",
 
     /**
