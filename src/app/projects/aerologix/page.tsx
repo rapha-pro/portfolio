@@ -26,7 +26,7 @@ export default function AeroLogixPage() {
                 <img
                     src={project.image}
                     alt={project.title}
-                    className="absolute inset-0 h-full w-full object-cover object-top"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
                 />
                 <div
                     className="pointer-events-none absolute inset-0"
@@ -72,6 +72,16 @@ export default function AeroLogixPage() {
                             open.
                         </p>
                     </Section>
+
+                    {/* Landing screenshot */}
+                    <div className="overflow-hidden rounded-2xl border border-app">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/images/projects/aerologix/landing.png"
+                            alt="AeroLogix landing page"
+                            className="w-full object-cover"
+                        />
+                    </div>
 
                     {/* Dashboard screenshot */}
                     <div className="overflow-hidden rounded-2xl border border-app">

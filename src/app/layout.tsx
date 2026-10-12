@@ -74,8 +74,13 @@ export const metadata: Metadata = {
         images: ["/images/website_banner.png"],
     },
 
+    // The SVG favicon switches to a white plate with a black R when the
+    // browser is in dark mode; the .ico stays as the fallback.
     icons: {
-        icon: "/favicon.ico",
+        icon: [
+            { url: "/favicon.ico", sizes: "32x32" },
+            { url: "/favicon.svg", type: "image/svg+xml" },
+        ],
         apple: "/favicon.ico",
         shortcut: "/favicon.ico",
     },
