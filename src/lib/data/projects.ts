@@ -154,6 +154,23 @@ export const PROJECTS: readonly Project[] = [
         customPage: true,
     },
     {
+        slug: "echocv",
+        title: "EchoCV",
+        description:
+            "A resume that talks: a RAG chatbot that answers questions about my background from my own documents, built with LangChain, ChromaDB, and Llama 3.1 on Groq.",
+        image: "/images/projects/echocv.png",
+        tech: ["Python", "LangChain", "ChromaDB", "Hugging Face", "Groq", "Streamlit", "Docker"],
+        sortDate: 202507,
+        period: "Summer 2025",
+        context: "Personal Project",
+        githubUrl: "https://github.com/rapha-pro/EchoCV",
+        hasDetailPage: true,
+        featured: true,
+        priority: "medium",
+        visible: true,
+        customPage: true,
+    },
+    {
         slug: "flotunes",
         title: "FloTunes",
         description:
