@@ -4,6 +4,8 @@
 
 **[raphaelonana.dev](https://raphaelonana.dev)**
 
+[![Vercel deployment](https://img.shields.io/github/deployments/rapha-pro/portfolio/Production?label=vercel&logo=vercel)](https://github.com/rapha-pro/portfolio/deployments/Production)
+
 ![Website banner](public/images/website_banner.png)
 
 </div>
