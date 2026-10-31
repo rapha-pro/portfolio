@@ -163,11 +163,11 @@ export default function PredictiveMaintenancePage() {
                         <StatRow
                             stats={[
                                 {
-                                    value: "$1.4T",
+                                    value: "−$1.4T",
                                     label: "lost every year by the world's 500 largest companies, 11% of their revenue",
                                 },
                                 {
-                                    value: "$2.3M",
+                                    value: "−$2.3M",
                                     label: "the cost of one hour of downtime in a large car plant",
                                 },
                                 {
@@ -175,10 +175,11 @@ export default function PredictiveMaintenancePage() {
                                     label: "of unplanned downtime per month at an average large plant",
                                 },
                                 {
-                                    value: "$253M",
+                                    value: "−$253M",
                                     label: "yearly cost of downtime for an average large plant",
                                 },
                             ]}
+                            tone="loss"
                         />
                         <p>
                             Predictive maintenance is how plants fight back. In independent surveys
@@ -191,13 +192,15 @@ export default function PredictiveMaintenancePage() {
                                 { value: "25 to 30%", label: "lower maintenance costs" },
                                 { value: "70 to 75%", label: "fewer breakdowns" },
                                 { value: "35 to 45%", label: "less downtime" },
-                                { value: "10x", label: "return on the investment" },
+                                { value: "+10x", label: "return on the investment" },
                             ]}
+                            tone="gain"
                         />
                         <p>
-                            Put together: if an average large plant losing 27 hours a month reached
-                            that range, it would win back roughly 9 to 12 hours of production every
-                            month, more than a full shift.
+                            In hours: an average large plant loses 27 hours a month to unplanned
+                            downtime <Cite n={1} />. Cutting that by 35 to 45% <Cite n={2} /> gives
+                            back about 9 to 12 hours of production every month, more than a full 8
+                            hour shift.
                         </p>
                         <p>Here is what our analysis adds to that picture:</p>
                         <LeadList

@@ -354,19 +354,42 @@ export function ReportFigure({ src, alt, caption }: { src: string; alt: string; 
  *
  * Args:
  *   - stats : value and label pairs, best kept to four
+ *   - tone : "accent" follows the accent picker (default); "loss" and "gain"
+ *            use fixed red and green for costs and improvements
  *
  * Returns:
  *   A responsive grid of glass tiles, two per row on phones and four on desktop.
  */
-export function StatRow({ stats }: { stats: { value: string; label: string }[] }) {
+export function StatRow({
+    stats,
+    tone = "accent",
+}: {
+    stats: { value: string; label: string }[]
+    tone?: "accent" | "loss" | "gain"
+}) {
+    const toned = tone !== "accent"
+
     return (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             {stats.map((s) => (
                 <div
                     key={s.label}
                     className="rounded-xl border border-app bg-[var(--glass)] px-4 py-4 backdrop-blur-sm"
+                    style={
+                        toned
+                            ? {
+                                  borderColor: `var(--${tone}-border)`,
+                                  background: `var(--${tone}-soft)`,
+                              }
+                            : undefined
+                    }
                 >
-                    <p className="font-mono text-2xl font-bold text-accent">{s.value}</p>
+                    <p
+                        className="font-mono text-2xl font-bold text-accent"
+                        style={toned ? { color: `var(--${tone})` } : undefined}
+                    >
+                        {s.value}
+                    </p>
                     <p className="mt-1 text-[12px] leading-snug text-muted">{s.label}</p>
                 </div>
             ))}
