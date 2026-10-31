@@ -106,6 +106,8 @@ export function ReportTable({
  *   - values : accuracy in [0, 1], values[row][col]
  *   - best : [row, col] of the cell to outline as the chosen setting
  *   - note : short takeaway shown under the grid
+ *   - digits : decimals shown per cell (default 3)
+ *   - suffix : text appended to each cell, e.g. "%"
  *
  * Returns:
  *   A scrollable table whose cell backgrounds mix the accent colour by value.
@@ -118,6 +120,8 @@ export function AccuracyHeatmap({
     values,
     best,
     note,
+    digits = 3,
+    suffix = "",
 }: {
     caption: string
     rowLabel: string
@@ -126,6 +130,8 @@ export function AccuracyHeatmap({
     values: number[][]
     best?: [number, number]
     note?: string
+    digits?: number
+    suffix?: string
 }) {
     const flat = values.flat()
     const min = Math.min(...flat)
@@ -173,7 +179,8 @@ export function AccuracyHeatmap({
                                                 fontWeight: isBest ? 700 : undefined,
                                             }}
                                         >
-                                            {v.toFixed(3)}
+                                            {v.toFixed(digits)}
+                                            {suffix}
                                         </td>
                                     )
                                 })}
@@ -309,6 +316,154 @@ export function ReportLineChart({
                         )
                     })}
                 </svg>
+            </div>
+            {note && <p className="mt-3 text-[13px] text-muted">{note}</p>}
+        </div>
+    )
+}
+
+/**
+ * Purpose:
+ *   A figure from a report, framed like the page screenshots, with a numbered
+ *   caption underneath in the style of a paper.
+ *
+ * Args:
+ *   - src : image path under public/
+ *   - alt : accessible description of the figure
+ *   - caption : text shown under the image, e.g. "Figure 1: ..."
+ *
+ * Returns:
+ *   A <figure> with a bordered image and a muted caption.
+ */
+export function ReportFigure({ src, alt, caption }: { src: string; alt: string; caption: string }) {
+    return (
+        <figure>
+            <div className="overflow-hidden rounded-2xl border border-app">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={alt} loading="lazy" className="w-full object-cover" />
+            </div>
+            <figcaption className="mt-3 text-[13px] text-muted">{caption}</figcaption>
+        </figure>
+    )
+}
+
+/**
+ * Purpose:
+ *   Row of headline numbers so a reader gets the gist of a report before
+ *   reading any prose.
+ *
+ * Args:
+ *   - stats : value and label pairs, best kept to four
+ *   - tone : "accent" follows the accent picker (default); "loss" and "gain"
+ *            use fixed red and green for costs and improvements
+ *
+ * Returns:
+ *   A responsive grid of glass tiles, two per row on phones and four on desktop.
+ */
+export function StatRow({
+    stats,
+    tone = "accent",
+}: {
+    stats: { value: string; label: string }[]
+    tone?: "accent" | "loss" | "gain"
+}) {
+    const toned = tone !== "accent"
+
+    return (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {stats.map((s) => (
+                <div
+                    key={s.label}
+                    className="rounded-xl border border-app bg-[var(--glass)] px-4 py-4 backdrop-blur-sm"
+                    style={
+                        toned
+                            ? {
+                                  borderColor: `var(--${tone}-border)`,
+                                  background: `var(--${tone}-soft)`,
+                              }
+                            : undefined
+                    }
+                >
+                    <p
+                        className="font-mono text-2xl font-bold text-accent"
+                        style={toned ? { color: `var(--${tone})` } : undefined}
+                    >
+                        {s.value}
+                    </p>
+                    <p className="mt-1 text-[12px] leading-snug text-muted">{s.label}</p>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+/**
+ * Purpose:
+ *   Two by two confusion matrix for a binary classifier, with the correct
+ *   predictions tinted by the accent colour and each cell named.
+ *
+ * Args:
+ *   - caption : title shown above the matrix
+ *   - matrix : [[TN, FP], [FN, TP]] counts, rows are actual, columns predicted
+ *   - labels : names of the negative and positive class
+ *   - note : short takeaway shown under the matrix
+ *
+ * Returns:
+ *   A labelled grid of four count cells.
+ */
+export function ConfusionMatrix({
+    caption,
+    matrix,
+    labels,
+    note,
+}: {
+    caption: string
+    matrix: [[number, number], [number, number]]
+    labels: [string, string]
+    note?: string
+}) {
+    const names = [
+        ["True negative", "False alarm"],
+        ["Missed", "Caught"],
+    ]
+
+    return (
+        <div>
+            <p className="mb-3 text-sm font-semibold text-brand">{caption}</p>
+            <div className="grid grid-cols-[auto_1fr_1fr] gap-1.5 text-[12px]">
+                <span />
+                {labels.map((l) => (
+                    <span key={l} className="pb-1 text-center text-subtle">
+                        predicted {l}
+                    </span>
+                ))}
+                {matrix.map((row, i) => (
+                    <div key={labels[i]} className="contents">
+                        <span className="flex flex-col items-end justify-center pr-2 text-right leading-tight text-subtle">
+                            <span>actual</span>
+                            <span>{labels[i]}</span>
+                        </span>
+                        {row.map((count, j) => (
+                            <div
+                                key={j}
+                                className="flex flex-col items-center justify-center rounded-lg border border-app py-4"
+                                style={{
+                                    background: i === j ? "var(--accent-soft)" : "var(--glass)",
+                                }}
+                            >
+                                <span
+                                    className={[
+                                        "font-mono text-xl font-bold",
+                                        i === j ? "text-accent" : "text-brand",
+                                    ].join(" ")}
+                                >
+                                    {count.toLocaleString("en-US")}
+                                </span>
+                                <span className="mt-0.5 text-muted">{names[i][j]}</span>
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
             {note && <p className="mt-3 text-[13px] text-muted">{note}</p>}
         </div>

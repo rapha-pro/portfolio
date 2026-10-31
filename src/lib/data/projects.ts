@@ -154,6 +154,23 @@ export const PROJECTS: readonly Project[] = [
         customPage: true,
     },
     {
+        slug: "predictive-maintenance-ml",
+        title: "Predictive Maintenance",
+        description:
+            "Predicts industrial machine failures from sensor readings: EDA driven hypotheses, five models compared under heavy class imbalance, a leakage free decision threshold, and an error analysis of what the model misses.",
+        image: "/images/projects/predictive-maintenance-ml/cover.png",
+        tech: ["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib", "seaborn", "Jupyter"],
+        sortDate: 202610,
+        period: "Oct 2026",
+        context: "Mini Research",
+        githubUrl: "https://github.com/rapha-pro/predictive-maintenance-ml",
+        hasDetailPage: true,
+        featured: true,
+        priority: "medium",
+        visible: true,
+        customPage: true,
+    },
+    {
         slug: "echocv",
         title: "EchoCV",
         description:
