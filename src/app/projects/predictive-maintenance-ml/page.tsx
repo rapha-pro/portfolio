@@ -17,6 +17,25 @@ const project = PROJECTS.find((p) => p.slug === "predictive-maintenance-ml")!
 
 const FIG = "/images/projects/predictive-maintenance-ml"
 
+/** Sources cited in the page, numbered in order of the Cite markers. */
+const REFERENCES = [
+    {
+        text: "Siemens, Senseye Predictive Maintenance. The True Cost of Downtime 2024.",
+        label: "assets.new.siemens.com",
+        url: "https://assets.new.siemens.com/siemens/assets/api/uuid:1b43afb5-2d07-47f7-9eb7-893fe7d0bc59/tcod-2024_original.pdf",
+    },
+    {
+        text: "U.S. Department of Energy, Federal Energy Management Program. Operations & Maintenance Best Practices: A Guide to Achieving Operational Efficiency, Release 2.0 (PNNL 14788), 2004, section 5.4.",
+        label: "pnnl.gov",
+        url: "https://www.pnnl.gov/main/publications/external/technical_reports/pnnl-14788.pdf",
+    },
+    {
+        text: "UCI Machine Learning Repository. AI4I 2020 Predictive Maintenance Dataset.",
+        label: "archive.ics.uci.edu",
+        url: "https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset",
+    },
+]
+
 /**
  * Purpose:
  *   Custom detail page for the predictive maintenance project, written as a
@@ -84,20 +103,40 @@ export default function PredictiveMaintenancePage() {
                 <div className="flex flex-col gap-12">
                     <ReportSection>
                         <p>
-                            When a factory machine breaks down without warning, the whole line
-                            stops. Replacing parts on a fixed schedule avoids that, but throws away
-                            parts that still had life left. This project asks a simple question: can
-                            a machine&apos;s own sensor readings warn us before it fails?
+                            Every machine wears out, no matter how well it is built. Its quality
+                            decides how well it performs and how long it lasts, but sooner or later,
+                            something gives.
                         </p>
                         <p>
-                            The hard part is that failures are rare, about 3 in every 100 runs. A
-                            model that always says &ldquo;everything is fine&rdquo; would be right
-                            96.6% of the time and still miss every single breakdown. So instead of
-                            just training a model, we ran it like a small research study: explore
-                            the data, form hypotheses, test them with models chosen for a reason,
-                            and dig into the failures the final model still misses. The result
-                            catches more than twice as many failures as a simple baseline, and about
-                            two in three of its alerts are real.
+                            To avoid breakdowns in the middle of production, many factories replace
+                            parts on a fixed calendar, whether the part needs it or not. It works,
+                            but it is wasteful: the U.S. Department of Energy lists &ldquo;unneeded
+                            maintenance&rdquo; as a built in cost of calendar based programs{" "}
+                            <Cite n={2} />, and Siemens points to lines closed for no reason and
+                            expensive spare parts kept on the shelf just in case <Cite n={1} />.
+                            Wait too long instead, and a single hour of unplanned downtime in a
+                            large car plant now costs about $2.3 million <Cite n={1} />.
+                        </p>
+                        <div className="rounded-xl border-l-2 border-[color:var(--accent)] bg-[var(--glass)] px-5 py-4">
+                            <p>This project asks a simple question:</p>
+                            <p className="mt-1 text-lg font-semibold text-brand">
+                                Can a machine&apos;s own sensor readings warn us before it fails?
+                            </p>
+                        </div>
+                        <p>
+                            We dig into what a machine reports about itself (temperature, speed,
+                            torque, and tool wear) and test whether machine learning can turn those
+                            readings into an early warning. The hard part is that failures are rare,
+                            about 3 in every 100 runs. A model that always says{" "}
+                            <em>&ldquo;everything is fine&rdquo;</em> would be right 96.6% of the
+                            time and still miss every single breakdown.
+                        </p>
+                        <p>
+                            So instead of just training a model, we ran it like a small research
+                            study: explore the data, form hypotheses, test them with models chosen
+                            for a reason, and dig into the failures the final model still misses.
+                            The result catches more than twice as many failures as a simple
+                            baseline, and about two in three of its alerts are real.
                         </p>
                         <StatRow
                             stats={[
@@ -117,24 +156,71 @@ export default function PredictiveMaintenancePage() {
 
                     <ReportSection title="How This Helps in a Real Factory">
                         <p>
-                            The data is the AI4I 2020 Predictive Maintenance Dataset from the UCI
-                            Machine Learning Repository. It is synthetic, but it was built to
-                            reflect predictive maintenance data seen in industry, and it keeps the
-                            properties that make the real problem hard:
+                            Unplanned downtime is one of the most expensive problems in
+                            manufacturing. Siemens&apos; 2024 survey of industrial companies puts
+                            numbers on it <Cite n={1} />:
                         </p>
+                        <StatRow
+                            stats={[
+                                {
+                                    value: "$1.4T",
+                                    label: "lost every year by the world's 500 largest companies, 11% of their revenue",
+                                },
+                                {
+                                    value: "$2.3M",
+                                    label: "the cost of one hour of downtime in a large car plant",
+                                },
+                                {
+                                    value: "27 h",
+                                    label: "of unplanned downtime per month at an average large plant",
+                                },
+                                {
+                                    value: "$253M",
+                                    label: "yearly cost of downtime for an average large plant",
+                                },
+                            ]}
+                        />
+                        <p>
+                            Predictive maintenance is how plants fight back. In independent surveys
+                            gathered by the U.S. Department of Energy, plants that started a working
+                            predictive maintenance program reported these average results{" "}
+                            <Cite n={2} />:
+                        </p>
+                        <StatRow
+                            stats={[
+                                { value: "25 to 30%", label: "lower maintenance costs" },
+                                { value: "70 to 75%", label: "fewer breakdowns" },
+                                { value: "35 to 45%", label: "less downtime" },
+                                { value: "10x", label: "return on the investment" },
+                            ]}
+                        />
+                        <p>
+                            Put together: if an average large plant losing 27 hours a month reached
+                            that range, it would win back roughly 9 to 12 hours of production every
+                            month, more than a full shift.
+                        </p>
+                        <p>Here is what our analysis adds to that picture:</p>
                         <LeadList
                             items={[
                                 {
-                                    lead: "Ordinary signals.",
-                                    body: "Air and process temperature, rotational speed, torque, and how long the current tool has been in use: the kind of readings a machine controller already logs.",
+                                    lead: "Less time checking healthy machines.",
+                                    body: "Instead of inspecting everything on a calendar, the crew checks only what the model flags: 52 of our 2,000 test runs, about 2.6%, and two in three of those were real failures.",
                                 },
                                 {
-                                    lead: "Failures with physical causes.",
-                                    body: "Runs fail from heat dissipation problems, power outside the safe range, overstrain, tool wear, and a small share of random failures, the same mechanisms maintenance engineers reason about.",
+                                    lead: "Fewer surprise breakdowns.",
+                                    body: "The model caught 36 of 68 failures before they happened, more than twice the 16 caught by a simple baseline.",
                                 },
                                 {
-                                    lead: "Rare failures.",
-                                    body: "Breakdowns are a few percent of all runs, so a model has very few examples of what it must catch.",
+                                    lead: "A dial, not a fixed answer.",
+                                    body: "The decision threshold trades caught failures against false alarms. A plant where a breakdown costs far more than an inspection can lower it and catch more failures (Table 7).",
+                                },
+                                {
+                                    lead: "Operating rules a technician can read.",
+                                    body: "Risk concentrates in a few zones: the highest fifth of torque fails at 11.5%, the lowest fifth of rotational speed at 12.2%, and tool wear above about 174 minutes at 8.1%, against 3.4% overall.",
+                                },
+                                {
+                                    lead: "Known blind spots.",
+                                    body: "The error analysis shows which failures the model tends to miss, so those cases can be covered by inspections instead of trusting the model.",
                                 },
                             ]}
                         />
@@ -161,28 +247,36 @@ export default function PredictiveMaintenancePage() {
                             note="The linear model catches more failures, but only by sending crews to 367 healthy machines. The forest raises 52 alerts and about two in three of them are real."
                         />
                         <p>
-                            Beyond the model itself, the analysis gives a plant three practical
-                            tools:
+                            These results come from a benchmark dataset, not a live factory. The
+                            industry figures above show the size of the prize; the rest of this page
+                            shows how far a careful model gets toward it, and where it still falls
+                            short.
+                        </p>
+                    </ReportSection>
+
+                    <ReportSection title="1. The Data">
+                        <p>
+                            The data is the AI4I 2020 Predictive Maintenance Dataset from the UCI
+                            Machine Learning Repository <Cite n={3} />. It is synthetic, but it was
+                            built to reflect predictive maintenance data seen in industry, and it
+                            keeps the properties that make the real problem hard:
                         </p>
                         <LeadList
                             items={[
                                 {
-                                    lead: "A dial, not a fixed answer.",
-                                    body: "The decision threshold trades caught failures against false alarms. A plant where a breakdown costs far more than an inspection can lower it and catch more failures (Table 7).",
+                                    lead: "Ordinary signals.",
+                                    body: "Air and process temperature, rotational speed, torque, and how long the current tool has been in use: the kind of readings a machine controller already logs.",
                                 },
                                 {
-                                    lead: "Operating rules a technician can read.",
-                                    body: "Risk concentrates in a few zones: the highest fifth of torque fails at 11.5%, the lowest fifth of rotational speed at 12.2%, and tool wear above about 174 minutes at 8.1%, against 3.4% overall.",
+                                    lead: "Failures with physical causes.",
+                                    body: "Runs fail from heat dissipation problems, power outside the safe range, overstrain, tool wear, and a small share of random failures, the same mechanisms maintenance engineers reason about.",
                                 },
                                 {
-                                    lead: "Known blind spots.",
-                                    body: "The error analysis shows which failures the model tends to miss, so those cases can be covered by inspections instead of trusting the model.",
+                                    lead: "Rare failures.",
+                                    body: "Breakdowns are a few percent of all runs, so a model has very few examples of what it must catch.",
                                 },
                             ]}
                         />
-                    </ReportSection>
-
-                    <ReportSection title="1. The Data">
                         <p>
                             The dataset has 10,000 runs and 14 columns, with no missing values and
                             no duplicate rows. Each run has a product quality type (L, M, or H, in a
@@ -578,6 +672,29 @@ export default function PredictiveMaintenancePage() {
                         </p>
                     </ReportSection>
 
+                    <ReportSection title="References">
+                        <ol className="flex flex-col gap-2 text-[13px]">
+                            {REFERENCES.map((ref, i) => (
+                                <li key={ref.url} id={`ref-${i + 1}`} className="flex gap-2">
+                                    <span className="shrink-0 font-mono text-accent">
+                                        [{i + 1}]
+                                    </span>
+                                    <span>
+                                        {ref.text}{" "}
+                                        <a
+                                            href={ref.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="break-all text-accent underline-offset-2 hover:underline"
+                                        >
+                                            {ref.label}
+                                        </a>
+                                    </span>
+                                </li>
+                            ))}
+                        </ol>
+                    </ReportSection>
+
                     {/* Tech stack */}
                     <div>
                         <h2 className="mb-4 text-lg font-semibold text-brand">Technologies</h2>
@@ -594,6 +711,17 @@ export default function PredictiveMaintenancePage() {
 }
 
 /** Accent dot list item, matching the other report pages. */
+/** Numbered superscript link to an entry in the References section. */
+function Cite({ n }: { n: number }) {
+    return (
+        <sup className="font-mono text-[11px]">
+            <a href={`#ref-${n}`} className="text-accent hover:underline">
+                [{n}]
+            </a>
+        </sup>
+    )
+}
+
 function Bullet({ children }: { children: React.ReactNode }) {
     return (
         <li className="flex gap-2">
