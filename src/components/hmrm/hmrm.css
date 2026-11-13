@@ -1,0 +1,662 @@
+/*
+   HMRM headquarters pages (the building grid and the room pages).
+   Everything is prefixed with .hq- so nothing leaks into the portfolio.
+   Colors come from the --hq-* variables the layout sets from
+   lib/data/hmrm/theme.ts; transparencies are mixed with color-mix().
+   Framer Motion owns transform and opacity; CSS transitions here only touch
+   colors and borders.
+*/
+
+@layer components {
+    .hq-root {
+        --hq-gutter: 16px;
+        --hq-line: color-mix(in srgb, var(--hq-ink) 11%, transparent);
+        --hq-line-strong: color-mix(in srgb, var(--hq-ink) 20%, transparent);
+        --hq-glass: color-mix(in srgb, var(--hq-surface) 72%, transparent);
+        --hq-light-ink: color-mix(in srgb, var(--hq-light) 62%, var(--hq-ink));
+
+        position: relative;
+        isolation: isolate;
+        width: 100%;
+        min-height: 100dvh;
+        overflow-x: clip;
+        background: var(--hq-bg);
+        color: var(--hq-ink);
+        color-scheme: dark;
+        font-family:
+            var(--font-sans),
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            sans-serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 640px) {
+        .hq-root {
+            --hq-gutter: 28px;
+        }
+    }
+
+    .hq-root :focus-visible {
+        outline: 2px solid var(--hq-light);
+        outline-offset: 2px;
+    }
+
+    :where(.hq-root) a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    :where(.hq-root) button {
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+    }
+
+    .hq-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+            radial-gradient(
+                70% 40% at 50% -5%,
+                color-mix(in srgb, var(--hq-light) 14%, transparent),
+                transparent 70%
+            ),
+            var(--hq-bg);
+    }
+
+    .hq-backdrop::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(var(--hq-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--hq-line) 1px, transparent 1px);
+        background-size: 36px 36px;
+        opacity: 0.35;
+        mask-image: radial-gradient(ellipse 80% 50% at 50% 10%, #000 15%, transparent 75%);
+    }
+
+    .hq-serif {
+        font-family: var(--font-hq-serif), "Cormorant Garamond", Georgia, serif;
+    }
+
+    .hq-label {
+        margin: 0;
+        font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10.5px;
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--hq-ink-subtle);
+    }
+
+    /* ─── Building ───────────────────────────────────────────────── */
+
+    .hq-page {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: calc(env(safe-area-inset-top, 0px) + 28px) var(--hq-gutter)
+            calc(env(safe-area-inset-bottom, 0px) + 40px);
+    }
+
+    .hq-head {
+        margin-bottom: 22px;
+    }
+
+    .hq-title {
+        margin: 8px 0 8px;
+        font-size: clamp(2.6rem, 12vw, 4.2rem);
+        font-weight: 500;
+        line-height: 0.95;
+    }
+
+    .hq-title em {
+        color: var(--hq-light-ink);
+        text-shadow: 0 0 40px color-mix(in srgb, var(--hq-light) 38%, transparent);
+    }
+
+    .hq-lead {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: var(--hq-ink-muted);
+    }
+
+    .hq-building {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        perspective: 1200px;
+    }
+
+    .hq-floor {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        transform-origin: 50% 100%;
+        border-radius: 20px;
+        border: 1px solid var(--hq-line);
+        background: var(--hq-glass);
+        box-shadow: 0 18px 40px -28px #000;
+    }
+
+    .hq-floor-label {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 0 4px;
+    }
+
+    .hq-floor-name {
+        font-family: var(--font-hq-serif), "Cormorant Garamond", Georgia, serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        line-height: 1.1;
+    }
+
+    .hq-floor-theme {
+        font-family: var(--font-mono), ui-monospace, monospace;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--hq-ink-subtle);
+    }
+
+    .hq-floor-rooms {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    /* Two or four rooms on a floor: two per line on phones, so cards stay readable. */
+    .hq-floor-rooms[data-count="2"],
+    .hq-floor-rooms[data-count="4"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 640px) {
+        .hq-floor {
+            grid-template-columns: 130px minmax(0, 1fr);
+            align-items: center;
+            padding: 14px 14px 14px 18px;
+        }
+
+        .hq-floor-label {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 0;
+        }
+
+        .hq-floor-rooms {
+            gap: 12px;
+        }
+
+        .hq-floor-rooms[data-count="4"] {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    .hq-card-wrap {
+        height: 100%;
+    }
+
+    .hq-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        height: 100%;
+        min-height: 92px;
+        padding: 12px 6px;
+        border-radius: 14px;
+        border: 1px solid color-mix(in srgb, var(--hq-ink) 16%, transparent);
+        background: linear-gradient(
+            160deg,
+            color-mix(in srgb, var(--hq-surface) 80%, var(--hq-ink)),
+            var(--hq-surface)
+        );
+        text-align: center;
+        transition:
+            border-color 0.25s ease,
+            background-color 0.25s ease;
+    }
+
+    .hq-card:hover {
+        border-color: color-mix(in srgb, var(--hq-light) 55%, transparent);
+    }
+
+    .hq-card[data-featured] {
+        border-color: color-mix(in srgb, var(--hq-light) 65%, transparent);
+        background: linear-gradient(
+            160deg,
+            color-mix(in srgb, var(--hq-light) 28%, var(--hq-surface)),
+            color-mix(in srgb, var(--hq-light) 9%, var(--hq-surface))
+        );
+        box-shadow: 0 0 26px -6px color-mix(in srgb, var(--hq-light) 45%, transparent);
+    }
+
+    .hq-card-name {
+        font-size: 0.86rem;
+        font-weight: 650;
+        line-height: 1.2;
+        text-wrap: balance;
+    }
+
+    .hq-card[data-featured] .hq-card-name {
+        color: var(--hq-light-ink);
+    }
+
+    .hq-card-sub {
+        font-size: 0.7rem;
+        line-height: 1.3;
+        color: var(--hq-ink-muted);
+        text-wrap: balance;
+    }
+
+    @media (min-width: 640px) {
+        .hq-card {
+            min-height: 96px;
+            padding: 14px 10px;
+        }
+
+        .hq-card-name {
+            font-size: 1rem;
+        }
+
+        .hq-card-sub {
+            font-size: 0.8rem;
+        }
+    }
+
+    /* ─── Room page ──────────────────────────────────────────────── */
+
+    .hq-room {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+        max-width: 960px;
+        margin: 0 auto;
+        overflow-x: clip;
+    }
+
+    .hq-back {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 12px);
+        left: 12px;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 40px;
+        padding: 0 16px 0 10px;
+        border-radius: 999px;
+        border: 1px solid var(--hq-line-strong);
+        background: color-mix(in srgb, var(--hq-bg) 62%, transparent);
+        backdrop-filter: blur(12px);
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .hq-room-media {
+        position: relative;
+    }
+
+    .hq-gallery {
+        position: relative;
+    }
+
+    .hq-gallery-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+    }
+
+    .hq-gallery-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hq-gallery-slide {
+        position: relative;
+        flex: 0 0 100%;
+        aspect-ratio: 4 / 3;
+        max-height: 72dvh;
+        scroll-snap-align: center;
+        background: color-mix(in srgb, var(--hq-ink) 5%, transparent);
+    }
+
+    @media (min-width: 900px) {
+        .hq-gallery-slide {
+            aspect-ratio: 16 / 10;
+        }
+    }
+
+    .hq-gallery-image {
+        object-fit: cover;
+    }
+
+    .hq-gallery-stage {
+        position: relative;
+    }
+
+    /* Counter and pause button, top right, level with the back button. */
+    .hq-gallery-bar {
+        position: absolute;
+        top: calc(env(safe-area-inset-top, 0px) + 12px);
+        right: 12px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        height: 40px;
+        padding: 0 12px 0 4px;
+        border-radius: 999px;
+        border: 1px solid var(--hq-line-strong);
+        background: color-mix(in srgb, var(--hq-bg) 62%, transparent);
+        backdrop-filter: blur(12px);
+    }
+
+    .hq-play {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+    }
+
+    .hq-gallery-count {
+        font-family: var(--font-mono), ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+    }
+
+    .hq-arrow {
+        position: absolute;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin-top: -22px;
+        border-radius: 999px;
+        border: 1px solid var(--hq-line-strong);
+        background: color-mix(in srgb, var(--hq-bg) 55%, transparent);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 24px -10px #000;
+        transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease;
+    }
+
+    .hq-arrow:hover {
+        border-color: color-mix(in srgb, var(--hq-light) 55%, transparent);
+        background: color-mix(in srgb, var(--hq-bg) 75%, transparent);
+    }
+
+    .hq-arrow--prev {
+        left: 10px;
+    }
+
+    .hq-arrow--next {
+        right: 10px;
+    }
+
+    /* Time left on the current photo while the slideshow runs. */
+    .hq-progress {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: color-mix(in srgb, var(--hq-ink) 12%, transparent);
+    }
+
+    .hq-progress-fill {
+        display: block;
+        height: 100%;
+        transform-origin: left;
+        background: var(--hq-light);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--hq-light) 60%, transparent);
+        animation: hq-progress linear both;
+    }
+
+    @keyframes hq-progress {
+        from {
+            transform: scaleX(0);
+        }
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    .hq-thumbs {
+        display: flex;
+        gap: 8px;
+        padding: 12px var(--hq-gutter) 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .hq-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hq-thumb {
+        position: relative;
+        flex: none;
+        width: 68px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 2px solid transparent;
+        opacity: 0.55;
+        transition:
+            border-color 0.25s ease,
+            opacity 0.25s ease;
+    }
+
+    .hq-thumb img {
+        object-fit: cover;
+    }
+
+    .hq-thumb[data-on] {
+        border-color: var(--hq-light);
+        opacity: 1;
+    }
+
+    .hq-room-body {
+        padding: 22px var(--hq-gutter) 28px;
+    }
+
+    .hq-room:not([data-photos]) .hq-room-body {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 84px);
+    }
+
+    .hq-room-title {
+        margin: 8px 0 4px;
+        font-size: clamp(2.4rem, 11vw, 3.6rem);
+        font-weight: 500;
+        line-height: 1;
+        text-wrap: balance;
+    }
+
+    .hq-room-sub {
+        margin: 0 0 16px;
+        font-size: 1.35rem;
+        font-style: italic;
+        color: var(--hq-light-ink);
+    }
+
+    .hq-room-text {
+        max-width: 38rem;
+        margin: 0;
+        font-size: 1.02rem;
+        line-height: 1.7;
+        color: var(--hq-ink-muted);
+    }
+
+    .hq-room-hint {
+        margin: 14px 0 0;
+        font-size: 0.8rem;
+        color: var(--hq-ink-subtle);
+    }
+
+    .hq-room-nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: auto;
+        padding: 12px var(--hq-gutter) calc(env(safe-area-inset-bottom, 0px) + 16px);
+        border-top: 1px solid var(--hq-line);
+    }
+
+    .hq-step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        min-height: 58px;
+        padding: 8px 12px;
+        border-radius: 16px;
+        border: 1px solid var(--hq-line);
+        background: color-mix(in srgb, var(--hq-ink) 3%, transparent);
+        transition: border-color 0.25s ease;
+    }
+
+    .hq-step:hover {
+        border-color: color-mix(in srgb, var(--hq-light) 45%, transparent);
+    }
+
+    .hq-step > span {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .hq-step--next {
+        text-align: right;
+    }
+
+    .hq-step--next > span {
+        align-items: flex-end;
+    }
+
+    .hq-step-name {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    /* ─── Entrances ──────────────────────────────────────────────────
+       CSS keyframes rather than Framer Motion so the content shows as soon
+       as the HTML arrives, even on a slow phone before JavaScript loads. */
+
+    .hq-rise {
+        animation: hq-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    .hq-floor {
+        animation: hq-floor-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .hq-room-media {
+        overflow: hidden;
+    }
+
+    .hq-room-media .hq-gallery-track {
+        animation: hq-step-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes hq-rise {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+    }
+
+    /* A floor is laid down: it swings up from flat, like a slab being set. */
+    @keyframes hq-floor-in {
+        from {
+            opacity: 0;
+            transform: translateY(30px) rotateX(-55deg);
+        }
+    }
+
+    /* Walking through the door: the room comes toward you and settles. */
+    @keyframes hq-step-in {
+        from {
+            opacity: 0;
+            transform: scale(1.12);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hq-rise,
+        .hq-floor,
+        .hq-room-media .hq-gallery-track {
+            animation: none;
+        }
+    }
+
+    /* ─── Tour controls ──────────────────────────────────────────── */
+
+    .hq-start {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 46px;
+        margin-top: 16px;
+        padding: 0 20px;
+        border-radius: 999px;
+        background: linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--hq-light) 92%, var(--hq-ink)),
+            color-mix(in srgb, var(--hq-light) 78%, var(--hq-bg))
+        );
+        color: var(--hq-bg);
+        font-size: 0.92rem;
+        font-weight: 650;
+        box-shadow: 0 12px 30px -14px color-mix(in srgb, var(--hq-light) 70%, transparent);
+    }
+
+    .hq-step-count {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--hq-light-ink);
+    }
+
+    .hq-step[data-primary] {
+        border-color: color-mix(in srgb, var(--hq-light) 45%, transparent);
+        background: color-mix(in srgb, var(--hq-light) 12%, transparent);
+    }
+
+    /* A room without photos: the tour timer sits on the screen itself. */
+    .hq-gallery-bar--fixed {
+        position: fixed;
+        z-index: 10;
+        padding: 0 4px;
+    }
+
+    .hq-progress--page {
+        position: fixed;
+        top: 0;
+        bottom: auto;
+        z-index: 11;
+    }
+}
